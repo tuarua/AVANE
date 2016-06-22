@@ -1,0 +1,22 @@
+# Created by https://www.gitignore.io/api/flashbuilder
+
+### FlashBuilder ###
+# Build and Release Folders
+bin-debug/
+bin-release/
+.actionScriptProperties
+.flexConfig.xml
+
+# only for a non-library project
+.flexProperties
+
+# only for library project
+.flexLibProperties
+
+# Other files and folders
+.settings/
+.project/
+
+.FlexUnitSettings
+.externalToolBuilders
+.model
