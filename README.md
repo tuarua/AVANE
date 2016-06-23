@@ -2,9 +2,13 @@
 
 Adobe Air Native Extension written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
 Samples included
+
 Universal player - demo showing flash playing mp4, mkv, webm encoded in h264, hevc and vp9
+
 Advanced client - demo similar to Handbrake 
+
 Desktop capture - demo using screen-capture-recorder to capture desktop
+
 
 ![alt tag](https://raw.githubusercontent.com/tuarua/AVANE/master/screenshots/screen-shot-1.png)
 
