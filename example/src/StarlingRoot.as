@@ -152,8 +152,9 @@ package {
 				menuButton.visible = false;
 				menuButton.x = 210;
 				backButton.visible = true;
-				if(selectedExample == 2)
+				if(selectedExample == 2){
 					advancedClient.freeze();
+				}	
 				Starling.juggler.tween(exampleSelector, 0.35, {transition: Transitions.EASE_OUT,x: 20});
 				Starling.juggler.tween(holder, 0.35, {transition: Transitions.EASE_OUT,x: 200});
 				Starling.juggler.tween(backButton, 0.35, {transition: Transitions.EASE_OUT,x: 225});
@@ -180,8 +181,9 @@ package {
 			backButton.x = 25;
 			Starling.juggler.tween(exampleSelector, 0.35, {transition: Transitions.EASE_OUT,x: -180,
 				onComplete: function():void {
-				if(selectedExample == 2)
+				if(selectedExample == 2){
 					advancedClient.unfreeze();
+				}
 			}});
 			Starling.juggler.tween(holder, 0.35, {transition: Transitions.EASE_OUT,x: 0});
 			Starling.juggler.tween(menuButton, 0.35, {transition: Transitions.EASE_OUT,x: 10});

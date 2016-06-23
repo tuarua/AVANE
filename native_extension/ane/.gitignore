@@ -1,4 +1,5 @@
 debug/
 *.sh
-*.bat
-*.xml
+# *.bat
+extension_osx.xml
+extension_multi.xml

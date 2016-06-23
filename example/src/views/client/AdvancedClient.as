@@ -239,7 +239,6 @@ package views.client {
 			filePathOutput.x = 100;
 			filePathOutput.y = 60;
 			
-			infoButton.addEventListener(TouchEvent.TOUCH,onInfoTouch);
 			infoButton.x = 500;
 			infoButton.y = 20;
 			
@@ -406,8 +405,6 @@ package views.client {
 				var videoSettings:Object = (panelsVec[0] as VideoPanel).getSettings();
 				var audioSettings:Vector.<Object> = (panelsVec[1] as AudioPanel).getSettings();
 				
-				//GlobalOptions.maxErrorRate = 0.1;
-				
 				var inputOptions:InputOptions = new InputOptions();
 					
 				inputOptions.uri = selectedFile.nativePath;
@@ -539,14 +536,7 @@ package views.client {
 			filePathInput.text = selectedFile.nativePath;
 			avANE.getProbeInfo(selectedFile.nativePath);
 		}
-		private function onInfoTouch(event:TouchEvent):void {
-			event.stopPropagation();
-			var touch:Touch = event.getTouch(infoButton, TouchPhase.ENDED);
-			if(touch && touch.phase == TouchPhase.ENDED){
-				trace("show info");
-				//show info screen
-			}
-		}
+		
 		private function onInputTouch(event:TouchEvent):void {
 			event.stopPropagation();
 			var touch:Touch = event.getTouch(chooseFileIn, TouchPhase.ENDED);
@@ -595,11 +585,6 @@ package views.client {
 			(panelsVec[0] as VideoPanel).freeze();
 			(panelsVec[2] as PicturePanel).freeze();
 			(panelsVec[4] as OverlayPanel).freeze();
-			
-			/*
-			(panelsVec[1] as AudioPanel).update(probe);
-			*/
-			
 		}
 		public function unfreeze():void {
 			filePathInput.unfreeze();
@@ -612,18 +597,17 @@ package views.client {
 				(panelsVec[4] as OverlayPanel).unfreeze();
 		}
 		public function suspend():void {
-			freeze();
+			//freeze();
 			avANE.removeEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.removeEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.removeEventListener(FFmpegEvent.ON_ENCODE_PROGRESS,encodingScreen.onProgress);
 			avANE.removeEventListener(FFmpegEvent.ON_ENCODE_FINISH,onEncodeFinish);
 			avANE.removeEventListener(FFmpegEvent.ON_ENCODE_START,onEncodeStart);
-			//only cancel if it is Encoding
 			avANE.cancelEncode();
 			this.visible = false;
 		}
 		public function resume():void {
-			unfreeze();
+			//unfreeze();
 			avANE.addEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_PROGRESS,encodingScreen.onProgress);
