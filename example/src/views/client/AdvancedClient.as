@@ -418,10 +418,6 @@ package views.client {
 				
 				if(videoSettings.codec == "libx264"){
 					var x264Options:X264Options = new X264Options();
-					
-					
-					trace(videoSettings);
-					
 					x264Options.level = videoSettings.level;
 					x264Options.preset = videoSettings.preset;
 					x264Options.profile = videoSettings.profile;
@@ -448,19 +444,12 @@ package views.client {
 
 				videoStream.crf = videoSettings.crf;
 				videoStream.bitrate = videoSettings.bitrate;
-					
-					
-				var attachment:Attachment = new Attachment();
-				attachment.fileName = "D:\\at.jpg";
-			//	OutputOptions.addAttachment(attachment); //!!can't write attachment when copy is set on video
-				
-				
 				
 				var metadata:MetaData = new MetaData();
 				metadata.title = "AVANE encoded video";
 				metadata.description = "The description";
 				metadata.addCustom("custom_meta","This is custom metadata");
-				//OutputOptions.metadata = metadata;
+				OutputOptions.metadata = metadata;
 
 				var audioStream:OutputAudioStream;
 				for (var i:int=0, l:int=audioSettings.length; i<l; ++i){
