@@ -5,6 +5,7 @@
 bin/
 #bin-debug/
 bin-release/
+bin-release-temp/
 .actionScriptProperties
 .flexConfig.xml
 

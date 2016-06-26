@@ -104,15 +104,7 @@ package views.client {
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_FINISH,onEncodeFinish);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_START,onEncodeStart);
 			
-			
-			//screen capture
-			//ffmpeg -list_devices true -f dshow -i dummy
-			//ffmpeg -f dshow -i video="UScreenCapture" -vcodec libx264 -crf 0 -preset ultrafast  D:\\capture.flv
-			//ffmpeg -video_size 1920x1080 -framerate 30 -f x11grab -i :0.0 -c:v libx264 -qp 0 -preset ultrafast capture.mkv
-			//cmdutils print_device_sources ?
-			
-			//avANE.encodeClassic("-i https://s3.amazonaws.com/x265.org/video/Tears_400_x265.mp4 D:\\dvds\\JurassicWorld\\fromHttp.mp4");
-			//avANE.encodeClassic("-f dshow -i video="UScreenCapture" -vcodec libx264 -crf 0 -preset ultrafast  D:\\capture.flv");
+		
 			
 			/*
 			var codecs:Vector.<Codec> = avANE.getCodecs();
@@ -128,7 +120,6 @@ package views.client {
 			var formats:Vector.<AvailableFormat> = avANE.getAvailableFormats();
 			
 			
-			var devices:Vector.<Device> = avANE.getDevices();
 			*/
 			var devices:Vector.<Device> = avANE.getDevices();
 			
@@ -482,7 +473,6 @@ package views.client {
 				if(hasFilter("hqdn3d") && denoiseFilter && denoiseFilter.length == 4)
 					OutputOptions.addVideoFilter(denoise(denoiseFilter[0],denoiseFilter[1],denoiseFilter[2],denoiseFilter[3]));
 				
-				//OutputOptions.timestamp = new Date();
 				//OutputOptions.fileSizeLimit = 1024*1024*10; //10MB limit
 				OutputOptions.uri = filePathOutput.text;
 				
@@ -586,7 +576,6 @@ package views.client {
 				(panelsVec[4] as OverlayPanel).unfreeze();
 		}
 		public function suspend():void {
-			//freeze();
 			avANE.removeEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.removeEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.removeEventListener(FFmpegEvent.ON_ENCODE_PROGRESS,encodingScreen.onProgress);
@@ -596,7 +585,6 @@ package views.client {
 			this.visible = false;
 		}
 		public function resume():void {
-			//unfreeze();
 			avANE.addEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_PROGRESS,encodingScreen.onProgress);
