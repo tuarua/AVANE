@@ -33,7 +33,7 @@ AVANE uses the following libraries:
 You will need
  
  - Flash Builder 4.7
- - AIR 21 SDK
+ - AIR 22 SDK
 
 ### Todos
  - OSX version
