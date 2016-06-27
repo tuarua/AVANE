@@ -26,6 +26,7 @@ AVANE uses the following libraries:
 * [http://www.boost.org] - C++ portable libraries
 * [http://www.frogtoss.com/labs] - Native File Dialog
 * [https://nlohmann.github.io/json] - JSON for Modern C++
+* [https://github.com/rdp/screen-capture-recorder-to-video-windows-free] - required for desktop capture example
 
 
 ### Prerequisites
