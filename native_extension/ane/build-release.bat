@@ -41,8 +41,9 @@ REM copy %pathtome%library.swf %pathtome%platforms\mac\debug
 
 REM Copy native libraries into place.
 echo Copying native libraries into place.
+IF EXIST %pathtome%..\..\native_library\win\AVANE\Release\AVANE.dll copy %pathtome%..\..\native_library\win\AVANE\Release\AVANE.dll %pathtome%platforms\win\release
+IF EXIST %pathtome%..\..\native_library\win\AVANE\Release\AVANE.dll copy %pathtome%..\..\native_library\win\AVANE\Release\AVANE.dll %pathtome%
 
-REM copy %pathtome%..\..\native_library\win\AVANE\Release\AVANE.dll %pathtome%platforms\win\release
 REM When I've fixed debug build in MSVC
 REM cp -R -L "%pathtome%..\..\native_library\win\AVANE\Debug\AVANE.dll" "%pathtome%platforms\win\debug"
 

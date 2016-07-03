@@ -232,22 +232,36 @@ package views {
 				Logger.enableLogToFile = false;
 				
 				//stop any existing playback
-				clearVideo();
-				showLoading(true);
 				
-				isTwitch = (urlList[urlDrop.selected].value == "twitch");
-
-				if(isTwitch){
-					var streamLdr:URLLoader = new URLLoader();
-					streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
-					//streamLdr.addEventListener(IOErrorEvent.IO_ERROR, onStreamError);
-					streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
+				showLoading(true);
+				if(streamer.connected){
+					avANE.addEventListener(FFmpegEvent.ON_ENCODE_FINISH,onPlayAfterCancel);
+					clearVideo();
 				}else{
-					uri = urlList[urlDrop.selected].value;
-					avANE.getProbeInfo(uri);
+					clearVideo();
+					isTwitch = (urlList[urlDrop.selected].value == "twitch");
+					if(isTwitch){
+						var streamLdr:URLLoader = new URLLoader();
+						streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
+						streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
+					}else{
+						uri = urlList[urlDrop.selected].value;
+						avANE.getProbeInfo(uri);
+					}
 				}
 				
 			}	
+		}
+		private function onPlayAfterCancel(event:FFmpegEvent):void {
+			isTwitch = (urlList[urlDrop.selected].value == "twitch");
+			if(isTwitch){
+				var streamLdr:URLLoader = new URLLoader();
+				streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
+				streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
+			}else{
+				uri = urlList[urlDrop.selected].value;
+				avANE.getProbeInfo(uri);
+			}
 		}
 		private function randomRange(minNum:Number, maxNum:Number):Number {
 			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
@@ -262,22 +276,37 @@ package views {
 					niceOptions.push(obj);
 			}
 			
-			
-			
 			twitchChannel = niceOptions[randomRange(0,niceOptions.length-1)].channel.name;
+			
 			var url:String = "http://api.twitch.tv/api/channels/"+twitchChannel+"/access_token";
 			var twitchTokenLdr:URLLoader = new URLLoader();
 			twitchTokenLdr.addEventListener(Event.COMPLETE, onTwitchToken);
 			twitchTokenLdr.load(new URLRequest(url));
 			
 		}
-		protected function onTwitchToken(event:Event):void {
-			var result:String = event.target.data;
-			var parsedObj:Object = JSON.parse(result);
-			var sig:String = parsedObj.sig;
-			var token:String = parsedObj.token;
-
-			uri = "http://usher.twitch.tv/api/channel/hls/"+twitchChannel+".m3u8?player=twitchweb&token="+token+"&sig="+sig+"&$allow_audio_only=true&allow_source=true&type=any&p=1243565"
+		
+		
+		protected function onTwitchm3u8Loaded(event:Event):void{
+			var m3u8:String = event.target.data;
+			var lines:Array = m3u8.split("\n");
+			var line:String;
+			var sourceArr:Array = new Array();
+			var sourceObj:Object ;
+			for (var i:int = 0; i < lines.length;i++){
+				line = lines[i];
+				if(line.indexOf("#EXT-X-MEDIA:TYPE=VIDEO") == 0){
+					var itms:Array = line.split(",");
+					sourceObj = new Object()
+					sourceObj.name = itms[2];
+					sourceObj.name = sourceObj.name.replace(new RegExp("NAME=", "g"),""); ;
+					sourceObj.name = sourceObj.name.replace(new RegExp('"', "g"),"");
+					sourceObj.name = sourceObj.name.toLowerCase();
+					sourceObj.uri = lines[i+2];
+					if(sourceObj.name == "source") uri = sourceObj.uri;
+					sourceArr.push(sourceObj);
+				}
+			}
+				
 			setupVideo();
 			
 			//don't probe - already know we need to transcode
@@ -306,6 +335,23 @@ package views {
 			
 			
 		}
+		
+		protected function onTwitchToken(event:Event):void {
+			var result:String = event.target.data;
+			var parsedObj:Object = JSON.parse(result);
+			var sig:String = parsedObj.sig;
+			var token:String = parsedObj.token;
+
+			trace();
+			var m3u8Url:String = "http://usher.twitch.tv/api/channel/hls/"+twitchChannel+".m3u8?player=twitchweb&token="+token+"&sig="+sig+"&$allow_audio_only=true&allow_source=true&type=any&p=1243565"
+				
+			
+			var m3u8Ldr:URLLoader = new URLLoader();
+			m3u8Ldr.addEventListener(Event.COMPLETE, onTwitchm3u8Loaded);
+			//m3u8Ldr.addEventListener(IOErrorEvent.IO_ERROR, onm3u8Error);
+			m3u8Ldr.load(new URLRequest(m3u8Url));
+			
+		}
 		private function showLoading(b:Boolean=true):void {
 			if(b && !loading.isRunning)
 				loading.start();
@@ -313,14 +359,8 @@ package views {
 				loading.stop();
 		}
 		public function clearVideo():void {
-			
-			//why is this being called at start
-			//it clears OutputOptions !!
-			
-			if(streamer.connected){
+			if(streamer.connected)
 				avANE.cancelEncode();
-			}
-				
 			OutputOptions.clear();
 			
 			if (this.contains(videoImage)) {
