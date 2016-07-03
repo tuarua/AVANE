@@ -123,8 +123,6 @@ package views.client {
 			*/
 			var devices:Vector.<Device> = avANE.getDevices();
 			
-			
-			
 			selectedFile.addEventListener(Event.SELECT, selectFile);
 			bg.touchable = false;
 			bg.addQuad(new Quad(w,1,0x0D1012));

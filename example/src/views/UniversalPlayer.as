@@ -20,10 +20,14 @@ package views {
 	import com.tuarua.ffprobe.Probe;
 	import com.tuarua.ffprobe.events.ProbeEvent;
 	
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.media.SoundTransform;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.system.System;
 	
 	import starling.core.Starling;
@@ -53,6 +57,8 @@ package views {
 		private var loading:LoadingIcon = new LoadingIcon();
 		private var soundTransform:SoundTransform = new SoundTransform();
 		private var circularLoader:CircularLoader;
+		private var isTwitch:Boolean = false;
+		private var twitchChannel:String;
 		public function UniversalPlayer(_avANE:AVANE) {
 			super();
 			avANE = _avANE;
@@ -70,7 +76,7 @@ package views {
 			urlList.push({value:"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
 			urlList.push({value:"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
 			urlList.push({value:"http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8",label:"HLS Vevo live   -   http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8"});
-			
+			urlList.push({value:"twitch",label:"HLS Twitch live   -   random channel"});
 			playButton.x = 1050;
 			playButton.y = 38;
 			playButton.addEventListener(TouchEvent.TOUCH,onPlayTouch);
@@ -100,10 +106,7 @@ package views {
 		protected function onStreamClose(event:StreamProviderEvent):void {
 			trace(event);
 		}
-		protected function onProbeInfo(event:ProbeEvent):void {
-			var probe:Probe = event.params.data as Probe;
-			//probe tells us about the video and audio codec. We can now determine how and if to transcode into a format Flash can play (h.264 & aac in flv container)
-			
+		private function setupVideo():void {
 			vidClient = new Object();
 			vidClient.onMetaData = onMetaData;
 			nc = new NetConnection();
@@ -116,9 +119,15 @@ package views {
 			ns.soundTransform = soundTransform;
 			
 			videoTexture = Texture.fromNetStream(this.ns, Starling.current.contentScaleFactor, onTextureComplete);
-
+			
 			ns.bufferTime = 2;
 			ns.play(null);
+		}
+		protected function onProbeInfo(event:ProbeEvent):void {
+			var probe:Probe = event.params.data as Probe;
+			//probe tells us about the video and audio codec. We can now determine how and if to transcode into a format Flash can play (h.264 & aac in flv container)
+			
+			setupVideo();
 			
 			var inputOptions:InputOptions = new InputOptions();
 			inputOptions.uri = uri;
@@ -127,6 +136,7 @@ package views {
 			//inputOptions.realtime = true;
 			InputStream.clear();
 			InputStream.addInput(inputOptions);
+			
 			
 			if(probe.audioStreams.length > 0){
 				var outputAudioStream:OutputAudioStream = new OutputAudioStream();
@@ -146,7 +156,7 @@ package views {
 				}
 				OutputOptions.addAudioStream(outputAudioStream);
 			}	
-					
+			
 			var videoStream:OutputVideoStream = new OutputVideoStream();
 			videoStream.sourceIndex = 0;
 			if(probe.videoStreams[0].codecName == "h264"){
@@ -224,9 +234,77 @@ package views {
 				//stop any existing playback
 				clearVideo();
 				showLoading(true);
-				uri = urlList[urlDrop.selected].value;
-				avANE.getProbeInfo(uri);
+				
+				isTwitch = (urlList[urlDrop.selected].value == "twitch");
+
+				if(isTwitch){
+					var streamLdr:URLLoader = new URLLoader();
+					streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
+					//streamLdr.addEventListener(IOErrorEvent.IO_ERROR, onStreamError);
+					streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
+				}else{
+					uri = urlList[urlDrop.selected].value;
+					avANE.getProbeInfo(uri);
+				}
+				
 			}	
+		}
+		private function randomRange(minNum:Number, maxNum:Number):Number {
+			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+		}
+
+		protected function onTwitchStream(event:Event):void {
+			var result:String = event.target.data;
+			var parsedObj:Object = JSON.parse(result);
+			var niceOptions:Array = new Array();
+			for each(var obj:Object in parsedObj.streams){
+				if(obj.average_fps > 50 && obj.channel.language == "en")
+					niceOptions.push(obj);
+			}
+			
+			
+			
+			twitchChannel = niceOptions[randomRange(0,niceOptions.length-1)].channel.name;
+			var url:String = "http://api.twitch.tv/api/channels/"+twitchChannel+"/access_token";
+			var twitchTokenLdr:URLLoader = new URLLoader();
+			twitchTokenLdr.addEventListener(Event.COMPLETE, onTwitchToken);
+			twitchTokenLdr.load(new URLRequest(url));
+			
+		}
+		protected function onTwitchToken(event:Event):void {
+			var result:String = event.target.data;
+			var parsedObj:Object = JSON.parse(result);
+			var sig:String = parsedObj.sig;
+			var token:String = parsedObj.token;
+
+			uri = "http://usher.twitch.tv/api/channel/hls/"+twitchChannel+".m3u8?player=twitchweb&token="+token+"&sig="+sig+"&$allow_audio_only=true&allow_source=true&type=any&p=1243565"
+			setupVideo();
+			
+			//don't probe - already know we need to transcode
+			var inputOptions:InputOptions = new InputOptions();
+			inputOptions.uri = uri;
+			InputStream.clear();
+			InputStream.addInput(inputOptions);
+			var outputAudioStream:OutputAudioStream = new OutputAudioStream();
+			outputAudioStream.sourceIndex = 0;
+			outputAudioStream.samplerate = 48000;
+			outputAudioStream.bitrate = 448000;
+			outputAudioStream.codec = "aac";
+			outputAudioStream.channels = 2;
+			OutputOptions.addAudioStream(outputAudioStream);
+			
+			var videoStream:OutputVideoStream = new OutputVideoStream();
+			videoStream.sourceIndex = 0;
+			videoStream.codec = "copy";
+			
+			OutputOptions.addVideoStream(videoStream);
+			OutputOptions.format = "flv";
+			streamer.init();
+			OutputOptions.uri = "tcp:127.0.0.1:1235";
+			avANE.setLogLevel(LogLevel.VERBOSE);
+			avANE.encode();
+			
+			
 		}
 		private function showLoading(b:Boolean=true):void {
 			if(b && !loading.isRunning)

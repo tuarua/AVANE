@@ -1,15 +1,16 @@
 package com.tuarua {
-	import com.tuarua.ffmpeg.Logger;
 	import com.tuarua.ffmpeg.Attachment;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
 	import com.tuarua.ffmpeg.InputStream;
+	import com.tuarua.ffmpeg.Logger;
 	import com.tuarua.ffmpeg.OutputAudioStream;
 	import com.tuarua.ffmpeg.OutputOptions;
 	import com.tuarua.ffmpeg.OutputVideoStream;
 	import com.tuarua.ffmpeg.events.FFmpegEvent;
 	import com.tuarua.ffmpeg.gets.AvailableFormat;
 	import com.tuarua.ffmpeg.gets.BitStreamFilter;
+	import com.tuarua.ffmpeg.BitStreamFilter;
 	import com.tuarua.ffmpeg.gets.Codec;
 	import com.tuarua.ffmpeg.gets.Color;
 	import com.tuarua.ffmpeg.gets.Decoder;
@@ -105,8 +106,8 @@ package com.tuarua {
 		public function getProtocols():Protocols {
 			return extensionContext.call("getProtocols") as Protocols;
 		}
-		public function getBitStreamFilters():Vector.<BitStreamFilter> {
-			return extensionContext.call("getBitStreamFilters") as Vector.<BitStreamFilter>;
+		public function getBitStreamFilters():Vector.<com.tuarua.ffmpeg.gets.BitStreamFilter> {
+			return extensionContext.call("getBitStreamFilters") as Vector.<com.tuarua.ffmpeg.gets.BitStreamFilter>;
 		}
 		public function getCodecs():Vector.<Codec> {
 			return extensionContext.call("getCodecs") as Vector.<Codec>;
@@ -261,6 +262,13 @@ package com.tuarua {
 					}
 					if(OutputOptions.videoFilters && OutputOptions.videoFilters.length > 0)
 						args.push("-vf", OutputOptions.videoFilters.toString());
+					
+					if(OutputOptions.bitStreamFilters && OutputOptions.bitStreamFilters.length > 0){
+						for each(var bsf:com.tuarua.ffmpeg.BitStreamFilter in OutputOptions.bitStreamFilters){
+							args.push("-bsf:"+bsf.type, bsf.value);
+						}
+					}
+					
 					if(OutputOptions.complexFilters && OutputOptions.complexFilters.length > 0)
 						args.push("-filter_complex", OutputOptions.complexFilters.toString());
 					if(OutputOptions.format)

@@ -11,6 +11,7 @@ package com.tuarua.ffmpeg {
 		public static var fastStart:Boolean = false;
 		public static var videoFilters:Vector.<String> = new Vector.<String>;
 		public static var complexFilters:Vector.<String> = new Vector.<String>;
+		public static var bitStreamFilters:Vector.<BitStreamFilter> = new Vector.<BitStreamFilter>;
 		
 		public static var copyAllVideoStreams:Boolean = false;
 		public static var copyAllAudioStreams:Boolean = false;
@@ -52,12 +53,21 @@ package com.tuarua.ffmpeg {
 			format = null;
 			uri = null;
 			fastStart = false;
+			copyAllVideoStreams = false;
+			copyAllAudioStreams = false;
 			metadata = null;
 			duration = -1;
 			to = -1;
 			fileSizeLimit = -1;
 		//	_timestamp = null;
+
+				
+			bufferSize = -1;
+			maxRate = -1;
+			preset = null;
+			target = null;
 			frameRate = 0;
+			realtime = false;
 			
 			if(videoStreams)
 				videoStreams.splice(0, videoStreams.length);
@@ -74,6 +84,9 @@ package com.tuarua.ffmpeg {
 			if(videoFilters) //why am I not clearing them again ?
 				videoFilters.splice(0, videoFilters.length);
 			
+			if(bitStreamFilters)
+				bitStreamFilters.splice(0, bitStreamFilters.length);
+			
 			if(complexFilters)
 				complexFilters.splice(0, complexFilters.length);
 		}
@@ -82,6 +95,10 @@ package com.tuarua.ffmpeg {
 		}
 		public static function addVideoFilter(value:String):void {
 			videoFilters.push(value);
+		}
+		public static function addBitStreamFilter(value:String,type:String="v"):void {
+			var bsf:BitStreamFilter = new BitStreamFilter(type,value);
+			bitStreamFilters.push(bsf);
 		}
 		/*
 		public static function getTimestamp():String {
