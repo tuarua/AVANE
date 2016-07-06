@@ -1,60 +1,48 @@
 package views.client {
 	import com.tuarua.ffprobe.Probe;
-	
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
 	import events.InteractionEvent;
-	
-	import feathers.display.Scale9Image;
-	import feathers.textures.Scale9Textures;
-	
-	import starling.animation.Transitions;
-	import starling.core.Starling;
 	import starling.display.BlendMode;
 	import starling.display.Image;
-	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.utils.Align;
 	import starling.utils.deg2rad;
+	
+	import views.SrollableContent;
 
 	public class InfoPanel extends Sprite {
-		private var bgTexture:Scale9Textures;
-		private var bg:Scale9Image;
+		private var bg:Image;
 		private var pane:Sprite = new Sprite();
 		private var txtHolder:Sprite = new Sprite();
-		private var scrollBar:Quad;
-		private var nScrollbarOffset:int = 20;
-		private var scrollBeganY:int;
 		private var h:int = 360;
 		private var closeButton:Image = new Image(Assets.getAtlas().getTexture("close-icon"));
+		private var infoList:SrollableContent;
 		public function InfoPanel() {
 			super();
-			bgTexture = new Scale9Textures(Assets.getAtlas().getTexture("popmenu-bg"),new Rectangle(4,4,16,16));
-			bg = new Scale9Image(bgTexture);
+			bg = new Image(Assets.getAtlas().getTexture("popmenu-bg"));
+			bg.scale9Grid = new Rectangle(4,4,16,16);
 			bg.blendMode = BlendMode.NONE;
 			bg.touchable = false;
 			bg.width = 880;
 			bg.height = 400;
 			
-			pane.y = nScrollbarOffset;
-			pane.clipRect = new Rectangle(0,0,800,h);
-			
 			addChild(bg);
 			pane.x = 30;
 			pane.addChild(txtHolder);
-			addChild(pane);
+			
+			infoList = new SrollableContent(800,h,pane);
+			infoList.y = 20;
+			
+			addChild(infoList);
 			closeButton.x = 870-24;
 			closeButton.y = 10;
 			closeButton.addEventListener(TouchEvent.TOUCH,onCloseTouch);
 			addChild(closeButton);
 			
-			setupScrollBar();
 		}
 		private function onCloseTouch(event:TouchEvent):void {
 			event.stopPropagation();
@@ -62,37 +50,12 @@ package views.client {
 			if(touch && touch.phase == TouchPhase.ENDED)
 				this.dispatchEvent(new InteractionEvent(InteractionEvent.ON_CLOSE));
 		}
-		private function setupScrollBar():void {
-			if(scrollBar && this.contains(scrollBar)) removeChild(scrollBar);
-			scrollBar = new Quad(8,h,0xCC8D1E);
-			scrollBar.alpha = 1;
-			scrollBar.visible = false;
-			scrollBar.y = nScrollbarOffset;
-			scrollBar.x = 850 - 24;
-			scrollBar.addEventListener(TouchEvent.TOUCH,onScrollBarTouch);
-			addChild(scrollBar);
-		}
-		private function onScrollBarTouch(event:TouchEvent):void {
-			var touch:Touch = event.getTouch(scrollBar);
-			if(touch && touch.phase == TouchPhase.BEGAN) scrollBeganY = globalToLocal(new Point(0,touch.globalY)).y-scrollBar.y;
-			if(touch && touch.phase == TouchPhase.ENDED) scrollBeganY = -1;
-			//if(touch && touch.phase == TouchPhase.HOVER) Starling.juggler.tween(scrollBar, 0.2, {transition: Transitions.LINEAR,alpha: 1});
-			//if(touch == null) Starling.juggler.tween(scrollBar, 0.2, {transition: Transitions.LINEAR,alpha: 0});
-			
-			if(touch && touch.phase == TouchPhase.MOVED){
-				var y:int = globalToLocal(new Point(touch.globalX,touch.globalY-(scrollBeganY))).y;
-				if(y < pane.y) y = pane.y;
-				if(y > (pane.y + pane.height - scrollBar.height)) y = pane.y + pane.height - scrollBar.height;
-				scrollBar.y = y;	
-				var percentage:Number = (y - nScrollbarOffset) / (h-scrollBar.height);
-				txtHolder.y = -Math.round(((txtHolder.height - h)*percentage));
-			}
-		}
+		
+		
 		private function createTextField(text:String,indent:int = 0):TextField{
 			var txt:TextField;
-			txt = new TextField(600,32,text, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			txt.hAlign = HAlign.LEFT;
-			txt.vAlign = VAlign.TOP;
+			txt = new TextField(600,32,text);
+			txt.format.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			txt.batchable = true;
 			txt.touchable = false;
 			txt.x = (indent * 40)+20;
@@ -208,12 +171,8 @@ package views.client {
 				
 			}
 			
-			scrollBar.y = nScrollbarOffset;
-			scrollBar.scaleY = h/txtHolder.height;
-			scrollBar.visible = !(pane.height < h);
-
-			trace(scrollBar.visible);
-			
+			infoList.fullHeight = (cnt*20)+12;
+			infoList.init();
 			
 		}
 	}

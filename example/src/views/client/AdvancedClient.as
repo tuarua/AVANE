@@ -48,21 +48,21 @@ package views.client {
 	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.Quad;
-	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.text.TextFormat;
+	import starling.utils.Align;
 	
 	import views.forms.DropDown;
 	import views.forms.Input;
+	import starling.display.MeshBatch;
 	
 	public class AdvancedClient extends Sprite {
-		private var bg:QuadBatch = new QuadBatch();
-		private var bgBottom:QuadBatch = new QuadBatch();
+		private var bg:MeshBatch = new MeshBatch();
+		private var bgBottom:MeshBatch = new MeshBatch();
 		private var holder:Sprite = new Sprite();
 		private var headingHolder:Sprite = new Sprite();
 		private var w:int = 1200;
@@ -125,7 +125,7 @@ package views.client {
 			
 			selectedFile.addEventListener(Event.SELECT, selectFile);
 			bg.touchable = false;
-			bg.addQuad(new Quad(w,1,0x0D1012));
+			bg.addMesh(new Quad(w,1,0x0D1012));
 			var lineLeft:Quad = new Quad(1,153,0x0D1012);
 			var lineRight:Quad = new Quad(1,153,0x0D1012);
 			var lineBot:Quad = new Quad(w,1,0x0D1012);
@@ -136,10 +136,10 @@ package views.client {
 			lineRight.x = w-1;
 			lineBot.y = 154;
 			bg.touchable = false;
-			bg.addQuad(lineLeft);
-			bg.addQuad(lineRight);
-			bg.addQuad(lineBot);
-			bg.addQuad(middle);
+			bg.addMesh(lineLeft);
+			bg.addMesh(lineRight);
+			bg.addMesh(lineBot);
+			bg.addMesh(middle);
 			
 			var bmiddle:Quad = new Quad(w-2,308,0x0D1012);
 			var blineLeft:Quad = new Quad(1,308,0x0D1012);
@@ -152,10 +152,10 @@ package views.client {
 			blineRight.y = bmiddle.y = 200;
 			blineLeft.y = 200;
 			blineBot.y = 508;
-			bgBottom.addQuad(bmiddle);
-			bgBottom.addQuad(blineLeft);
-			bgBottom.addQuad(blineRight);
-			bgBottom.addQuad(blineBot);
+			bgBottom.addMesh(bmiddle);
+			bgBottom.addMesh(blineLeft);
+			bgBottom.addMesh(blineRight);
+			bgBottom.addMesh(blineBot);
 			
 			bgBottom.visible = false;
 			itmHolder.y = 25;
@@ -275,11 +275,13 @@ package views.client {
 			encodeButton.addEventListener(TouchEvent.TOUCH,onEncode);
 			encodeButton.alpha = 0.25;
 			
-			var inputLbl:TextField = new TextField(120,32,"Input:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			var outputLbl:TextField = new TextField(120,32,"Output:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			var containerLbl:TextField = new TextField(120,32,"Output container:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			outputLbl.vAlign = inputLbl.vAlign = containerLbl.vAlign = VAlign.TOP;
-			outputLbl.hAlign = inputLbl.hAlign = containerLbl.hAlign = HAlign.LEFT;
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
+			var inputLbl:TextField = new TextField(120,32,"Input:");
+			var outputLbl:TextField = new TextField(120,32,"Output:");
+			var containerLbl:TextField = new TextField(120,32,"Output container:");
+			outputLbl.format = inputLbl.format = containerLbl.format = tf;
+			
 			outputLbl.touchable = inputLbl.touchable = containerLbl.touchable = false;
 			outputLbl.batchable = inputLbl.batchable = containerLbl.batchable = true;
 			
@@ -351,7 +353,7 @@ package views.client {
 			txtHolder.visible = true;
 			encodeButton.visible = true;
 			cancelButton.visible = false;
-			
+			encodingScreen.onComplete();
 			encodingScreen.show(false);
 		}
 		protected function onProbeInfo(event:ProbeEvent):void {

@@ -5,8 +5,8 @@ package views.client {
 	
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.text.TextFormat;
+	import starling.utils.Align;
 	
 	import views.forms.Stepper;
 	
@@ -15,15 +15,17 @@ package views.client {
 		private var hStppr:Stepper;
 		private var holder:Sprite = new Sprite();
 		private var txtHolder:Sprite = new Sprite();
-		private var sourceLbl:TextField = new TextField(400,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var wLbl:TextField = new TextField(60,32,"Width:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var hLbl:TextField = new TextField(60,32,"Height:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+		private var sourceLbl:TextField = new TextField(400,32,"");
+		private var wLbl:TextField = new TextField(60,32,"Width:");
+		private var hLbl:TextField = new TextField(60,32,"Height:");
 		private var _probe:Probe;
 		public function PicturePanel() {
 			super();
 			
-			sourceLbl.vAlign = hLbl.vAlign = wLbl.vAlign = VAlign.TOP;
-			sourceLbl.hAlign = hLbl.hAlign = wLbl.hAlign = HAlign.LEFT;
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
+			
+			sourceLbl.format = hLbl.format = wLbl.format = tf;
 			sourceLbl.touchable = hLbl.touchable = wLbl.touchable = false;
 			sourceLbl.batchable = hLbl.batchable = wLbl.batchable = true;
 			
@@ -57,7 +59,7 @@ package views.client {
 			txtHolder.addChild(wLbl);
 			txtHolder.addChild(hLbl);
 			addChild(txtHolder);
-			txtHolder.flatten();
+		//	txtHolder.flatten();
 			
 		}
 		public function update(probe:Probe):void {

@@ -5,23 +5,20 @@ package views.forms {
 	
 	import events.FormEvent;
 	
-	import feathers.display.Scale3Image;
-	import feathers.display.Scale9Image;
-	import feathers.textures.Scale3Textures;
-	import feathers.textures.Scale9Textures;
-	
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.display.BlendMode;
+	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.text.TextFormat;
+	import starling.textures.Texture;
+	import starling.utils.Align;
 	
 	public class DropDown extends Sprite { //5 draw calls - not nice
 		private var _id:String;
@@ -29,49 +26,57 @@ package views.forms {
 		private var h:int;
 		private var _selected:int = 0;
 		private var items:Vector.<Object>;
-		private var bg:Scale3Image;
-		private var bgTexture:Scale3Textures = new Scale3Textures(Assets.getAtlas().getTexture("dropdown-bg"),4,23);
-		private var listBg:Scale9Image;
-		private var listBgTexture:Scale9Textures;
+		private var bg:Image;
+		private var listBg:Image;
+		private var listBgTexture:Texture;
 		private var listContainer:Sprite = new Sprite();
 		private var hover:Quad;
 		private var txt:TextField;
 		private var listOuterContainer:Sprite = new Sprite();
 		private var tween:Tween;
 		private var isEnabled:Boolean = true;
+
+		private var textFormat:TextFormat;
 		public function DropDown(_w:int,_items:Vector.<Object>) {
 			super();
 			w = _w;
 			items = _items;
+			textFormat = new TextFormat();
+			textFormat.setTo("Fira Sans Semi-Bold 13",13);
+			textFormat.horizontalAlign = Align.LEFT;
+			textFormat.verticalAlign = Align.CENTER;
+			textFormat.color = 0xD8D8D8;
 			render();
 		}
-		
 		private function render():void {
 			h = (items.length*20) + 5;
-			bg = new Scale3Image(bgTexture);
+			bg = new Image(Assets.getAtlas().getTexture("dropdown-bg"));
+			bg.scale9Grid = new Rectangle(4, 0, 23, 25);
 			bg.width = w;
 			bg.blendMode = BlendMode.NONE;
 			
 			hover = new Quad(w-6,20,0xCC8D1E);
 			hover.alpha = 0.4;
 			
-			txt = new TextField(w,26,items[_selected].label, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+			txt = new TextField(w,26,items[_selected].label);
+			txt.format = textFormat;
+			
+			txt.x = 8;
 			txt.batchable = true;
 			txt.touchable = false;
-			txt.hAlign = HAlign.LEFT;
-			txt.vAlign = VAlign.CENTER;
-			txt.x = 8;
 			
 			bg.addEventListener(TouchEvent.TOUCH,onTouch);
 			
-			listBgTexture = new Scale9Textures(Assets.getAtlas().getTexture("dropdown-items-bg"),new Rectangle(4,4,41,17));
-			listBg = new Scale9Image(listBgTexture);
+			listBg = new Image(Assets.getAtlas().getTexture("dropdown-items-bg"));
+			listBg.scale9Grid = new Rectangle(4, 4, 41, 17);
+			
 			listBg.blendMode = BlendMode.NONE;
 			listBg.width = w;
 			listBg.height = h;
 			
 			listContainer.y = 25-h;
-			listOuterContainer.clipRect = new Rectangle(0,25,w,h);
+			listOuterContainer.mask = new Quad(w, h);
+			listOuterContainer.mask.y = 25
 			
 			var k:int = listContainer.numChildren;
 			while(k--){
@@ -86,11 +91,8 @@ package views.forms {
 			
 			var itmLbl:TextField;
 			for (var i:int=0, l:int=items.length; i<l; ++i){
-				itmLbl = new TextField(w,26,items[i].label, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-				itmLbl.batchable = true;
-				itmLbl.touchable = false;
-				itmLbl.hAlign = HAlign.LEFT;
-				itmLbl.vAlign = VAlign.CENTER;
+				itmLbl = new TextField(w,26,items[i].label);
+				itmLbl.format = textFormat;
 				itmLbl.x = 8;
 				itmLbl.y = (i*20) + 0;
 				listContainer.addChild(itmLbl);

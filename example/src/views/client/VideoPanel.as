@@ -10,9 +10,9 @@ package views.client {
 	
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
-
+	import starling.text.TextFormat;
+	import starling.utils.Align;
+	
 	import views.forms.DropDown;
 	import views.forms.Input;
 	import views.forms.RadioOption;
@@ -34,15 +34,15 @@ package views.client {
 		private var profileDrop:DropDown;
 		private var tuneDrop:DropDown;
 		private var levelDrop:DropDown;
-		private var codecLbl:TextField = new TextField(120,32,"Codec:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var presetLbl:TextField = new TextField(120,32,"Preset:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var tuneLbl:TextField = new TextField(120,32,"Tune:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var profileLbl:TextField = new TextField(120,32,"Profile:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var levelLbl:TextField = new TextField(120,32,"Level:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var crfLbl:TextField = new TextField(200,32,"Constant Rate Factor:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var crfTxt:TextField = new TextField(120,32,"20", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var presetTxt:TextField = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var bitrateLbl:TextField = new TextField(200,32,"Bitrate (Kbps):", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+		private var codecLbl:TextField = new TextField(120,32,"Codec:");
+		private var presetLbl:TextField = new TextField(120,32,"Preset:");
+		private var tuneLbl:TextField = new TextField(120,32,"Tune:");
+		private var profileLbl:TextField = new TextField(120,32,"Profile:");
+		private var levelLbl:TextField = new TextField(120,32,"Level:");
+		private var crfLbl:TextField = new TextField(200,32,"Constant Rate Factor:");
+		private var crfTxt:TextField = new TextField(120,32,"20");
+		private var presetTxt:TextField = new TextField(120,32,"");
+		private var bitrateLbl:TextField = new TextField(200,32,"Bitrate (Kbps):");
 		private var crfRadio:RadioOption = new RadioOption(0);
 		private var bitrateRadio:RadioOption = new RadioOption(1);
 		private var qualityRadioGroupSelected:int=0;
@@ -109,9 +109,10 @@ package views.client {
 			_levelDataList.push({value:"5.1",label:"5.1"});
 			_levelDataList.push({value:"5.2",label:"5.2"});
 			
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			
-			bitrateLbl.vAlign = crfTxt.vAlign = crfLbl.vAlign = presetTxt.vAlign = profileLbl.vAlign = levelLbl.vAlign = presetLbl.vAlign = codecLbl.vAlign = tuneLbl.vAlign = VAlign.TOP;
-			bitrateLbl.hAlign = crfTxt.hAlign = crfLbl.hAlign = presetTxt.hAlign = profileLbl.hAlign = levelLbl.hAlign = presetLbl.hAlign = codecLbl.hAlign = tuneLbl.hAlign = HAlign.LEFT;
+			bitrateLbl.format = crfTxt.format = crfLbl.format = presetTxt.format = profileLbl.format = levelLbl.format = presetLbl.format = codecLbl.format = tuneLbl.format = tf;
 			bitrateLbl.touchable = crfTxt.touchable = crfLbl.touchable = presetTxt.touchable = profileLbl.touchable = levelLbl.touchable = presetLbl.touchable = codecLbl.touchable = tuneLbl.touchable = false;
 			bitrateLbl.batchable = crfTxt.batchable = crfLbl.batchable = presetTxt.batchable = profileLbl.batchable = levelLbl.batchable = presetLbl.batchable = codecLbl.batchable = tuneLbl.batchable = true;
 			
@@ -165,7 +166,7 @@ package views.client {
 			levelLbl.alpha = txtHolder.alpha = 0.25;
 			
 			addChild(txtHolder);
-			txtHolder.flatten();
+			
 			
 			codecDrop = new DropDown(120,_encoderDataList);
 			codecDrop.addEventListener(FormEvent.CHANGE,onFormChange);

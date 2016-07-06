@@ -21,9 +21,9 @@ package views.client {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
+	import starling.text.TextFormat;
 	import starling.textures.Texture;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.utils.Align;
 	
 	import views.forms.Input;
 	import views.forms.Stepper;
@@ -37,16 +37,18 @@ package views.client {
 		private var yStppr:Stepper;
 		private var inStppr:Stepper;
 		private var outStppr:Stepper;
-		private var xLbl:TextField = new TextField(32,32,"X:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var yLbl:TextField = new TextField(32,32,"Y:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var inLbl:TextField = new TextField(60,32,"In time:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-		private var outLbl:TextField = new TextField(60,32,"Out time:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+		private var xLbl:TextField = new TextField(32,32,"X:");
+		private var yLbl:TextField = new TextField(32,32,"Y:");
+		private var inLbl:TextField = new TextField(60,32,"In time:");
+		private var outLbl:TextField = new TextField(60,32,"Out time:");
 		private var txtHolder:Sprite = new Sprite();
 		public function OverlayPanel() {
 			super();
 			
-			outLbl.vAlign = inLbl.vAlign = yLbl.vAlign = xLbl.vAlign = VAlign.TOP;
-			outLbl.hAlign = inLbl.hAlign = yLbl.hAlign = xLbl.hAlign = HAlign.LEFT;
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
+			
+			outLbl.format = inLbl.format = yLbl.format = xLbl.format = tf;
 			outLbl.touchable = inLbl.touchable = yLbl.touchable = xLbl.touchable = false;
 			outLbl.batchable = inLbl.batchable = yLbl.batchable = xLbl.batchable = true;
 			
@@ -117,7 +119,7 @@ package views.client {
 			addChild(holder);
 			
 			addChild(txtHolder);
-			txtHolder.flatten();
+			//txtHolder.flatten();
 			
 		}
 		private function onFormChange(event:FormEvent):void {

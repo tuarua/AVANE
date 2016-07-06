@@ -24,6 +24,7 @@ package {
 	import views.DesktopCapture;
 	import views.ExampleSelector;
 	import views.MenuButton;
+	import views.loader.RadialImage;
 	import views.UniversalPlayer;
 	import views.client.AdvancedClient;
 
@@ -39,6 +40,8 @@ package {
 		private var backButton:Image = new Image(upTexture);
 		private var selectedExample:int = 0;
 		private var exampleSelector:ExampleSelector;
+		
+		private var ri:RadialImage = new RadialImage(Assets.getAtlas().getTexture("semi-circle-bg2"));
 		
 		public function StarlingRoot() {
 			super();
@@ -101,6 +104,7 @@ package {
 			
 			addChild(exampleSelector);
 			
+			
 		}
 		private function onBasicTouch(event:TouchEvent):void {
 			event.stopPropagation();
@@ -109,6 +113,7 @@ package {
 				closeMenu();
 				clearAll();
 				selectedExample = 1;
+				Starling.current.skipUnchangedFrames = true;
 				basicExample.resume();
 			}
 		}
@@ -130,6 +135,7 @@ package {
 				closeMenu();
 				clearAll();
 				selectedExample = 3;
+				Starling.current.skipUnchangedFrames = true;
 				desktopCapture.resume();
 			}
 		}
@@ -141,6 +147,7 @@ package {
 				closeMenu();
 				clearAll();
 				selectedExample = 0;
+				Starling.current.skipUnchangedFrames = false;
 				universalPlayer.resume();
 			}
 		}

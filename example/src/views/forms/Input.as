@@ -3,27 +3,20 @@ package views.forms {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFieldType;
-	import flash.text.TextFormatAlign;
-	
 	import events.FormEvent;
-	
-	import feathers.display.Scale9Image;
-	import feathers.textures.Scale9Textures;
-	
 	import starling.core.Starling;
 	import starling.display.BlendMode;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.utils.Align;
 	
 	import views.forms.NativeTextInput;
 	
 	public class Input extends Sprite {
-		private var txtures:Scale9Textures;
-		private var inputBG:Scale9Image;
-		//private var w:int;
+		private var inputBG:Image;
+		private var w:int;
 		private var nti:NativeTextInput;
 		private var frozenText:TextField;
 		private var isEnabled:Boolean = true;
@@ -33,21 +26,24 @@ package views.forms {
 		public function Input(_w:int,_txt:String,_h:int=25) {
 			super();
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE,onAddedToStage);
-			//w = _w;
-			
-			txtures = new Scale9Textures(Assets.getAtlas().getTexture("input-bg"),new Rectangle(4,4,16,16));
-			inputBG = new Scale9Image(txtures);
+			w = _w;
+			inputBG = new Image(Assets.getAtlas().getTexture("input-bg"));
+			inputBG.scale9Grid = new Rectangle(4, 4, 16, 16);
 			inputBG.width = _w;
 			inputBG.height = _h;
 			
 			inputBG.blendMode = BlendMode.NONE;
 			inputBG.touchable = false;
-			inputBG.flatten();
-			frozenText = new TextField(_w,_h,_txt, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+			
+			frozenText = new TextField(_w,_h,_txt);
+			frozenText.format.setTo("Fira Sans Semi-Bold 13",13);
+			frozenText.format.horizontalAlign = Align.LEFT;
+			frozenText.format.verticalAlign = Align.TOP;
+			frozenText.format.color = 0xD8D8D8;
+			
 			frozenText.x = 6;
 			frozenText.y = 4;
-			frozenText.vAlign = VAlign.TOP;
-			frozenText.hAlign = HAlign.LEFT;
+			
 			frozenText.touchable = false;
 			frozenText.batchable = true;
 			frozenText.visible = false;

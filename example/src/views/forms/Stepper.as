@@ -1,12 +1,10 @@
 package views.forms {
 	import flash.events.Event;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.text.TextFormatAlign;
 	
 	import events.FormEvent;
-	
-	import feathers.display.Scale3Image;
-	import feathers.textures.Scale3Textures;
 	
 	import starling.core.Starling;
 	import starling.display.BlendMode;
@@ -17,12 +15,11 @@ package views.forms {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.utils.Align;
 	
 	public class Stepper extends Sprite {
-		private var txtures:Scale3Textures = new Scale3Textures(Assets.getAtlas().getTexture("stepper-bg"),4,18);
-		private var inputBG:Scale3Image = new Scale3Image(txtures);
+		private var inputBG:Image;
+		
 		private var upArrow:Image = new Image(Assets.getAtlas().getTexture("stepper-arrow"));
 		private var downArrow:Image = new Image(Assets.getAtlas().getTexture("stepper-arrow"));
 		private var w:int;
@@ -36,21 +33,26 @@ package views.forms {
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE,onAddedToStage);
 			w = _w;
 			increment = _increment;
+			
+			inputBG = new Image(Assets.getAtlas().getTexture("stepper-bg"));
+			inputBG.scale9Grid = new Rectangle(4, 0, 18, 0);
+			
 			inputBG.width = w;
 			inputBG.blendMode = BlendMode.NONE;
 			inputBG.touchable = false;
-			inputBG.flatten();
-			frozenText = new TextField(w-29,25,_txt, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			///trace(_txt);
-			//trace(w-29-35);
-			//trace("---------");
+			
+			frozenText = new TextField(w-29,25,_txt);
+			frozenText.format.setTo("Fira Sans Semi-Bold 13",13);
 			frozenText.x = w-29-35;
 			frozenText.y = 4;
-			frozenText.vAlign = VAlign.TOP;
-			frozenText.hAlign = HAlign.RIGHT;
+			frozenText.format.horizontalAlign = Align.LEFT;
+			frozenText.format.verticalAlign = Align.TOP;
+			frozenText.format.color = 0xD8D8D8;
 			frozenText.touchable = false;
 			frozenText.batchable = true;
 			frozenText.visible = false;
+			
+			
 			nti = new NativeTextInput(w-29,_txt,false,0xC0C0C0);
 			nti.align = TextFormatAlign.RIGHT;
 			nti.maxChars = _maxChars;
@@ -121,9 +123,7 @@ package views.forms {
 			}catch(e:Error){
 				
 			}
-		
 		}
-		
 		protected function changeHandler(event:flash.events.Event):void {
 			var test:int;
 			test = parseInt(nti.input.text);

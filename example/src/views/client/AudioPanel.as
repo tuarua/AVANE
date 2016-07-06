@@ -1,20 +1,21 @@
 package views.client {
 	import com.tuarua.ffprobe.Probe;
+	
 	import events.FormEvent;
 	
-	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.text.TextFormat;
+	import starling.utils.Align;
 	
 	import utils.LangUtils;
 	
 	import views.forms.CheckBox;
 	import views.forms.DropDown;
+	import starling.display.MeshBatch;
 
 	public class AudioPanel extends Sprite {
-		private var bg:QuadBatch = new QuadBatch();
+		private var bg:MeshBatch = new MeshBatch();
 		private var headingHolder:Sprite = new Sprite();
 		private var pane:Sprite = new Sprite();
 		private var txtHolder:Sprite = new Sprite();
@@ -65,12 +66,12 @@ package views.client {
 			var sampleDrop:DropDown;
 			var bitrateDrop:DropDown;
 			var chk:CheckBox;
-			
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			for (var i:int=probe.audioStreams.length-1, l:int=-1; i>l; --i){
-				sourceLbl = new TextField(120,32,"Source:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-				codecLbl = new TextField(120,32,"Codec:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-				sourceLbl.vAlign = codecLbl.vAlign = VAlign.TOP;
-				sourceLbl.hAlign = codecLbl.hAlign = HAlign.LEFT;
+				sourceLbl = new TextField(120,32,"Source:");
+				codecLbl = new TextField(120,32,"Codec:");
+				sourceLbl.format = codecLbl.format = tf;
 				sourceLbl.touchable = codecLbl.touchable = false;
 				sourceLbl.batchable = codecLbl.batchable = true;
 				if(probe.audioStreams[i].tags && probe.audioStreams[i].tags.hasOwnProperty("language") && probe.audioStreams[i].tags.language)

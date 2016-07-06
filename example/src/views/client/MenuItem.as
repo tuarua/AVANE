@@ -7,7 +7,6 @@ package views.client {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
 	
 	public class MenuItem extends Sprite {
 		private var bg:Quad;
@@ -27,8 +26,8 @@ package views.client {
 			bgOff.alpha = 0.25;
 			bgOff.visible = !isSelected;
 			
-			lbl = new TextField(w,32,_lbl, "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			lbl.hAlign = HAlign.CENTER;
+			lbl = new TextField(w,32,_lbl);
+			lbl.format.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
 			lbl.x = 0;
 			lbl.batchable = true;
 			lbl.touchable = false;

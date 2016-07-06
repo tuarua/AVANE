@@ -5,8 +5,7 @@ package views.client {
 	
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.utils.VAlign;
-	import starling.utils.HAlign;
+	import starling.utils.Align;
 	
 	import views.forms.DropDown;
 	
@@ -14,13 +13,11 @@ package views.client {
 		private var denoiseDrop:DropDown;
 		private var selectedDenoise:Array;
 		private var _denoiseDataList:Vector.<Object> = new Vector.<Object>;
-		private var denoiseLbl:TextField = new TextField(120,32,"Denoise:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+		private var denoiseLbl:TextField = new TextField(120,32,"Denoise:");
 		public function FiltersPanel() {
 			super();
 			
-			
-			denoiseLbl.vAlign = VAlign.TOP;
-			denoiseLbl.hAlign = HAlign.LEFT;
+			denoiseLbl.format.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			denoiseLbl.touchable = false;
 			denoiseLbl.batchable = true;
 			

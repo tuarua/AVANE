@@ -3,12 +3,13 @@ package views.client {
 	
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
+	import starling.text.TextFormat;
+	import starling.utils.Align;
 	
-	import views.CircularLoader;
 	import utils.TextUtils;
 	import utils.TimeUtils;
+	
+	import views.loader.CircularLoader;
 
 	public class EncodingScreen extends Sprite {
 		private var circularLoader:CircularLoader;
@@ -36,27 +37,29 @@ package views.client {
 			circularLoader.x = 280;
 			circularLoader.y = 6;
 			circularLoader.visible = true;
-			speedLbl = new TextField(120,32,"Speed:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			bitrateLbl = new TextField(120,32,"Bitrate:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			timeLbl = new TextField(120,32,"Time:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			sizeLbl = new TextField(120,32,"Size:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			frameLbl = new TextField(120,32,"Frame:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			fpsLbl = new TextField(120,32,"Fps:", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
 			
-			speedTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			bitrateTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			timeTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			sizeTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			frameTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
-			fpsTxt = new TextField(120,32,"", "Fira Sans Semi-Bold 13", 13, 0xD8D8D8);
+			var tf:TextFormat = new TextFormat();
+			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			
-			fpsLbl.vAlign = timeLbl.vAlign = sizeLbl.vAlign = frameLbl.vAlign = speedLbl.vAlign = bitrateLbl.vAlign = VAlign.TOP;
-			fpsLbl.hAlign = timeLbl.hAlign = sizeLbl.hAlign = frameLbl.hAlign = speedLbl.hAlign = bitrateLbl.hAlign = HAlign.LEFT;
+			speedLbl = new TextField(120,32,"Speed:");
+			bitrateLbl = new TextField(120,32,"Bitrate:");
+			timeLbl = new TextField(120,32,"Time:");
+			sizeLbl = new TextField(120,32,"Size:");
+			frameLbl = new TextField(120,32,"Frame:");
+			fpsLbl = new TextField(120,32,"Fps:");
+			
+			speedTxt = new TextField(120,32,"");
+			bitrateTxt = new TextField(120,32,"");
+			timeTxt = new TextField(120,32,"");
+			sizeTxt = new TextField(120,32,"");
+			frameTxt = new TextField(120,32,"");
+			fpsTxt = new TextField(120,32,"");
+			
+			fpsLbl.format = timeLbl.format = sizeLbl.format = frameLbl.format = speedLbl.format = bitrateLbl.format = tf;
 			fpsLbl.touchable = timeLbl.touchable = sizeLbl.touchable = frameLbl.touchable = speedLbl.touchable = bitrateLbl.touchable = false;
 			fpsLbl.batchable = timeLbl.batchable = sizeLbl.batchable = frameLbl.batchable = speedLbl.batchable = bitrateLbl.batchable = true;
 			
-			fpsTxt.vAlign = timeTxt.vAlign = sizeTxt.vAlign = frameTxt.vAlign = speedTxt.vAlign = bitrateTxt.vAlign = VAlign.TOP;
-			fpsTxt.hAlign = timeTxt.hAlign = sizeTxt.hAlign = frameTxt.hAlign = speedTxt.hAlign = bitrateTxt.hAlign = HAlign.LEFT;
+			fpsTxt.format = timeTxt.format = sizeTxt.format = frameTxt.format = speedTxt.format = bitrateTxt.format = tf;
 			fpsTxt.touchable = timeTxt.touchable = sizeTxt.touchable = frameTxt.touchable = speedTxt.touchable = bitrateTxt.touchable = false;
 			fpsTxt.batchable = timeTxt.batchable = sizeTxt.batchable = frameTxt.batchable = speedTxt.batchable = bitrateTxt.batchable = true;
 			
@@ -87,7 +90,7 @@ package views.client {
 			
 			addChild(txtHolder);
 			
-			lblHolder.flatten();
+			//lblHolder.flatten();
 		}
 		public function show(value:Boolean):void {
 			this.visible = value;
@@ -114,6 +117,9 @@ package views.client {
 			circularLoader.update(((event.params.secs) + (event.params.us/100)) / _totalTime);
 		}
 
+		public function onComplete():void {
+			circularLoader.reset();
+		}
 		
 		public function set totalTime(value:Number):void {
 			_totalTime = value;

@@ -42,6 +42,7 @@ package views {
 	import starling.textures.TextureSmoothing;
 	
 	import views.forms.DropDown;
+	import views.loader.CircularLoader;
 
 	public class UniversalPlayer extends Sprite {
 		private var avANE:AVANE;
@@ -52,7 +53,8 @@ package views {
 		private var nc:NetConnection;
 		private var ns:NetStream;
 		private var vidClient:Object;
-		private var uri:String;private var videoImage:Image;
+		private var uri:String;
+		private var videoImage:Image;
 		private var videoTexture:Texture;
 		private var loading:LoadingIcon = new LoadingIcon();
 		private var soundTransform:SoundTransform = new SoundTransform();
@@ -75,8 +77,8 @@ package views {
 			urlList.push({value:"http://video.h265files.com/TearsOfSteel_720p_h265.mkv",label:"MKV HEVC   -   http://video.h265files.com/TearsOfSteel_720p_h265.mkv"});
 			urlList.push({value:"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
 			urlList.push({value:"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
-			urlList.push({value:"http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8",label:"HLS Vevo live   -   http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8"});
-			urlList.push({value:"twitch",label:"HLS Twitch live   -   random channel"});
+			urlList.push({value:"http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch2/06/prog_index.m3u8",label:"HLS Vevo live   -   http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8"});
+			urlList.push({value:"twitch",label:"HLS Twitch live  60fps -   random channel"});
 			playButton.x = 1050;
 			playButton.y = 38;
 			playButton.addEventListener(TouchEvent.TOUCH,onPlayTouch);
@@ -114,7 +116,6 @@ package views {
 			ns = new NetStream(nc);
 			ns.addEventListener( NetStatusEvent.NET_STATUS, onNetStatus );
 			ns.client = vidClient;
-			ns.bufferTime = 5;
 			soundTransform.volume = 0.5;
 			ns.soundTransform = soundTransform;
 			
@@ -199,7 +200,8 @@ package views {
 			}
 		}
 		
-		protected function onTextureComplete():void {videoImage = new Image(videoTexture);
+		protected function onTextureComplete():void {
+			videoImage = new Image(videoTexture);
 			videoImage.blendMode = BlendMode.NONE;
 			videoImage.touchable = false;
 			setSize();
@@ -212,9 +214,9 @@ package views {
 			videoImage.y = 80;
 			
 			if(videoTexture.nativeWidth == 1280)
-				videoImage.smoothing = TextureSmoothing.NONE;
+				videoImage.textureSmoothing = TextureSmoothing.NONE;
 			else
-				videoImage.smoothing = TextureSmoothing.BILINEAR;
+				videoImage.textureSmoothing = TextureSmoothing.BILINEAR;
 			
 		}
 		protected function onNoProbeInfo(event:ProbeEvent):void {
@@ -308,6 +310,7 @@ package views {
 			}
 				
 			setupVideo();
+			ns.bufferTime = 1;
 			
 			//don't probe - already know we need to transcode
 			var inputOptions:InputOptions = new InputOptions();
@@ -321,6 +324,7 @@ package views {
 			outputAudioStream.codec = "aac";
 			outputAudioStream.channels = 2;
 			OutputOptions.addAudioStream(outputAudioStream);
+			
 			
 			var videoStream:OutputVideoStream = new OutputVideoStream();
 			videoStream.sourceIndex = 0;

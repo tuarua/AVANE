@@ -1,26 +1,23 @@
 package views.forms {
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import events.FormEvent;
-	
-	import feathers.display.Scale3Image;
-	import feathers.textures.Scale3Textures;
 	
 	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.Quad;
-	import starling.display.QuadBatch;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.filters.ColorMatrixFilter;
+	import starling.display.MeshBatch;
 
 	public class Slider extends Sprite {
-		private var bgTexture:Scale3Textures = new Scale3Textures(Assets.getAtlas().getTexture("slider-bg"),4,12);
-		private var bg:Scale3Image = new Scale3Image(bgTexture);
+		private var bg:Image = new Image(Assets.getAtlas().getTexture("slider-bg"));
 		private var handle:Image = new Image(Assets.getAtlas().getTexture("slider-handle"));
-		private var notchHolder:QuadBatch = new QuadBatch();
+		private var notchHolder:MeshBatch = new MeshBatch();
 		private var _w:int;
 		private var numNotches:int;
 		private var volumeScrubBeganX:Number;
@@ -33,12 +30,14 @@ package views.forms {
 		public function Slider(w:int,start:int,end:int,selected:int=0) {
 			
 			super();
+			
+			bg.scale9Grid = new Rectangle(4, 0, 12, 0);
+			
 			_selected = selected;
 			_w = w;
 			bg.width = w;
 			bg.blendMode = BlendMode.NONE;
 			bg.addEventListener(TouchEvent.TOUCH,onBgClick);
-			bg.flatten();
 			handle.pivotX = 5;//half the width 
 			fltr = new ColorMatrixFilter();
 			fltr.tint(0x000000,0.4);
@@ -76,7 +75,7 @@ package views.forms {
 			for (var i:int=0, l:int=numNotches; i<l; ++i){
 				divider.x = (i*notchGap)+5;
 			//	trace(divider.x);
-				notchHolder.addQuad(divider);
+				notchHolder.addMesh(divider);
 			}
 			
 			notchHolder.y = 18;
