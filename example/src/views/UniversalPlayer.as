@@ -29,7 +29,6 @@ package views {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.System;
-	
 	import starling.core.Starling;
 	import starling.display.BlendMode;
 	import starling.display.Image;
@@ -37,7 +36,6 @@ package views {
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-	import starling.filters.ColorMatrixFilter;
 	import starling.textures.Texture;
 	import starling.textures.TextureSmoothing;
 	
@@ -95,7 +93,6 @@ package views {
 			
 			addChild(loading);
 			
-		
 		}
 		
 		protected function onEncodeError(event:FFmpegEvent):void {
@@ -209,6 +206,7 @@ package views {
 				this.addChildAt(videoImage,0);
 		}
 		public function setSize():void {
+			trace(videoTexture.nativeWidth);
 			var scaleFactor:Number = 1280/videoTexture.nativeWidth;
 			videoImage.scaleY = videoImage.scaleX = scaleFactor;
 			videoImage.y = 80;
@@ -345,8 +343,6 @@ package views {
 			var parsedObj:Object = JSON.parse(result);
 			var sig:String = parsedObj.sig;
 			var token:String = parsedObj.token;
-
-			trace();
 			var m3u8Url:String = "http://usher.twitch.tv/api/channel/hls/"+twitchChannel+".m3u8?player=twitchweb&token="+token+"&sig="+sig+"&$allow_audio_only=true&allow_source=true&type=any&p=1243565"
 				
 			

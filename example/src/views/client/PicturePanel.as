@@ -92,13 +92,9 @@ package views.client {
 			return obj;
 		}
 		
-		public function freeze():void {
-			wStppr.freeze();
-			hStppr.freeze();
-		}
-		public function unfreeze():void {
-			wStppr.unfreeze();
-			hStppr.unfreeze();
+		public function freeze(value:Boolean=true):void {
+			wStppr.freeze(value);
+			hStppr.freeze(value);
 		}
 	}
 }

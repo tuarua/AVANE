@@ -247,19 +247,13 @@ package views.client {
 						profileDrop.enable(true);
 						tuneDrop.enable(true);
 						
-						if(qualityRadioGroupSelected == 0){
-							crfSlider.enable(true);
-							crfTxt.alpha = crfLbl.alpha = 1.0;
-							bitrateInput.freeze();
-							bitrateLbl.alpha = 0.25;
-							bitrateInput.enable(false);
-						}else{
-							crfSlider.enable(false);
-							crfTxt.alpha = crfLbl.alpha = 0.25;
-							bitrateInput.unfreeze();
-							bitrateLbl.alpha =1.0;
-							bitrateInput.enable(true);
-						}
+						crfSlider.enable((qualityRadioGroupSelected == 0));
+						crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
+						bitrateInput.freeze((qualityRadioGroupSelected == 0));
+						bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
+						bitrateInput.enable(!(qualityRadioGroupSelected == 0));
+						
+						
 					}else if(event.params.value == "copy"){
 						bitrateLbl.alpha = crfTxt.alpha = crfLbl.alpha = presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 0.25;
 						crfRadio.enable(false);
@@ -307,7 +301,7 @@ package views.client {
 					qualityRadioGroupSelected = event.params.value;
 					crfSlider.enable(false);
 					crfTxt.alpha = crfLbl.alpha = 0.25;
-					bitrateInput.unfreeze();
+					bitrateInput.freeze(false);
 					bitrateInput.enable(true);
 					bitrateLbl.alpha = 1.0;
 					break;
@@ -347,11 +341,8 @@ package views.client {
 			}
 			return obj;
 		}
-		public function unfreeze():void {
-			bitrateInput.unfreeze();
-		}
-		public function freeze():void {
-			bitrateInput.freeze();
+		public function freeze(value:Boolean=true):void {
+			bitrateInput.freeze(value);
 		}
 		public function clear():void {
 			

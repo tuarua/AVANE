@@ -3,6 +3,7 @@ package views.client {
 	
 	import events.FormEvent;
 	
+	import starling.display.MeshBatch;
 	import starling.display.Sprite;
 	import starling.text.TextField;
 	import starling.text.TextFormat;
@@ -12,7 +13,6 @@ package views.client {
 	
 	import views.forms.CheckBox;
 	import views.forms.DropDown;
-	import starling.display.MeshBatch;
 
 	public class AudioPanel extends Sprite {
 		private var bg:MeshBatch = new MeshBatch();
@@ -190,11 +190,8 @@ package views.client {
 			
 		}
 		
-		public function freeze():void {
+		public function freeze(value:Boolean=true):void {
 		}
-		public function unfreeze():void {
-		}
-		
 
 			
 	}

@@ -72,6 +72,7 @@ package {
 			basicExample.suspend();
 			holder.addChild(basicExample);
 			
+			
 			desktopCapture = new DesktopCapture(avANE);
 			desktopCapture.suspend();
 			desktopCapture.y = 40;
@@ -131,10 +132,10 @@ package {
 		private function onCaptureTouch(event:TouchEvent):void {
 			event.stopPropagation();
 			var touch:Touch = event.getTouch(exampleSelector.captureButton, TouchPhase.ENDED);
-			if(touch && touch.phase == TouchPhase.ENDED && selectedExample != 3){
+			if(touch && touch.phase == TouchPhase.ENDED && selectedExample != 4){
 				closeMenu();
 				clearAll();
-				selectedExample = 3;
+				selectedExample = 4;
 				Starling.current.skipUnchangedFrames = true;
 				desktopCapture.resume();
 			}

@@ -190,7 +190,6 @@ package views.client {
 				videoEncoderDataList.push({value:"libx265",label:"H.265 (x265)"});
 			//add others qsv, nvenc
 			
-			
 			audioEncoderDataList.push({value:"copy",label:"Copy"});
 			if(hasEncoder("aac"))
 				audioEncoderDataList.push({value:"aac",label:"AAC"});
@@ -341,13 +340,13 @@ package views.client {
 			trace(event);
 			InputStream.clear();
 			OutputOptions.clear();
-			filePathInput.unfreeze();
-			filePathInput.visible = true;
-			chooseFileIn.visible = true;
+			filePathInput.freeze(false);
+			//filePathInput.visible = true;
+			//chooseFileIn.visible = true;
 			
-			filePathOutput.unfreeze();
-			filePathOutput.visible = true;
-			chooseFileOut.visible = true;
+			filePathOutput.freeze(false);
+			//filePathOutput.visible = true;
+			//chooseFileOut.visible = true;
 			
 			containerDrop.visible = true;
 			txtHolder.visible = true;
@@ -492,7 +491,7 @@ package views.client {
 				
 				encodingScreen.show(true);
 				
-				avANE.setLogLevel(LogLevel.INFO);
+				avANE.setLogLevel(LogLevel.DEBUG);
 				Logger.enableLogToTextField = false;
 				Logger.enableLogToTrace = true;
 				Logger.enableLogToFile = false;
@@ -548,10 +547,7 @@ package views.client {
 				mi = menuItemsVec[ii];
 				mi.setSelected((event.params.type == ii));
 				panelsVec[ii].visible = (event.params.type == ii);
-				if(event.params.type == ii)
-					panelsVec[ii].unfreeze();
-				else
-					panelsVec[ii].freeze();
+				panelsVec[ii].freeze(event.params.type != ii);
 			}
 		}
 		protected function onItemSelect(event:InteractionEvent):void {
@@ -566,14 +562,14 @@ package views.client {
 			(panelsVec[4] as OverlayPanel).freeze();
 		}
 		public function unfreeze():void {
-			filePathInput.unfreeze();
-			filePathOutput.unfreeze();
+			filePathInput.freeze(false);
+			filePathOutput.freeze(false);
 			if((panelsVec[0] as VideoPanel).visible)
-				(panelsVec[0] as VideoPanel).unfreeze();
+				(panelsVec[0] as VideoPanel).freeze(false);
 			if((panelsVec[2] as PicturePanel).visible)
-				(panelsVec[2] as PicturePanel).unfreeze();
+				(panelsVec[2] as PicturePanel).freeze(false);
 			if((panelsVec[4] as OverlayPanel).visible)
-				(panelsVec[4] as OverlayPanel).unfreeze();
+				(panelsVec[4] as OverlayPanel).freeze(false);
 		}
 		public function suspend():void {
 			avANE.removeEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);

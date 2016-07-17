@@ -28,6 +28,8 @@ package com.tuarua.ffmpeg {
 		public static var frameRate:int = 0;
 		public static var realtime:Boolean = false;
 		
+		//hls here ?
+		
 		public static function addOverlay(overlay:Overlay):void {
 			var inputOptions:InputOptions = new InputOptions();
 			inputOptions.uri = overlay.fileName;

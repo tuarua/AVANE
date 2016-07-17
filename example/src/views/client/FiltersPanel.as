@@ -49,9 +49,7 @@ package views.client {
 			return selectedDenoise;
 		}
 		
-		public function freeze():void {
-		}
-		public function unfreeze():void {
+		public function freeze(value:Boolean=true):void {
 		}
 		
 	}

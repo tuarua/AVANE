@@ -28,6 +28,7 @@ package views.forms {
 		private var isEnabled:Boolean = true;
 		private var increment:int;
 		private var _maxValue:int = -1;
+		private var _minValue:int = -1;
 		public function Stepper(_w:int,_txt:String,_maxChars:int=3,_increment:int=1) {
 			super();
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE,onAddedToStage);
@@ -56,7 +57,7 @@ package views.forms {
 			nti = new NativeTextInput(w-29,_txt,false,0xC0C0C0);
 			nti.align = TextFormatAlign.RIGHT;
 			nti.maxChars = _maxChars;
-			nti.restrict = "0-9";
+			nti.restrict = "-0-9";
 			upArrow.x = w - 24;
 			upArrow.y = 1;
 			upArrow.addEventListener(TouchEvent.TOUCH,onUp);
@@ -77,7 +78,7 @@ package views.forms {
 			if(touch && touch.phase == TouchPhase.ENDED && isEnabled){
 				var test:int;
 				test = (parseInt(nti.input.text)+increment);
-				if(test > -1 && (test <= _maxValue || _maxValue == -1)){
+				if(_maxValue == -1 || test <= _maxValue){//eh ?
 					frozenText.text = nti.input.text = test.toString();
 					this.dispatchEvent(new FormEvent(FormEvent.CHANGE,{value:test}));
 				}
@@ -88,7 +89,7 @@ package views.forms {
 			if(touch && touch.phase == TouchPhase.ENDED && isEnabled){
 				var test:int;
 				test = (parseInt(nti.input.text)-increment);
-				if(test > -1){
+				if(test >= _minValue){
 					frozenText.text = nti.input.text = test.toString();
 					this.dispatchEvent(new FormEvent(FormEvent.CHANGE,{value:test}));
 				}	
@@ -138,14 +139,17 @@ package views.forms {
 			_maxValue = value;
 		}
 		
-		public function freeze():void {
-			frozenText.visible = true;
-			nti.show(false);
-			updatePosition();
+		public function get minValue():int {
+			return _minValue;
 		}
-		public function unfreeze():void {
-			frozenText.visible = false;
-			nti.show(true);
+		
+		public function set minValue(value:int):void {
+			_minValue = value;
+		}
+		
+		public function freeze(value:Boolean=true):void {
+			frozenText.visible = value;
+			nti.show(!value);
 			updatePosition();
 		}
 	}

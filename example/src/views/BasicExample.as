@@ -119,9 +119,8 @@ package views {
 				avANE.addEventListener(FFmpegEvent.ON_ENCODE_START,onEncodeStart);
 				avANE.cancelEncode();
 			}
-			if(loggerTextField){
+			if(loggerTextField)
 				Starling.current.nativeOverlay.addChild(loggerTextField);
-			}
 		}
 		public function suspend():void {
 			if(avANE){
@@ -134,7 +133,7 @@ package views {
 					Starling.current.nativeOverlay.removeChild(loggerTextField);
 				loggerTextField.text = "";
 			}
-			this.visible = false;	
+			this.visible = false;
 		}
 	}
 }

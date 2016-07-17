@@ -11,22 +11,13 @@ package {
 	[SWF(width = "1280", height = "800", frameRate = "60", backgroundColor = "#121314")]
 	public class AVANESample extends Sprite {
 		public var mStarling:Starling;
-		
-		
-
-		
 		public function AVANESample(){
-			//to do
-			//disposition
-			//finish x264 params
-			//finish x265 params
 			
 			super();
 
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			Starling.multitouchEnabled = false;  // useful on mobile devices
-			//Starling.handleLostContext = true;
+			Starling.multitouchEnabled = false;
 			var viewPort:Rectangle = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
 			mStarling = new Starling(StarlingRoot, stage, viewPort,null,"auto","auto");
 			mStarling.stage.stageWidth = stage.stageWidth;  // <- same size on all devices!

@@ -1,7 +1,6 @@
 package views {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
 	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import starling.display.Quad;
@@ -18,22 +17,23 @@ package views {
 		private var _fullHeight:uint;
 		private var _spr:Sprite;
 		private var _moveBy:int;
-		public function SrollableContent(w:int,h:int,spr:Sprite,moveBy:int=50) {
+		public function SrollableContent(w:int,h:int,spr:Sprite=null,moveBy:int=50) {
 			super();
 			_w = w;
 			_h = h;
 			_spr = spr;
 			_moveBy = moveBy;
 			this.mask = new Quad(w, h);
-			addChild(spr);
+			if(spr)
+				addChild(spr);
 			Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_WHEEL,onMouseWheel);
 		}
 		protected function onMouseWheel(event:MouseEvent):void {
 			var mousePoint:Point = this.globalToLocal(new Point(Starling.current.nativeStage.mouseX,Starling.current.nativeStage.mouseY));
-			if(this.visible && mousePoint.x > 0 && mousePoint.x < _w && mousePoint.y > 0 && mousePoint.y < _h && !(_fullHeight < _h)){
+			if(this.visible && mousePoint.x > 0 && mousePoint.x < _w && mousePoint.y > 0 && mousePoint.y < _h && !(_fullHeight < _h) && scrollBar && _spr){
 				var lastY:int;
 				var cY:int = lastY = _spr.y;
-				cY += (_moveBy*event.delta);
+				cY += (_moveBy* (event.delta));
 				if(cY > 0) cY = 0;
 				if(cY < (_h - _fullHeight))
 					cY = (_h - _fullHeight);
@@ -50,7 +50,24 @@ package views {
 		public function set fullHeight(value:uint):void {
 			_fullHeight = value;
 		}
-		public function init():void {
+		public function init(w:int=-1,h:int=-1,spr:Sprite=null):void {
+			if(w > -1) _w = w;
+			if(h > -1) _h = h;
+			//remove all existing children
+			var k:int = this.numChildren;
+			while(k--)
+				this.removeChildAt(k);
+			if(spr)
+				_spr = spr;
+			if(_spr)
+				addChild(_spr);
+			setupScrollBar();
+			recalculate();
+		}
+		public function resize(w:int,h:int):void {
+			_w = w;
+			_h = h;
+			this.mask = new Quad(w, h);
 			setupScrollBar();
 			recalculate();
 		}
@@ -64,18 +81,12 @@ package views {
 			scrollBar.addEventListener(TouchEvent.TOUCH,onScrollBarTouch);
 			addChild(scrollBar);
 		}
-		
 		private function onScrollBarTouch(event:TouchEvent):void {
 			var touch:Touch = event.getTouch(scrollBar);
 			if(touch && touch.phase == TouchPhase.BEGAN)
 				scrollBeganY = globalToLocal(new Point(0,touch.globalY)).y-scrollBar.y;
 			if(touch && touch.phase == TouchPhase.ENDED)
 				scrollBeganY = -1;
-			//if(touch && touch.phase == TouchPhase.HOVER)
-				//Starling.juggler.tween(scrollBar, 0.2, {transition: Transitions.LINEAR,alpha: 1});
-			//if(touch == null)
-				//Starling.juggler.tween(scrollBar, 0.2, {transition: Transitions.LINEAR,alpha: 0});
-			
 			if(touch && touch.phase == TouchPhase.MOVED){
 				var sby:int = globalToLocal(new Point(touch.globalX,touch.globalY-(scrollBeganY))).y;
 				if(sby < 0) sby = 0;
@@ -87,16 +98,14 @@ package views {
 				_spr.y = Math.round(-((_fullHeight - _h)*percentage));
 			}
 		}
-		
 		public function recalculate():void {
 			scrollBar.scaleY = (_h == 0) ? 0 : _h/_fullHeight;
 			scrollBar.visible = !(_fullHeight < _h);
 		}
-		
 		public function reset():void {
 			if(_spr && scrollBar)
 				_spr.y = scrollBar.y = 0;
 		}
-
+		
 	}
 }

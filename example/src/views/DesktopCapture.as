@@ -69,13 +69,8 @@ package views {
 				//ffmpeg -f dshow -i video="screen-capture-recorder" -r 60 -t 10 D:\\screen-capture.mp4
 				
 				var inputOptions:InputOptions = new InputOptions();
-				if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1){
-					inputOptions.format = "dshow";
-					inputOptions.uri = "video=screen-capture-recorder";
-				}else{
-					inputOptions.format = "avfoundation";
-					inputOptions.uri = "default:none";
-				}
+				inputOptions.format = "dshow";
+				inputOptions.uri = "video=screen-capture-recorder";
 				
 				InputStream.clear();
 				InputStream.addInput(inputOptions);

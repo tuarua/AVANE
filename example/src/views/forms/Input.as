@@ -66,14 +66,9 @@ package views.forms {
 		protected function changeHandler(event:flash.events.Event):void {
 			this.dispatchEvent(new FormEvent(FormEvent.CHANGE));
 		}
-		public function freeze():void {
-			frozenText.visible = true;
-			nti.show(false);
-			updatePosition();
-		}
-		public function unfreeze():void {
-			frozenText.visible = false;
-			nti.show(true);
+		public function freeze(value:Boolean=true):void {
+			frozenText.visible = value;
+			nti.show(!value);
 			updatePosition();
 		}
 		public function updatePosition():void {

@@ -1,4 +1,6 @@
 package views {
+	import flash.system.Capabilities;
+	
 	import starling.display.Sprite;
 	
 	public class ExampleSelector extends Sprite {
@@ -17,7 +19,9 @@ package views {
 			addChild(universalButton);
 			addChild(basicButton);
 			addChild(advancedButton);
-			addChild(captureButton);
+			if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1)
+				addChild(captureButton);
+			
 		}
 	}
 }

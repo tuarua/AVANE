@@ -67,7 +67,7 @@ package views.client {
 			filePathInput.type = TextFieldType.DYNAMIC;
 			filePathInput.x = 20;
 			filePathInput.y = 37;
-			filePathInput.unfreeze();
+			filePathInput.freeze(false);
 			
 			chooseFileIn.x = filePathInput.x + filePathInput.width + 8;
 			chooseFileIn.y = filePathInput.y;
@@ -167,11 +167,8 @@ package views.client {
 			if(touch && touch.phase == TouchPhase.ENDED)
 				selectedFile.browseForOpen("Select image file...",[new FileFilter("image file", "*.png;*.jpg;*.jpeg;*.gif;")]);
 		}
-		public function freeze():void {
-			filePathInput.freeze();
-		}
-		public function unfreeze():void {
-			filePathInput.unfreeze();
+		public function freeze(value:Boolean=true):void {
+			filePathInput.freeze(value);
 		}
 		
 	}
