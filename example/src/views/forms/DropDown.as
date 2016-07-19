@@ -35,6 +35,8 @@ package views.forms {
 		private var listOuterContainer:Sprite = new Sprite();
 		private var tween:Tween;
 		private var isEnabled:Boolean = true;
+		
+		private var maxHeight:int = 200;
 
 		private var textFormat:TextFormat;
 		public function DropDown(_w:int,_items:Vector.<Object>) {
@@ -50,6 +52,7 @@ package views.forms {
 		}
 		private function render():void {
 			h = (items.length*20) + 5;
+			
 			bg = new Image(Assets.getAtlas().getTexture("dropdown-bg"));
 			bg.scale9Grid = new Rectangle(4, 0, 23, 25);
 			bg.width = w;
@@ -170,7 +173,10 @@ package views.forms {
 				txt.text = items[_selected].label;
 				hover.y = (_selected*20)+2;
 			}
-			
+		}
+		
+		public function get value():String {
+			return items[_selected].value;
 		}
 		
 		public function update(_items:Vector.<Object>):void {

@@ -1,5 +1,6 @@
 package com.tuarua {
 	import com.tuarua.ffmpeg.Attachment;
+	import com.tuarua.ffmpeg.BitStreamFilter;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
 	import com.tuarua.ffmpeg.InputStream;
@@ -10,7 +11,6 @@ package com.tuarua {
 	import com.tuarua.ffmpeg.events.FFmpegEvent;
 	import com.tuarua.ffmpeg.gets.AvailableFormat;
 	import com.tuarua.ffmpeg.gets.BitStreamFilter;
-	import com.tuarua.ffmpeg.BitStreamFilter;
 	import com.tuarua.ffmpeg.gets.Codec;
 	import com.tuarua.ffmpeg.gets.Color;
 	import com.tuarua.ffmpeg.gets.Decoder;
@@ -207,6 +207,10 @@ package com.tuarua {
 						args.push("-r",inputOptions.frameRate.toString());
 					if(inputOptions.inputTimeOffset > 0)
 						args.push("-itsoffset",inputOptions.inputTimeOffset.toString());
+					if(inputOptions.hardwareAcceleration)
+						args.push("-hwaccel",inputOptions.hardwareAcceleration);
+					
+					
 					args.push("-i",inputOptions.uri);
 				}
 				
@@ -305,6 +309,15 @@ package com.tuarua {
 						for (var n:int=0, l5:int=vecMeta.length; n<l5; ++n)
 							args.push("-metadata",vecMeta[n]);
 					}
+				}
+				
+				if(OutputOptions.arbitraryOptions){
+					try{
+						var vecArb:Vector.<Object> = OutputOptions.arbitraryOptions.getAsVector();
+						for each(var optArb:Object in vecArb){
+							args.push("-"+opt.key, opt.value);
+						}	
+					}catch(e:Error){}
 				}
 				
 				args.push(OutputOptions.uri);

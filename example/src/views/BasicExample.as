@@ -1,5 +1,6 @@
 package views {
 	import com.tuarua.AVANE;
+	import com.tuarua.BuildMode;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
 	import com.tuarua.ffmpeg.InputStream;
@@ -55,7 +56,7 @@ package views {
 			event.stopPropagation();
 			var touch:Touch = event.getTouch(encodeButton, TouchPhase.ENDED);
 			if(touch && touch.phase == TouchPhase.ENDED){
-				avANE.setLogLevel(LogLevel.VERBOSE);
+				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET); 
 				Logger.enableLogToTextField = true; //it is not advisable to set to true if using LogLevel.DEBUG or LogLevel.TRACE, the flash textField can't handle it
 				Logger.enableLogToTrace = true;
 				Logger.enableLogToFile = false;

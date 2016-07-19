@@ -8,7 +8,7 @@ package {
 	import starling.events.Event;
 
 
-	[SWF(width = "1280", height = "800", frameRate = "60", backgroundColor = "#121314")]
+	[SWF(width = "1280", height = "850", frameRate = "60", backgroundColor = "#121314")]
 	public class AVANESample extends Sprite {
 		public var mStarling:Starling;
 		public function AVANESample(){

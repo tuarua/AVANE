@@ -1,5 +1,11 @@
 package views.client {
+	import com.tuarua.ffmpeg.constants.Nvenc264Preset;
+	import com.tuarua.ffmpeg.constants.Nvenc264Profile;
+	import com.tuarua.ffmpeg.constants.Nvenc265Preset;
+	import com.tuarua.ffmpeg.constants.Nvenc265Profile;
 	import com.tuarua.ffmpeg.constants.X264Preset;
+	import com.tuarua.ffmpeg.constants.X265Preset;
+	
 	import com.tuarua.ffmpeg.constants.X264Profile;
 	import com.tuarua.ffmpeg.constants.X264Tune;
 	import com.tuarua.ffmpeg.constants.X265Profile;
@@ -21,15 +27,26 @@ package views.client {
 	public class VideoPanel extends Sprite {
 		private var txtHolder:Sprite = new Sprite();
 		private var _encoderDataList:Vector.<Object>;
-		private var _presetDataList:Vector.<Object> = new Vector.<Object>;
+		private var _x264PresetDataList:Vector.<Object> = new Vector.<Object>;
 		private var _x264ProfileDataList:Vector.<Object> = new Vector.<Object>;
-		private var _x265ProfileDataList:Vector.<Object> = new Vector.<Object>;
 		private var _x264TuneDataList:Vector.<Object> = new Vector.<Object>;
-		private var _x265TuneDataList:Vector.<Object> = new Vector.<Object>;
-		private var _levelDataList:Vector.<Object> = new Vector.<Object>;
+		private var _x264LevelDataList:Vector.<Object> = new Vector.<Object>;
 		
-		private var presetSlider:Slider = new Slider(190,0,9,5);
-		private var crfSlider:Slider = new Slider(265,51,0,20);
+		private var _x265ProfileDataList:Vector.<Object> = new Vector.<Object>;
+		private var _x265TuneDataList:Vector.<Object> = new Vector.<Object>;
+		private var _x265PresetDataList:Vector.<Object> = new Vector.<Object>;
+		private var _x265LevelDataList:Vector.<Object> = new Vector.<Object>;
+		
+		private var _nvenc264PresetDataList:Vector.<Object> = new Vector.<Object>;
+		private var _nvenc264ProfileDataList:Vector.<Object> = new Vector.<Object>;
+		private var _nvenc264LevelDataList:Vector.<Object> = new Vector.<Object>;
+		
+		private var _nvenc265PresetDataList:Vector.<Object> = new Vector.<Object>;
+		private var _nvenc265ProfileDataList:Vector.<Object> = new Vector.<Object>;
+		private var _nvenc265LevelDataList:Vector.<Object> = new Vector.<Object>;
+		
+		private var presetSlider:Slider = new Slider(18,0,9,5);
+		private var crfSlider:Slider = new Slider(5,51,0,20);
 		private var codecDrop:DropDown;
 		private var profileDrop:DropDown;
 		private var tuneDrop:DropDown;
@@ -41,7 +58,7 @@ package views.client {
 		private var levelLbl:TextField = new TextField(120,32,"Level:");
 		private var crfLbl:TextField = new TextField(200,32,"Constant Rate Factor:");
 		private var crfTxt:TextField = new TextField(120,32,"20");
-		private var presetTxt:TextField = new TextField(120,32,"");
+		private var presetTxt:TextField = new TextField(200,32,"");
 		private var bitrateLbl:TextField = new TextField(200,32,"Bitrate (Kbps):");
 		private var crfRadio:RadioOption = new RadioOption(0);
 		private var bitrateRadio:RadioOption = new RadioOption(1);
@@ -51,18 +68,51 @@ package views.client {
 			super();
 			_encoderDataList = encoderDataList;
 			
-			_presetDataList.push({value:X264Preset.ULTRA_FAST,label:"Ultrafast"});
-			_presetDataList.push({value:X264Preset.SUPER_FAST,label:"Super Fast"});
-			_presetDataList.push({value:X264Preset.VERY_FAST,label:"Very Fast"});
-			_presetDataList.push({value:X264Preset.FASTER,label:"Faster"});
-			_presetDataList.push({value:X264Preset.FAST,label:"Fast"});
-			_presetDataList.push({value:X264Preset.MEDIUM,label:"Medium"});
-			_presetDataList.push({value:X264Preset.SLOW,label:"Slow"});
-			_presetDataList.push({value:X264Preset.SLOWER,label:"Slower"});
-			_presetDataList.push({value:X264Preset.VERY_SLOW,label:"Very Slow"});
-			_presetDataList.push({value:X264Preset.PLACEBO,label:"Placebo"});
+			_x264PresetDataList.push({value:X264Preset.ULTRA_FAST,label:"Ultrafast"});
+			_x264PresetDataList.push({value:X264Preset.SUPER_FAST,label:"Super Fast"});
+			_x264PresetDataList.push({value:X264Preset.VERY_FAST,label:"Very Fast"});
+			_x264PresetDataList.push({value:X264Preset.FASTER,label:"Faster"});
+			_x264PresetDataList.push({value:X264Preset.FAST,label:"Fast"});
+			_x264PresetDataList.push({value:X264Preset.MEDIUM,label:"Medium"});
+			_x264PresetDataList.push({value:X264Preset.SLOW,label:"Slow"});
+			_x264PresetDataList.push({value:X264Preset.SLOWER,label:"Slower"});
+			_x264PresetDataList.push({value:X264Preset.VERY_SLOW,label:"Very Slow"});
+			_x264PresetDataList.push({value:X264Preset.PLACEBO,label:"Placebo"});
 			
-			presetTxt.text = _presetDataList[5].label;
+			_x265PresetDataList.push({value:X265Preset.ULTRA_FAST,label:"Ultrafast"});
+			_x265PresetDataList.push({value:X265Preset.SUPER_FAST,label:"Super Fast"});
+			_x265PresetDataList.push({value:X265Preset.VERY_FAST,label:"Very Fast"});
+			_x265PresetDataList.push({value:X265Preset.FASTER,label:"Faster"});
+			_x265PresetDataList.push({value:X265Preset.FAST,label:"Fast"});
+			_x265PresetDataList.push({value:X265Preset.MEDIUM,label:"Medium"});
+			_x265PresetDataList.push({value:X265Preset.SLOW,label:"Slow"});
+			_x265PresetDataList.push({value:X265Preset.SLOWER,label:"Slower"});
+			_x265PresetDataList.push({value:X265Preset.VERY_SLOW,label:"Very Slow"});
+			_x265PresetDataList.push({value:X265Preset.PLACEBO,label:"Placebo"});
+			
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.LOSSLESS_HIGH_PERFORMANCE,label:"Lossless High Performance"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.LOSSLESS,label:"Lossless"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.LOW_LATENCY_HIGH_QUALITY,label:"Low Latency High Quality"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.LOW_LATENCY,label:"Low Latency"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.BLURAY,label:"Bluray"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.HIGH_PERFORMANCE,label:"High Performance"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.HIGH_QUALITY,label:"High Quality"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.FAST,label:"Fast"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.MEDIUM,label:"Medium"});
+			_nvenc264PresetDataList.push({value:Nvenc264Preset.SLOW,label:"Slow"});
+			
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.LOSSLESS_HIGH_PERFORMANCE,label:"Lossless High Performance"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.LOSSLESS,label:"Lossless"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.LOW_LATENCY_HIGH_QUALITY,label:"Low Latency High Quality"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.LOW_LATENCY,label:"Low Latency"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.BLURAY,label:"Bluray"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.HIGH_PERFORMANCE,label:"High Performance"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.HIGH_QUALITY,label:"High Quality"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.FAST,label:"Fast"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.MEDIUM,label:"Medium"});
+			_nvenc265PresetDataList.push({value:Nvenc265Preset.SLOW,label:"Slow"});
+
+			presetTxt.text = _x264PresetDataList[5].label;
 			
 			_x264ProfileDataList.push({value:X264Profile.AUTO,label:"Auto"});
 			_x264ProfileDataList.push({value:X264Profile.BASELINE,label:"Baseline"});
@@ -73,6 +123,14 @@ package views.client {
 			_x265ProfileDataList.push({value:X265Profile.MAIN,label:"Main"});
 			_x265ProfileDataList.push({value:X265Profile.MAIN_10,label:"Main 10"});
 			_x265ProfileDataList.push({value:X265Profile.MAIN_STILL_PICTURE,label:"MainStillPicure"});
+			
+			_nvenc264ProfileDataList.push({value:Nvenc264Profile.AUTO,label:"Auto"});
+			_nvenc264ProfileDataList.push({value:Nvenc264Profile.BASELINE,label:"Baseline"});
+			_nvenc264ProfileDataList.push({value:Nvenc264Profile.MAIN,label:"Main"});
+			_nvenc264ProfileDataList.push({value:Nvenc264Profile.HIGH,label:"High"});
+			_nvenc264ProfileDataList.push({value:Nvenc264Profile.HIGH_444P,label:"High 444p"});
+			
+			_nvenc265ProfileDataList.push({value:Nvenc265Profile.MAIN,label:"Main"});
 			
 			_x264TuneDataList.push({value:"",label:"None"});
 			_x264TuneDataList.push({value:X264Tune.FILM,label:"Film"});
@@ -90,25 +148,91 @@ package views.client {
 			_x265TuneDataList.push({value:X265Tune.FAST_DECODE,label:"Fast Decode"});
 			_x265TuneDataList.push({value:X265Tune.ZERO_LATENCY,label:"Zero Latency"});
 			
-			_levelDataList.push({value:"",label:"Auto"});
-			_levelDataList.push({value:"1.0",label:"1.0"});
-			_levelDataList.push({value:"1b",label:"1b"});
-			_levelDataList.push({value:"1.1",label:"1.1"});
-			_levelDataList.push({value:"1.2",label:"1.2"});
-			_levelDataList.push({value:"1.3",label:"1.3"});
-			_levelDataList.push({value:"2.0",label:"2.0"})
-			_levelDataList.push({value:"2.1",label:"2.1"})
-			_levelDataList.push({value:"2.2",label:"2.2"});
-			_levelDataList.push({value:"3.0",label:"2.0"});
-			_levelDataList.push({value:"3.1",label:"3.1"});
-			_levelDataList.push({value:"3.2",label:"3.2"});
-			_levelDataList.push({value:"4.0",label:"4.0"});
-			_levelDataList.push({value:"4.1",label:"4.1"});
-			_levelDataList.push({value:"4.2",label:"4.2"});
-			_levelDataList.push({value:"5.0",label:"5.0"});
-			_levelDataList.push({value:"5.1",label:"5.1"});
-			_levelDataList.push({value:"5.2",label:"5.2"});
+			_x264LevelDataList.push({value:"",label:"Auto"});
+			_x264LevelDataList.push({value:"1.0",label:"1.0"});
+			_x264LevelDataList.push({value:"1b",label:"1b"});
+			_x264LevelDataList.push({value:"1.1",label:"1.1"});
+			_x264LevelDataList.push({value:"1.2",label:"1.2"});
+			_x264LevelDataList.push({value:"1.3",label:"1.3"});
+			_x264LevelDataList.push({value:"2.0",label:"2.0"})
+			_x264LevelDataList.push({value:"2.1",label:"2.1"})
+			_x264LevelDataList.push({value:"2.2",label:"2.2"});
+			_x264LevelDataList.push({value:"3.0",label:"3.0"});
+			_x264LevelDataList.push({value:"3.1",label:"3.1"});
+			_x264LevelDataList.push({value:"3.2",label:"3.2"});
+			_x264LevelDataList.push({value:"4.0",label:"4.0"});
+			_x264LevelDataList.push({value:"4.1",label:"4.1"});
+			_x264LevelDataList.push({value:"4.2",label:"4.2"});
+			_x264LevelDataList.push({value:"5.0",label:"5.0"});
+			_x264LevelDataList.push({value:"5.1",label:"5.1"});
+			_x264LevelDataList.push({value:"5.2",label:"5.2"});
 			
+			_x265LevelDataList.push({value:"",label:"Auto"});
+			_x265LevelDataList.push({value:"1.0",label:"1.0"});
+			_x265LevelDataList.push({value:"1b",label:"1b"});
+			_x265LevelDataList.push({value:"1.1",label:"1.1"});
+			_x265LevelDataList.push({value:"1.2",label:"1.2"});
+			_x265LevelDataList.push({value:"1.3",label:"1.3"});
+			_x265LevelDataList.push({value:"2.0",label:"2.0"})
+			_x265LevelDataList.push({value:"2.1",label:"2.1"})
+			_x265LevelDataList.push({value:"2.2",label:"2.2"});
+			_x265LevelDataList.push({value:"3.0",label:"3.0"});
+			_x265LevelDataList.push({value:"3.1",label:"3.1"});
+			_x265LevelDataList.push({value:"3.2",label:"3.2"});
+			_x265LevelDataList.push({value:"4.0",label:"4.0"});
+			_x265LevelDataList.push({value:"4.1",label:"4.1"});
+			_x265LevelDataList.push({value:"4.2",label:"4.2"});
+			_x265LevelDataList.push({value:"5.0",label:"5.0"});
+			_x265LevelDataList.push({value:"5.1",label:"5.1"});
+			_x265LevelDataList.push({value:"5.2",label:"5.2"});
+			
+			_nvenc264LevelDataList.push({value:"",label:"Auto"});
+			_nvenc264LevelDataList.push({value:"1",label:"1"});
+			_nvenc264LevelDataList.push({value:"1.0",label:"1.0"});
+			_nvenc264LevelDataList.push({value:"1b",label:"1b"});
+			_nvenc264LevelDataList.push({value:"1.0b",label:"1.0b"});
+			_nvenc264LevelDataList.push({value:"1.1",label:"1.1"});
+			_nvenc264LevelDataList.push({value:"1.2",label:"1.2"});
+			_nvenc264LevelDataList.push({value:"1.3",label:"1.3"});
+			_nvenc264LevelDataList.push({value:"2",label:"2"});
+			_nvenc264LevelDataList.push({value:"2.0",label:"2.0"});
+			_nvenc264LevelDataList.push({value:"2.1",label:"2.1"});
+			_nvenc264LevelDataList.push({value:"2.2",label:"2.2"});
+			_nvenc264LevelDataList.push({value:"3",label:"3"});
+			_nvenc264LevelDataList.push({value:"3.0",label:"3.0"});
+			_nvenc264LevelDataList.push({value:"3.1",label:"3.1"});
+			_nvenc264LevelDataList.push({value:"3.2",label:"3.2"});
+			_nvenc264LevelDataList.push({value:"4",label:"4"});
+			_nvenc264LevelDataList.push({value:"4.0",label:"4.0"});
+			_nvenc264LevelDataList.push({value:"4.1",label:"4.1"});
+			_nvenc264LevelDataList.push({value:"4.2",label:"4.2"});
+			_nvenc264LevelDataList.push({value:"5",label:"5"});
+			_nvenc264LevelDataList.push({value:"5.0",label:"5.0"});
+			_nvenc264LevelDataList.push({value:"5.1",label:"5.1"});
+			
+			
+			_nvenc265LevelDataList.push({value:"",label:"Auto"});
+			_nvenc265LevelDataList.push({value:"1",label:"1"});
+			_nvenc265LevelDataList.push({value:"1.0",label:"1.0"});
+			_nvenc265LevelDataList.push({value:"2",label:"2"});
+			_nvenc265LevelDataList.push({value:"2.0",label:"2.0"});
+			_nvenc265LevelDataList.push({value:"2.1",label:"2.1"});
+			_nvenc265LevelDataList.push({value:"3",label:"3"});
+			_nvenc265LevelDataList.push({value:"3.0",label:"3.0"});
+			_nvenc265LevelDataList.push({value:"3.1",label:"3.1"});
+			_nvenc265LevelDataList.push({value:"4",label:"4"});
+			_nvenc265LevelDataList.push({value:"4.0",label:"4.0"});
+			_nvenc265LevelDataList.push({value:"4.1",label:"4.1"});
+			_nvenc265LevelDataList.push({value:"5",label:"5"});
+			_nvenc265LevelDataList.push({value:"5.0",label:"5.0"});
+			_nvenc265LevelDataList.push({value:"5.1",label:"5.1"});
+			_nvenc265LevelDataList.push({value:"5.2",label:"5.2"});
+			_nvenc265LevelDataList.push({value:"6",label:"6"});
+			_nvenc265LevelDataList.push({value:"6.0",label:"6.0"});
+			_nvenc265LevelDataList.push({value:"6.1",label:"6.1"});
+			_nvenc265LevelDataList.push({value:"6.2",label:"6.2"});
+			
+
 			var tf:TextFormat = new TextFormat();
 			tf.setTo("Fira Sans Semi-Bold 13", 13, 0xD8D8D8,Align.LEFT,Align.TOP);
 			
@@ -187,7 +311,7 @@ package views.client {
 			tuneDrop.x = 640;
 			tuneDrop.y = 177;
 			
-			levelDrop = new DropDown(120,_levelDataList);
+			levelDrop = new DropDown(120,_x264LevelDataList);
 			levelDrop.enable(false);
 			levelDrop.addEventListener(FormEvent.CHANGE,onFormChange);
 			levelDrop.x = 640;
@@ -233,48 +357,141 @@ package views.client {
 			var test:int;
 			switch(event.currentTarget){
 				case presetSlider:
-					presetTxt.text = _presetDataList[event.params.value].label;
+					switch(codecDrop.value){
+						case "libx264":
+							presetTxt.text = _x264PresetDataList[event.params.value].label;
+							break;
+						case "h264_nvenc":
+							presetTxt.text = _nvenc264PresetDataList[event.params.value].label;
+							break;
+						case "libx265":
+							presetTxt.text = _x265PresetDataList[event.params.value].label;
+							break;
+						case "hevc_nvenc":
+							presetTxt.text = _nvenc265PresetDataList[event.params.value].label;
+							break;
+						default:
+							break;	
+					}
 					break;
 				case crfSlider:
 					crfTxt.text = String(event.params.value);
 					break;
 				case codecDrop:
-					if(event.params.value == "libx264" || event.params.value == "libx265"){
-						presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 1;
-						crfRadio.enable(true);
-						bitrateRadio.enable(true);
-						presetSlider.enable(true);
-						profileDrop.enable(true);
-						tuneDrop.enable(true);
-						
-						crfSlider.enable((qualityRadioGroupSelected == 0));
-						crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
-						bitrateInput.freeze((qualityRadioGroupSelected == 0));
-						bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
-						bitrateInput.enable(!(qualityRadioGroupSelected == 0));
-						
-						
-					}else if(event.params.value == "copy"){
-						bitrateLbl.alpha = crfTxt.alpha = crfLbl.alpha = presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 0.25;
-						crfRadio.enable(false);
-						bitrateRadio.enable(false);
-						presetSlider.enable(false);
-						profileDrop.enable(false);
-						tuneDrop.enable(false);
-						crfSlider.enable(false);
-						bitrateInput.freeze();
-						bitrateInput.enable(false);
-					}
-					levelDrop.enable((event.params.value == "libx264"));
-					levelLbl.alpha = (event.params.value == "libx264") ? 1.0 : 0.25;
-					
-					//main, main10, mainstillpicture 
-					if(event.params.value == "libx264"){
-						profileDrop.update(_x264ProfileDataList);
-						tuneDrop.update(_x264TuneDataList);
-					}else if(event.params.value == "libx265"){
-						profileDrop.update(_x265ProfileDataList);
-						tuneDrop.update(_x265TuneDataList);
+					switch(event.params.value){
+						case "copy":
+							bitrateLbl.alpha = crfTxt.alpha = crfLbl.alpha = presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 0.25;
+							crfRadio.enable(false);
+							bitrateRadio.enable(false);
+							presetSlider.enable(false);
+							profileDrop.enable(false);
+							tuneDrop.enable(false);
+							crfSlider.enable(false);
+							bitrateInput.freeze();
+							bitrateInput.enable(false);
+							levelDrop.enable(false);
+							levelLbl.alpha = 0.25;
+							break;
+						case "libx264":
+							presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 1;
+							crfRadio.enable(true);
+							bitrateRadio.enable(true);
+							presetSlider.enable(true);
+							profileDrop.enable(true);
+							tuneDrop.enable(true);
+							
+							crfSlider.enable((qualityRadioGroupSelected == 0));
+							crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
+							bitrateInput.freeze((qualityRadioGroupSelected == 0));
+							bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
+							bitrateInput.enable(!(qualityRadioGroupSelected == 0));
+							levelDrop.enable(true);
+							levelDrop.update(_x264LevelDataList);
+							levelLbl.alpha = 1.0;
+							
+							profileDrop.update(_x264ProfileDataList);
+							tuneDrop.update(_x264TuneDataList);
+							
+							presetSlider.update(18,0,9,5);
+							presetTxt.text = _x264PresetDataList[presetSlider.selected].label;
+							
+							break;
+						case "h264_nvenc":
+							presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 1;
+							crfRadio.enable(true);
+							bitrateRadio.enable(true);
+							presetSlider.enable(true);
+							profileDrop.enable(true);
+							tuneDrop.enable(false);
+							levelDrop.enable(true);
+							levelDrop.update(_nvenc264LevelDataList);
+							levelLbl.alpha = 1.0;
+							
+							
+							crfSlider.enable((qualityRadioGroupSelected == 0));
+							crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
+							bitrateInput.freeze((qualityRadioGroupSelected == 0));
+							bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
+							bitrateInput.enable(!(qualityRadioGroupSelected == 0));
+							levelDrop.enable(true);
+							levelLbl.alpha = 1.0;
+							
+							profileDrop.update(_nvenc264ProfileDataList);
+							
+							presetSlider.update(18,0,9,8);
+							presetTxt.text = _nvenc264PresetDataList[presetSlider.selected].label;
+							
+							break;
+						case "libx265":
+							presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 1;
+							crfRadio.enable(true);
+							bitrateRadio.enable(true);
+							presetSlider.enable(true);
+							profileDrop.enable(true);
+							tuneDrop.enable(true);
+							
+							crfSlider.enable((qualityRadioGroupSelected == 0));
+							crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
+							bitrateInput.freeze((qualityRadioGroupSelected == 0));
+							bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
+							bitrateInput.enable(!(qualityRadioGroupSelected == 0));
+							levelDrop.enable(true);
+							levelDrop.update(_x265LevelDataList);
+							levelLbl.alpha = 1.0;
+							
+							profileDrop.update(_x265ProfileDataList);
+							tuneDrop.update(_x265TuneDataList);
+							
+							presetSlider.update(18,0,9,5);
+							presetTxt.text = _x265PresetDataList[presetSlider.selected].label;
+							
+							break;
+						case "hevc_nvenc":
+							presetTxt.alpha = presetLbl.alpha = txtHolder.alpha = 1;
+							crfRadio.enable(true);
+							bitrateRadio.enable(true);
+							presetSlider.enable(true);
+							profileDrop.enable(true);
+							tuneDrop.enable(false);
+							levelDrop.enable(true);
+							levelDrop.update(_nvenc265LevelDataList);
+							levelLbl.alpha = 1.0;
+							
+							
+							crfSlider.enable((qualityRadioGroupSelected == 0));
+							crfTxt.alpha = crfLbl.alpha = (qualityRadioGroupSelected == 0) ? 1.0 : 0.25;
+							bitrateInput.freeze((qualityRadioGroupSelected == 0));
+							bitrateLbl.alpha = (qualityRadioGroupSelected == 0) ? 0.25 : 1.0;
+							bitrateInput.enable(!(qualityRadioGroupSelected == 0));
+							levelDrop.enable(true);
+							levelLbl.alpha = 1.0;
+							
+							profileDrop.update(_nvenc265ProfileDataList);
+							
+							presetSlider.update(18,0,9,8);
+							presetTxt.text = _nvenc265PresetDataList[presetSlider.selected].label;
+							
+							break;
 					}
 						
 					break;
@@ -322,9 +539,45 @@ package views.client {
 			obj.tune = "";
 			obj.crf = -1;
 			obj.bitrate = -1;
+			
+			switch (codecDrop.value){
+				case "libx264":
+					obj.preset = _x264PresetDataList[presetSlider.selected].value;
+					obj.level = _x264LevelDataList[levelDrop.selected].value;
+					obj.profile = _x264ProfileDataList[profileDrop.selected].value;
+					obj.tune = _x264TuneDataList[tuneDrop.selected].value;
+					break;
+				case "h264_nvenc":
+					obj.preset = _nvenc264PresetDataList[presetSlider.selected].value;
+					obj.level = _nvenc264LevelDataList[levelDrop.selected].value;
+					obj.profile = _nvenc264ProfileDataList[profileDrop.selected].value;
+					break;
+				case "libx265":
+					obj.preset = _x265PresetDataList[presetSlider.selected].value;
+					obj.level = _x265LevelDataList[levelDrop.selected].value;
+					obj.profile = _x265ProfileDataList[profileDrop.selected].value;
+					obj.tune = _x265TuneDataList[tuneDrop.selected].value;
+					break;
+				case "hevc_nvenc":
+					obj.preset = _nvenc265PresetDataList[presetSlider.selected].value;
+					obj.level = _nvenc265LevelDataList[levelDrop.selected].value;
+					obj.profile = _nvenc265ProfileDataList[profileDrop.selected].value;
+					break;
+				default:
+					break;
+			}
+			
 			if(codecDrop.selected > 0){
-				obj.preset = _presetDataList[presetSlider.selected].value;
-				obj.level = _levelDataList[levelDrop.selected].value;
+				if(qualityRadioGroupSelected == 0)
+					obj.crf = crfSlider.values[crfSlider.selected];
+				else
+					obj.bitrate = parseInt(bitrateInput.text)*1000;
+			}
+			
+			/*
+			if(codecDrop.selected > 0){
+				obj.preset = _x264PresetDataList[presetSlider.selected].value;
+				obj.level = _x264LevelDataList[levelDrop.selected].value;
 				if(codecDrop.selected == 1){
 					obj.profile = _x264ProfileDataList[profileDrop.selected].value;
 					obj.tune = _x264TuneDataList[tuneDrop.selected].value;
@@ -333,12 +586,10 @@ package views.client {
 					obj.tune = _x265TuneDataList[tuneDrop.selected].value;
 				}
 				
-				if(qualityRadioGroupSelected == 0)
-					obj.crf = crfSlider.values[crfSlider.selected];
-				else
-					obj.bitrate = parseInt(bitrateInput.text)*1000;
+				
 				
 			}
+			*/
 			return obj;
 		}
 		public function freeze(value:Boolean=true):void {

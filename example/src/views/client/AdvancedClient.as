@@ -1,5 +1,6 @@
 package views.client {
 	import com.tuarua.AVANE;
+	import com.tuarua.BuildMode;
 	import com.tuarua.ffmpeg.Attachment;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
@@ -47,6 +48,7 @@ package views.client {
 	
 	import starling.display.BlendMode;
 	import starling.display.Image;
+	import starling.display.MeshBatch;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Touch;
@@ -58,7 +60,6 @@ package views.client {
 	
 	import views.forms.DropDown;
 	import views.forms.Input;
-	import starling.display.MeshBatch;
 	
 	public class AdvancedClient extends Sprite {
 		private var bg:MeshBatch = new MeshBatch();
@@ -93,18 +94,17 @@ package views.client {
 		private var encoders:Vector.<Encoder>;
 		private var filters:Vector.<Filter>;
 		private var encodingScreen:EncodingScreen = new EncodingScreen();
-
+		private var hwAccels:Vector.<HardwareAcceleration>;
 		public function AdvancedClient(_avANE:AVANE) {
 			super();
 			avANE = _avANE;
-			avANE.setLogLevel(LogLevel.DEBUG);
 			avANE.addEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_PROGRESS,encodingScreen.onProgress);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_FINISH,onEncodeFinish);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_START,onEncodeStart);
 			
-		
+			hwAccels = avANE.getHardwareAccelerations();
 			
 			/*
 			var codecs:Vector.<Codec> = avANE.getCodecs();
@@ -186,9 +186,14 @@ package views.client {
 			videoEncoderDataList.push({value:"copy",label:"Copy"});
 			if(hasEncoder("libx264"))
 				videoEncoderDataList.push({value:"libx264",label:"H.264 (x264)"});
+			if(hasEncoder("h264_nvenc"))
+				videoEncoderDataList.push({value:"h264_nvenc",label:"H.264 (nvenc)"});
 			if(hasEncoder("libx265"))
 				videoEncoderDataList.push({value:"libx265",label:"H.265 (x265)"});
-			//add others qsv, nvenc
+			
+			//if(hasEncoder("hevc_nvenc"))
+				//videoEncoderDataList.push({value:"hevc_nvenc",label:"H.265 (nvenc)"});
+			
 			
 			audioEncoderDataList.push({value:"copy",label:"Copy"});
 			if(hasEncoder("aac"))
@@ -314,6 +319,8 @@ package views.client {
 		}
 		
 	
+	
+		
 		private function hasEncoder(value:String):Boolean {
 			for (var i:int=0, l:int=encoders.length; i<l; ++i){
 				if(encoders[i].name == value)
@@ -341,12 +348,12 @@ package views.client {
 			InputStream.clear();
 			OutputOptions.clear();
 			filePathInput.freeze(false);
-			//filePathInput.visible = true;
-			//chooseFileIn.visible = true;
+			filePathInput.visible = true;
+			chooseFileIn.visible = true;
 			
 			filePathOutput.freeze(false);
-			//filePathOutput.visible = true;
-			//chooseFileOut.visible = true;
+			filePathOutput.visible = true;
+			chooseFileOut.visible = true;
 			
 			containerDrop.visible = true;
 			txtHolder.visible = true;
@@ -407,6 +414,11 @@ package views.client {
 				videoStream.codec = videoSettings.codec;
 				
 				if(videoSettings.codec == "libx264"){
+					//if(hasHardWareAcceleration("dxva2"))
+						//inputOptions.hardwareAcceleration = "dxva2";
+					//else if(hasHardWareAcceleration("vda"))
+						//inputOptions.hardwareAcceleration = "vda";
+					
 					var x264Options:X264Options = new X264Options();
 					x264Options.level = videoSettings.level;
 					x264Options.preset = videoSettings.preset;
@@ -419,9 +431,14 @@ package views.client {
 					//x264AdvancedOptions.merange = 13;
 					//x264AdvancedOptions.psyRd = [1.0,0.15];
 					//videoStream.advancedEncOpts = x264AdvancedOptions;
+				}else if(videoSettings.codec == "h264_nvenc"){
+					var nvenc264Options:X264Options = new X264Options();
+					nvenc264Options.level = videoSettings.level;
+					nvenc264Options.preset = videoSettings.preset;
+					nvenc264Options.profile = videoSettings.profile;
+					videoStream.encoderOptions = nvenc264Options;
 					
 				}else if(videoSettings.codec == "libx265"){
-					//different
 					var x265Options:X265Options = new X265Options();
 					x265Options.preset = videoSettings.preset;
 					videoStream.encoderOptions = x265Options;
@@ -432,6 +449,7 @@ package views.client {
 					videoStream.advancedEncOpts = x265AdvancedOptions;
 				}
 
+				
 				videoStream.crf = videoSettings.crf;
 				videoStream.bitrate = videoSettings.bitrate;
 				
@@ -491,7 +509,7 @@ package views.client {
 				
 				encodingScreen.show(true);
 				
-				avANE.setLogLevel(LogLevel.DEBUG);
+				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET); 
 				Logger.enableLogToTextField = false;
 				Logger.enableLogToTrace = true;
 				Logger.enableLogToFile = false;
@@ -588,6 +606,12 @@ package views.client {
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_START,onEncodeStart);
 			this.visible = true;
 		}
-		
+		private function hasHardWareAcceleration(value:String):Boolean {
+			for (var i:int=0, l:int=hwAccels.length; i<l; ++i){
+				if(hwAccels[i].name == value)
+					return true;
+			}
+			return false;
+		}
 	}
 }

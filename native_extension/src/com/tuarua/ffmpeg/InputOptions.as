@@ -10,7 +10,7 @@ package com.tuarua.ffmpeg {
 		//public var pixelFormat:String;//need
 		public var frameRate:int = 0;
 		public var playlist:int = -1;
-		//public var hardwareAcceleration:String;
+		public var hardwareAcceleration:String;
 		public var threads:uint = 0;
 	}
 	

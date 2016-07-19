@@ -1,5 +1,6 @@
 package views {
 	import com.tuarua.AVANE;
+	import com.tuarua.BuildMode;
 	import com.tuarua.ffmpeg.Attachment;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
@@ -16,6 +17,7 @@ package views {
 	import com.tuarua.ffmpeg.constants.X264Profile;
 	import com.tuarua.ffmpeg.events.FFmpegEvent;
 	import com.tuarua.ffmpeg.events.StreamProviderEvent;
+	import com.tuarua.ffmpeg.gets.HardwareAcceleration;
 	import com.tuarua.ffprobe.AudioStream;
 	import com.tuarua.ffprobe.Probe;
 	import com.tuarua.ffprobe.events.ProbeEvent;
@@ -29,6 +31,7 @@ package views {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.System;
+	
 	import starling.core.Starling;
 	import starling.display.BlendMode;
 	import starling.display.Image;
@@ -59,9 +62,13 @@ package views {
 		private var circularLoader:CircularLoader;
 		private var isTwitch:Boolean = false;
 		private var twitchChannel:String;
+
+		private var hwAccels:Vector.<HardwareAcceleration>;
 		public function UniversalPlayer(_avANE:AVANE) {
 			super();
 			avANE = _avANE;
+			
+			hwAccels = avANE.getHardwareAccelerations();
 			
 			avANE.addEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
@@ -160,7 +167,12 @@ package views {
 			if(probe.videoStreams[0].codecName == "h264"){
 				videoStream.codec = "copy";
 			}else{
-				videoStream.codec = "libx264";
+				if(hasHardWareAcceleration("dxva2"))
+					inputOptions.hardwareAcceleration = "dxva2";
+				else if(hasHardWareAcceleration("vda"))
+					inputOptions.hardwareAcceleration = "vda";
+					
+				videoStream.codec = "libx2h264_nvenc64";
 				videoStream.crf = 1;
 				var x264Options:X264Options = new X264Options();
 				x264Options.preset = X264Preset.ULTRA_FAST;
@@ -174,7 +186,7 @@ package views {
 			OutputOptions.realtime = true;
 			streamer.init();
 			OutputOptions.uri = "tcp:127.0.0.1:1235";
-			avANE.setLogLevel(LogLevel.INFO);
+			avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET); 
 			avANE.encode();
 			
 		}
@@ -226,7 +238,7 @@ package views {
 			var touch:Touch = event.getTouch(playButton, TouchPhase.ENDED);
 			if(touch && touch.phase == TouchPhase.ENDED){
 				
-				avANE.setLogLevel(LogLevel.INFO);
+				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.INFO :  LogLevel.QUIET);
 				Logger.enableLogToTextField = false;
 				Logger.enableLogToTrace = true;
 				Logger.enableLogToFile = false;
@@ -312,6 +324,7 @@ package views {
 			
 			//don't probe - already know we need to transcode
 			var inputOptions:InputOptions = new InputOptions();
+			
 			inputOptions.uri = uri;
 			InputStream.clear();
 			InputStream.addInput(inputOptions);
@@ -332,7 +345,7 @@ package views {
 			OutputOptions.format = "flv";
 			streamer.init();
 			OutputOptions.uri = "tcp:127.0.0.1:1235";
-			avANE.setLogLevel(LogLevel.VERBOSE);
+			avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET);
 			avANE.encode();
 			
 			
@@ -408,6 +421,13 @@ package views {
 				streamer.removeEventListener(StreamProviderEvent.ON_STREAM_CLOSE,onStreamClose);
 			}
 			this.visible = false;
+		}
+		private function hasHardWareAcceleration(value:String):Boolean {
+			for (var i:int=0, l:int=hwAccels.length; i<l; ++i){
+				if(hwAccels[i].name == value)
+					return true;
+			}
+			return false;
 		}
 	}
 }

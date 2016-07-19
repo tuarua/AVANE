@@ -8,6 +8,9 @@ package com.tuarua.ffmpeg {
 		public static var audioStreams:Vector.<OutputAudioStream> = new Vector.<OutputAudioStream>;
 		public static var attachments:Vector.<Attachment> = new Vector.<Attachment>;
 		public static var metadata:MetaData; //http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
+		
+		public static var arbitraryOptions:*; //eg hls
+		
 		public static var fastStart:Boolean = false;
 		public static var videoFilters:Vector.<String> = new Vector.<String>;
 		public static var complexFilters:Vector.<String> = new Vector.<String>;
@@ -28,8 +31,6 @@ package com.tuarua.ffmpeg {
 		public static var frameRate:int = 0;
 		public static var realtime:Boolean = false;
 		
-		//hls here ?
-		
 		public static function addOverlay(overlay:Overlay):void {
 			var inputOptions:InputOptions = new InputOptions();
 			inputOptions.uri = overlay.fileName;
@@ -40,15 +41,18 @@ package com.tuarua.ffmpeg {
 			complexFilters.push(str);
 		}
 		public static function addVideoStream(_videoStream:OutputVideoStream):void {
-			if(videoStreams == null) videoStreams = new Vector.<OutputVideoStream>;
+			if(videoStreams == null)
+				videoStreams = new Vector.<OutputVideoStream>;
 			videoStreams.push(_videoStream);
 		}
 		public static function addAudioStream(_audioStream:OutputAudioStream):void {
-			if(audioStreams == null) audioStreams = new Vector.<OutputAudioStream>
+			if(audioStreams == null)
+				audioStreams = new Vector.<OutputAudioStream>
 			audioStreams.push(_audioStream);
 		}
 		public static function addAttachment(_attachment:Attachment):void {
-			if(attachments == null) attachments = new Vector.<Attachment>;
+			if(attachments == null)
+				attachments = new Vector.<Attachment>;
 			attachments.push(_attachment);
 		}
 		public static function clear():void {

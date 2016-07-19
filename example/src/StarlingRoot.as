@@ -24,9 +24,10 @@ package {
 	import views.DesktopCapture;
 	import views.ExampleSelector;
 	import views.MenuButton;
-	import views.loader.RadialImage;
 	import views.UniversalPlayer;
 	import views.client.AdvancedClient;
+	import views.forms.Slider;
+	import views.loader.RadialImage;
 
 	public class StarlingRoot extends Sprite {
 		private var avANE:AVANE = new AVANE();
@@ -83,6 +84,8 @@ package {
 			//trace("AVANE library versions:",avANE.getVersion());
 			//trace("AVANE FFmpeg License:",avANE.getLicense());
 			
+			
+			
 			menuButton.x = 10;
 			menuButton.y = 10;
 			menuButton.addEventListener(TouchEvent.TOUCH,onMenuTouch);
@@ -101,10 +104,8 @@ package {
 			
 			holder.addChild(universalPlayer);
 			addChild(holder);
-			
-			
+
 			addChild(exampleSelector);
-			
 			
 		}
 		private function onBasicTouch(event:TouchEvent):void {

@@ -1,6 +1,7 @@
 package views {
 	
 	import com.tuarua.AVANE;
+	import com.tuarua.BuildMode;
 	import com.tuarua.ffmpeg.InputOptions;
 	import com.tuarua.ffmpeg.InputStream;
 	import com.tuarua.ffmpeg.Logger;
@@ -60,9 +61,10 @@ package views {
 				cancelButton.visible = true;
 				captureButton.visible = false;
 				
-				avANE.setLogLevel(LogLevel.INFO);
+				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.INFO :  LogLevel.QUIET); 
+				
 				Logger.enableLogToTextField = false;
-				Logger.enableLogToTrace = true;
+				Logger.enableLogToTrace = BuildMode.isDebugBuild();
 				Logger.enableLogToFile = false;
 				
 				//https://github.com/rdp/screen-capture-recorder-to-video-windows-free
