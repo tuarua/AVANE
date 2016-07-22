@@ -172,7 +172,7 @@ package views {
 				else if(hasHardWareAcceleration("vda"))
 					inputOptions.hardwareAcceleration = "vda";
 					
-				videoStream.codec = "libx2h264_nvenc64";
+				videoStream.codec = "libx264";
 				videoStream.crf = 1;
 				var x264Options:X264Options = new X264Options();
 				x264Options.preset = X264Preset.ULTRA_FAST;
