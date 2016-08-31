@@ -19,10 +19,10 @@ package views.client {
 	import starling.text.TextFormat;
 	import starling.utils.Align;
 	
-	import views.forms.DropDown;
 	import views.forms.Input;
 	import views.forms.RadioOption;
 	import views.forms.Slider;
+	import views.forms.DropDown;
 	
 	public class VideoPanel extends Sprite {
 		private var txtHolder:Sprite = new Sprite();
@@ -312,6 +312,7 @@ package views.client {
 			tuneDrop.y = 177;
 			
 			levelDrop = new DropDown(120,_x264LevelDataList);
+			
 			levelDrop.enable(false);
 			levelDrop.addEventListener(FormEvent.CHANGE,onFormChange);
 			levelDrop.x = 640;

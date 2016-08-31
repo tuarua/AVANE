@@ -20,29 +20,33 @@ package views.forms {
 	import starling.textures.Texture;
 	import starling.utils.Align;
 	
-	public class DropDown extends Sprite { //5 draw calls - not nice
+	import views.SrollableContent;
+	
+	public class DropDown extends Sprite {
 		private var _id:String;
-		private var w:int;
+		private var _w:int;
 		private var h:int;
 		private var _selected:int = 0;
-		private var items:Vector.<Object>;
+		private var _items:Vector.<Object>;
 		private var bg:Image;
 		private var listBg:Image;
 		private var listBgTexture:Texture;
-		private var listContainer:Sprite = new Sprite();
+		private var pane:Sprite = new Sprite();
 		private var hover:Quad;
 		private var txt:TextField;
 		private var listOuterContainer:Sprite = new Sprite();
 		private var tween:Tween;
+		private var tween2:Tween;
 		private var isEnabled:Boolean = true;
-		
-		private var maxHeight:int = 200;
-
+		private var _maxHeight:int = 200;
+		private var paneHeight:int;
 		private var textFormat:TextFormat;
-		public function DropDown(_w:int,_items:Vector.<Object>) {
+		private var scrollable:SrollableContent;
+		
+		public function DropDown(w:int,items:Vector.<Object>) {
 			super();
-			w = _w;
-			items = _items;
+			_w = w;
+			_items = items;
 			textFormat = new TextFormat();
 			textFormat.setTo("Fira Sans Semi-Bold 13",13);
 			textFormat.horizontalAlign = Align.LEFT;
@@ -51,17 +55,19 @@ package views.forms {
 			render();
 		}
 		private function render():void {
-			h = (items.length*20) + 5;
+			paneHeight = h = (_items.length*20) + 5;
+			if(paneHeight > _maxHeight)
+				paneHeight = _maxHeight;
 			
 			bg = new Image(Assets.getAtlas().getTexture("dropdown-bg"));
 			bg.scale9Grid = new Rectangle(4, 0, 23, 25);
-			bg.width = w;
+			bg.width = _w;
 			bg.blendMode = BlendMode.NONE;
 			
-			hover = new Quad(w-6,20,0xCC8D1E);
+			hover = new Quad(_w-6,20,0xCC8D1E);
 			hover.alpha = 0.4;
 			
-			txt = new TextField(w,26,items[_selected].label);
+			txt = new TextField(_w,26,_items[_selected].label);
 			txt.format = textFormat;
 			
 			txt.x = 8;
@@ -72,43 +78,51 @@ package views.forms {
 			
 			listBg = new Image(Assets.getAtlas().getTexture("dropdown-items-bg"));
 			listBg.scale9Grid = new Rectangle(4, 4, 41, 17);
-			
 			listBg.blendMode = BlendMode.NONE;
-			listBg.width = w;
-			listBg.height = h;
+			listBg.width = _w;
+			listBg.height = paneHeight;
+			listBg.y = 25-paneHeight;
 			
-			listContainer.y = 25-h;
-			listOuterContainer.mask = new Quad(w, h);
+			pane.y = 0;
+			
+			listOuterContainer.mask = new Quad(_w, h);
 			listOuterContainer.mask.y = 25
 			
-			var k:int = listContainer.numChildren;
+			var k:int = pane.numChildren;
 			while(k--){
-				listContainer.getChildAt(k).dispose();
-				listContainer.removeChildAt(k);
+				pane.getChildAt(k).dispose();
+				pane.removeChildAt(k);
 			}
 			
-			listContainer.addChild(listBg);
 			hover.x = 3;
 			hover.y = (_selected*20)+2;
-			listContainer.addChild(hover);
+			pane.addChild(hover);
 			
 			var itmLbl:TextField;
-			for (var i:int=0, l:int=items.length; i<l; ++i){
-				itmLbl = new TextField(w,26,items[i].label);
+			for (var i:int=0, l:int=_items.length; i<l; ++i){
+				itmLbl = new TextField(_w,26,_items[i].label);
 				itmLbl.format = textFormat;
 				itmLbl.x = 8;
 				itmLbl.y = (i*20) + 0;
-				listContainer.addChild(itmLbl);
+				pane.addChild(itmLbl);
 			}
 			
-			listContainer.addEventListener(TouchEvent.TOUCH,onListTouch);
-			listOuterContainer.addChild(listContainer);
+			pane.addEventListener(TouchEvent.TOUCH,onListTouch);
+			
+			scrollable = new SrollableContent(_w,_maxHeight,pane);
+			scrollable.y = 25-paneHeight;
+			
+			scrollable.fullHeight = h;
+			scrollable.init();
+			
+			listOuterContainer.addChild(listBg);
+			listOuterContainer.addChild(scrollable);
+			
 			listOuterContainer.visible = false;
 			addChild(listOuterContainer);
 			addChild(bg);
 			addChild(txt);
 		}
-		
 		protected function onTouch(event:TouchEvent):void{
 			event.stopPropagation();
 			var touch:Touch = event.getTouch(bg, TouchPhase.ENDED);
@@ -117,24 +131,43 @@ package views.forms {
 		}
 		
 		private function open():void {
-			Starling.juggler.removeTweens(listContainer);
-			tween = new Tween(listContainer, 0.15, Transitions.EASE_OUT);
+			Starling.juggler.removeTweens(scrollable);
+			tween = new Tween(scrollable, 0.15, Transitions.EASE_OUT);
 			tween.animate("y",25);
+			
+			Starling.juggler.removeTweens(listBg);
+			tween2 = new Tween(listBg, 0.15, Transitions.EASE_OUT);
+			tween2.animate("y",25);
+			
 			listOuterContainer.visible = true;
 			Starling.juggler.add(tween);
+			Starling.juggler.add(tween2);
 			Starling.current.nativeStage.addEventListener(MouseEvent.CLICK,onClick);
 			Starling.current.nativeStage.addEventListener(MouseEvent.RIGHT_CLICK,onClick);
 			this.dispatchEvent(new FormEvent(FormEvent.FOCUS_IN,null));
 		}
 		private function onClick(event:MouseEvent):void {
-			Starling.current.nativeStage.removeEventListener(MouseEvent.CLICK,onClick);
-			close();
+			//trace(event.localX,event.localY);
+			var clickPoint:Point = this.globalToLocal(new Point(event.stageX,event.stageY));
+			//trace(clickPoint);
+			//trace(this.bounds);
+			if(clickPoint.x > this.bounds.width || clickPoint.y > paneHeight || clickPoint.y < 0 || clickPoint.x < 0 ){
+				Starling.current.nativeStage.removeEventListener(MouseEvent.CLICK,onClick);
+				close();
+			}
 		}
 		private function close():void {
-			Starling.juggler.removeTweens(listContainer);
-			tween = new Tween(listContainer, 0.15, Transitions.EASE_IN);
-			tween.animate("y",25-h);
+			Starling.juggler.removeTweens(scrollable);
+			tween = new Tween(scrollable, 0.15, Transitions.EASE_IN);
+			tween.animate("y",25-paneHeight);
+			
+			Starling.juggler.removeTweens(listBg);
+			tween2 = new Tween(listBg, 0.15, Transitions.EASE_IN);
+			tween2.animate("y",25-paneHeight);
+
 			Starling.juggler.add(tween);
+			Starling.juggler.add(tween2);
+			
 			tween.onComplete = function():void {
 				listOuterContainer.visible = false;
 				hover.y = (_selected*20)+2;
@@ -146,41 +179,43 @@ package views.forms {
 			this.alpha = (_b) ? 1 : 0.25;
 		}
 		protected function onListTouch(event:TouchEvent):void {
-			var hoverTouch:Touch = event.getTouch(listContainer, TouchPhase.HOVER);
-			var clickTouch:Touch = event.getTouch(listContainer, TouchPhase.ENDED);
+			var hoverTouch:Touch = event.getTouch(pane, TouchPhase.HOVER);
+			var clickTouch:Touch = event.getTouch(pane, TouchPhase.ENDED);
 			if(hoverTouch && isEnabled){
-				var p:Point = hoverTouch.getLocation(listContainer,p);
+				var p:Point = hoverTouch.getLocation(pane,p);
 				var proposedHover:int = Math.floor((p.y)/20);
-				if(proposedHover > -1 && proposedHover < items.length && tween.isComplete)
+				if(proposedHover > -1 && proposedHover < _items.length && tween.isComplete)
 					hover.y = (proposedHover*20)+2;
 			}else if(clickTouch && isEnabled){
-				var pClick:Point = clickTouch.getLocation(listContainer,pClick);
+				var pClick:Point = clickTouch.getLocation(pane,pClick);
 				var proposedSelected:int = Math.floor((pClick.y)/20);
-				if(proposedSelected > -1 && proposedSelected < items.length){
+				if(proposedSelected > -1 && proposedSelected < _items.length){
 					_selected = proposedSelected;
-					txt.text = items[_selected].label;
-					this.dispatchEvent(new FormEvent(FormEvent.CHANGE,{value:items[_selected].value},false));
+					txt.text = _items[_selected].label;
+					this.dispatchEvent(new FormEvent(FormEvent.CHANGE,{value:_items[_selected].value},false));
+					Starling.current.nativeStage.removeEventListener(MouseEvent.CLICK,onClick);
+					close();
 				}
 			}
 		}
-
+		
 		public function get selected():int {
 			return _selected;
 		}
 		public function set selected(value:int):void {
 			if(value > -1){
 				_selected = value;
-				txt.text = items[_selected].label;
+				txt.text = _items[_selected].label;
 				hover.y = (_selected*20)+2;
 			}
 		}
 		
 		public function get value():String {
-			return items[_selected].value;
+			return _items[_selected].value;
 		}
 		
-		public function update(_items:Vector.<Object>):void {
-			items = _items;
+		public function update(items:Vector.<Object>):void {
+			_items = items;
 			var k:int = this.numChildren;
 			while(k--){
 				this.getChildAt(k).dispose();
@@ -188,13 +223,21 @@ package views.forms {
 			}
 			render();
 		}
-
+		
 		public function get id():String {
 			return _id;
 		}
-
+		
 		public function set id(value:String):void {
 			_id = value;
+		}
+
+		public function get maxHeight():int {
+			return _maxHeight;
+		}
+
+		public function set maxHeight(value:int):void {
+			_maxHeight = value;
 		}
 
 	}

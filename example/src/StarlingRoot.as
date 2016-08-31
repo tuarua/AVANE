@@ -26,7 +26,7 @@ package {
 	import views.MenuButton;
 	import views.UniversalPlayer;
 	import views.client.AdvancedClient;
-	import views.forms.Slider;
+	import views.forms.DropDown;
 	import views.loader.RadialImage;
 
 	public class StarlingRoot extends Sprite {
@@ -50,6 +50,9 @@ package {
 		}
 		
 		public function start():void {
+			
+			
+			
 			exampleSelector = new ExampleSelector();
 			exampleSelector.x = -180;
 			exampleSelector.y = 10;
@@ -106,6 +109,17 @@ package {
 			addChild(holder);
 
 			addChild(exampleSelector);
+			
+			var containerDataList:Vector.<Object> = new Vector.<Object>();
+			containerDataList.push({value:"1",label:"1"});
+			containerDataList.push({value:"2",label:"2"});
+			containerDataList.push({value:"3",label:"3"});
+			containerDataList.push({value:"4",label:"4"});
+			containerDataList.push({value:"5",label:"5"});
+			containerDataList.push({value:"6",label:"6"});
+			containerDataList.push({value:"7",label:"7"});
+			
+			
 			
 		}
 		private function onBasicTouch(event:TouchEvent):void {
