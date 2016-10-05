@@ -1,0 +1,29 @@
+apply plugin: 'com.android.application'
+
+android {
+    defaultConfig {
+        applicationId "com.tuarua.avane.android.libavaneexample"
+        minSdkVersion 19
+        targetSdkVersion 22
+        versionCode = 1
+        versionName = '1.0'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    testCompile 'junit:junit:4.12'
+    compile project(':libAVANE')
+}
