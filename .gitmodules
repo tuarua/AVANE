@@ -1,3 +1,0 @@
-[submodule "native_library/android/LibAVANEExample/libAVANE/dist"]
-	path = native_library/android/LibAVANEExample/libAVANE/dist
-	url = https://github.com/tuarua/Boost-for-Android-Prebuilt
