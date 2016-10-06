@@ -1,0 +1,6 @@
+[submodule "native_library/android/LibAVANEExample/libAVANE/dist/boost"]
+	path = native_library/android/LibAVANEExample/libAVANE/dist/boost
+	url = https://github.com/tuarua/Boost-for-Android-Prebuilt
+[submodule "native_library/android/LibAVANEExample/libAVANE/dist/ffmpeg"]
+	path = native_library/android/LibAVANEExample/libAVANE/dist/ffmpeg
+	url = https://github.com/tuarua/FFmpeg-for-Android-Prebuilt
