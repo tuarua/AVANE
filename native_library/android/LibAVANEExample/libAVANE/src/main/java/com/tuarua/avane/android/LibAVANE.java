@@ -28,8 +28,8 @@ import java.util.ArrayList;
  * Created by User on 02/10/2016.
  */
 public class LibAVANE {
+    public JniEventDispatcher eventDispatcher = JniEventDispatcher.getInstance();
     private static LibAVANE ourInstance = new LibAVANE();
-
     public static LibAVANE getInstance() {
         return ourInstance;
     }

@@ -862,14 +862,14 @@ extern "C" {
 
         avane_set_pause_transcode(0);
         isEncoding = true;
-        trace("avane_main_transcode is starting");
-        if (ret < 0) {
-        }else {
+        std::string returnVal = "";
+
+        if (ret > -1) {
+            dispatchJniEventAsync(g_ctx.env, g_ctx.jniHelperObj, g_ctx.asyncEventFunc,returnVal.c_str(), "ON_ENCODE_START");
             ret = avane_main_transcode();
-            trace("avane_main_transcode is finished");
         }
         isEncoding = false;
-        std::string returnVal = "";
+
         if (ret < 0)
             dispatchJniEventAsync(g_ctx.env, g_ctx.jniHelperObj, g_ctx.asyncEventFunc,returnVal.c_str(), "ON_ENCODE_ERROR");
         else

@@ -1,17 +1,15 @@
 package com.tuarua.avane.android;
 
-import android.util.Log;
-
 /**
  * Created by User on 04/10/2016.
  */
 
 public class JniHandler {
+    private JniEventDispatcher jniHandlerEventD;
     private JniHandler(){
-
+        jniHandlerEventD = JniEventDispatcher.getInstance();
     }
     public void dispatchStatusEventAsync(String msg,String type) {
-        Log.i("message",msg);
-        Log.i("type",type);
+        jniHandlerEventD.dispatchStatusEventAsync(msg,type);
     }
 }

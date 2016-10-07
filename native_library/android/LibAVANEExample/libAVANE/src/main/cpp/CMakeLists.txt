@@ -27,7 +27,6 @@ set_target_properties(lib_ffmpeg PROPERTIES IMPORTED_LOCATION
     ${distribution_DIR}/ffmpeg/lib/${ANDROID_ABI}/libffmpeg.so)
 
 
-# TODO  ffmpeg includes to ANDROID_ABI & source to ANDROID_ABI
 include_directories(
     ${ffmpeg_DIR}
     ${dist_DIR}/ffmpeg/include/${ANDROID_ABI}

@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tuarua.avane.android.LibAVANE;
+import com.tuarua.avane.android.Progress;
+import com.tuarua.avane.android.events.Event;
+import com.tuarua.avane.android.events.IEventHandler;
 import com.tuarua.avane.android.gets.AvailableFormat;
 import com.tuarua.avane.android.gets.BitStreamFilter;
 import com.tuarua.avane.android.gets.Codec;
@@ -65,14 +68,55 @@ public class MainActivity extends AppCompatActivity {
                         doEncode();
                     }
                 });
+
+
+        libAVANE.eventDispatcher.addEventListener(Event.TRACE, new IEventHandler(){
+            @Override
+            public void callback(Event event) {
+                String msg = (String) event.getParams();
+                Log.i("MA trace",msg);
+            }
+        });
+        libAVANE.eventDispatcher.addEventListener(Event.INFO, new IEventHandler(){
+            @Override
+            public void callback(Event event) {
+                String msg = (String) event.getParams();
+                Log.i("MA info",msg);
+            }
+        });
+        libAVANE.eventDispatcher.addEventListener(Event.ON_ENCODE_START, new IEventHandler(){
+            @Override
+            public void callback(Event event) {
+                String msg = (String) event.getParams();
+                Log.i("MA","encode start");
+            }
+        });
+        libAVANE.eventDispatcher.addEventListener(Event.ON_ENCODE_FINISH, new IEventHandler(){
+            @Override
+            public void callback(Event event) {
+                String msg = (String) event.getParams();
+                Log.i("MA","encode finish");
+            }
+        });
+        libAVANE.eventDispatcher.addEventListener(Event.ON_ENCODE_PROGRESS, new IEventHandler() {
+            @Override
+            public void callback(Event event) {
+                Progress progress = (Progress) event.getParams();
+                Log.i("MA fps", String.valueOf(progress.fps));
+                Log.i("MA bitrate", String.valueOf(progress.bitrate));
+                Log.i("MA size", String.valueOf(progress.size));
+                Log.i("MA frame", String.valueOf(progress.frame));
+                Log.i("MA speed", String.valueOf(progress.speed));
+            }
+        });
+
+
     }
 
     private void doEncode(){
         String[] params = {"-i",
                 "http://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4",
                 "-c:v","libx264","-c:a","copy","-preset","ultrafast","-y", appDirectory + "/files/avane-encode-classic.mp4"};
-
-        Log.i("params", String.valueOf(params));
 
         libAVANE.encode(params);
     }
