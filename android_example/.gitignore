@@ -1,0 +1,14 @@
+# Created by https://www.gitignore.io/api/flashbuilder
+
+### FlashBuilder ###
+# Build and Release Folders
+bin/
+bin-release/
+bin-release-temp/
+bin-debug/
+
+# Other files and folders
+.settings/
+
+# textures
+.tps
