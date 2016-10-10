@@ -1,0 +1,2 @@
+include ':app', ':LibAVANE-Android'
+project(':LibAVANE-Android').projectDir = new File('LibAVANE-Android')

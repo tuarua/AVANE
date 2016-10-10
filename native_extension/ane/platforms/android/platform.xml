@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<platform xmlns="http://ns.adobe.com/air/extension/22.0">
+    <packagedDependencies>
+		<packagedDependency>LibAVANE.jar</packagedDependency>
+    </packagedDependencies>
+	<packagedResources>
+		<packagedResource>
+			<packageName>com.tuarua.AVANE</packageName>
+			<folderName>res</folderName>
+		</packagedResource>
+	</packagedResources>
+</platform>
