@@ -1,0 +1,4 @@
+[submodule "native_library/android/AVANE/LibAVANE-Android"]
+	path = native_library/android/AVANE/LibAVANE-Android
+	url = https://github.com/tuarua/LibAVANE-Android
+	branch = master
