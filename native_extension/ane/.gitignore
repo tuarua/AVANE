@@ -1,5 +1,6 @@
 debug/
-*.sh
+build_osx.sh
+build_multi.sh
 # *.bat
 extension_osx.xml
 extension_multi.xml
