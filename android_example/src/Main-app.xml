@@ -95,7 +95,7 @@
 
         <!-- <aspectRatio></aspectRatio> -->
         
-        <aspectRatio>landscape</aspectRatio>
+        <aspectRatio>portrait</aspectRatio>
 
         <!-- Whether the app will begin auto-orienting on launch. Optional. Mobile only. Default false -->
 

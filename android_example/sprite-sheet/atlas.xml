@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:13e9f241aa719a132cc5031fcf46bb0f:7445709b1ea5f605902d02ab213665af:cde709370900f12288f3449eded86f07$ -->
+<TextureAtlas imagePath="atlas.png" width="646" height="322">
+    <SubTexture name="semi-circle-bg2" x="1" y="1" width="320" height="320"/>
+    <SubTexture name="semi-circle-full" x="325" y="1" width="320" height="320"/>
+</TextureAtlas>
