@@ -127,6 +127,8 @@ package {
 		protected function onEncodeFinish(event:FFmpegEvent):void{
 			trace(event);
 			circularLoader.update(1.0);
+			encodeBtn.visible = true;
+			cancelBtn.visible = false;
 		}
 		
 		protected function onEncodeStart(event:FFmpegEvent):void {
