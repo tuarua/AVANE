@@ -8,7 +8,7 @@ echo %pathtome%
 REM Setup the directory.
 echo Making directories.
 
-mkdir %pathtome%platforms
+REM mkdir %pathtome%platforms
 mkdir %pathtome%platforms\win
 mkdir %pathtome%platforms\win\release
 mkdir %pathtome%platforms\win\debug

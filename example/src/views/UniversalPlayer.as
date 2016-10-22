@@ -82,8 +82,8 @@ package views {
 			urlList.push({value:"http://video.h265files.com/TearsOfSteel_720p_h265.mkv",label:"MKV HEVC   -   http://video.h265files.com/TearsOfSteel_720p_h265.mkv"});
 			urlList.push({value:"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
 			urlList.push({value:"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
-			urlList.push({value:"http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch2/06/prog_index.m3u8",label:"HLS Vevo live   -   http://vevoplaylist-live.hls.adaptive.level3.net/vevo/ch1/06/prog_index.m3u8"});
-			urlList.push({value:"twitch",label:"HLS Twitch live  60fps -   random channel"});
+			urlList.push({value:"http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on",label:"NASA TV HLS   -   http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on"});
+			//urlList.push({value:"twitch",label:"HLS Twitch live  60fps -   random channel"});
 			playButton.x = 1050;
 			playButton.y = 38;
 			playButton.addEventListener(TouchEvent.TOUCH,onPlayTouch);
@@ -179,8 +179,8 @@ package views {
 				x264Options.profile = X264Profile.MAIN;
 				x264Options.level = "4.1";
 				videoStream.encoderOptions = x264Options;
-			}	
-				
+			}
+			
 			OutputOptions.addVideoStream(videoStream);
 			OutputOptions.format = "flv";
 			OutputOptions.realtime = true;
@@ -334,9 +334,9 @@ package views {
 			outputAudioStream.bitrate = 448000;
 			outputAudioStream.codec = "aac";
 			outputAudioStream.channels = 2;
+			
 			OutputOptions.addAudioStream(outputAudioStream);
-			
-			
+
 			var videoStream:OutputVideoStream = new OutputVideoStream();
 			videoStream.sourceIndex = 0;
 			videoStream.codec = "copy";

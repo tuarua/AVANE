@@ -324,7 +324,7 @@ package com.tuarua {
 			}
 			
 			
-			trace(args);
+			//trace(args);
 			
 			
 			extensionContext.call("encode",args);

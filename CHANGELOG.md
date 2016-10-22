@@ -1,5 +1,7 @@
 ### 0.0.3
-- Android native extension added
+- WINS/OSX: updated to FFmpeg 3.1.4
+- WINS/OSX: cleaned up example, removed Twitch stream
+- Android: native extension added
 
 ### 0.0.2 
 - OSX 64 compatable

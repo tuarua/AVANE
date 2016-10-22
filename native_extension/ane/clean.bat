@@ -6,5 +6,5 @@ echo cleaning %pathtome%
 DEL /F /S /Q /A %pathtome%AVANE.swc
 DEL /F /S /Q /A %pathtome%library.swf
 DEL /F /S /Q /A %pathtome%catalog.xml
-rd /S /Q %pathtome%platforms
+rd /S /Q %pathtome%platforms\win
 

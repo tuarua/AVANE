@@ -3,14 +3,13 @@ package {
 	import com.tuarua.ffmpeg.Logger;
 	import com.tuarua.ffmpeg.constants.LogLevel;
 	import com.tuarua.ffmpeg.gets.AvailableFormat;
+	import com.tuarua.ffmpeg.gets.Decoder;
 	import com.tuarua.ffmpeg.gets.Device;
 	import com.tuarua.ffmpeg.gets.Filter;
 	import com.tuarua.ffmpeg.gets.HardwareAcceleration;
 	
-	import events.InteractionEvent;
 	
 	import starling.animation.Transitions;
-	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -26,8 +25,6 @@ package {
 	import views.MenuButton;
 	import views.UniversalPlayer;
 	import views.client.AdvancedClient;
-	import views.forms.DropDown;
-	import views.loader.RadialImage;
 
 	public class StarlingRoot extends Sprite {
 		private var avANE:AVANE = new AVANE();
@@ -41,8 +38,6 @@ package {
 		private var backButton:Image = new Image(upTexture);
 		private var selectedExample:int = 0;
 		private var exampleSelector:ExampleSelector;
-		
-		private var ri:RadialImage = new RadialImage(Assets.getAtlas().getTexture("semi-circle-bg2"));
 		
 		public function StarlingRoot() {
 			super();
@@ -84,9 +79,8 @@ package {
 			
 			
 			//trace("AVANE configuration:",avANE.getBuildConfiguration());
-			//trace("AVANE library versions:",avANE.getVersion());
+			trace("AVANE library versions:",avANE.getVersion());
 			//trace("AVANE FFmpeg License:",avANE.getLicense());
-			
 			
 			
 			menuButton.x = 10;
@@ -109,17 +103,6 @@ package {
 			addChild(holder);
 
 			addChild(exampleSelector);
-			
-			var containerDataList:Vector.<Object> = new Vector.<Object>();
-			containerDataList.push({value:"1",label:"1"});
-			containerDataList.push({value:"2",label:"2"});
-			containerDataList.push({value:"3",label:"3"});
-			containerDataList.push({value:"4",label:"4"});
-			containerDataList.push({value:"5",label:"5"});
-			containerDataList.push({value:"6",label:"6"});
-			containerDataList.push({value:"7",label:"7"});
-			
-			
 			
 		}
 		private function onBasicTouch(event:TouchEvent):void {

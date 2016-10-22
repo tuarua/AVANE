@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension xmlns="http://ns.adobe.com/air/extension/22.0">
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
     <id>com.tuarua.AVANE</id>
 	<name>AVANE Android</name>
     <versionNumber>0.0.3</versionNumber>
