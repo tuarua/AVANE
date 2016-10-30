@@ -1,3 +1,6 @@
+### 0.0.4
+- WINS/OSX: updated to FFmpeg 3.1.5
+
 ### 0.0.3
 - WINS/OSX: updated to FFmpeg 3.1.4
 - WINS/OSX: cleaned up example, removed Twitch stream

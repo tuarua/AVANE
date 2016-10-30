@@ -339,13 +339,6 @@ package com.tuarua {
 		public function pauseEncode(value:Boolean):Boolean {
 			return extensionContext.call("pauseEncode",value);
 		}
-		public function saveAs(fileType:String=null,defaultPath:String=null):String {
-			var ret:String = extensionContext.call("saveAs",fileType,defaultPath) as String;
-			if(ret != "" && ret.lastIndexOf("."+fileType) == -1)
-				ret = ret + "." + fileType;
-			return ret;
-		}
-		
 		
 		public function dispose():void {
 			if (!extensionContext) {

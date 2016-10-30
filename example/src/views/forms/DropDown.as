@@ -147,10 +147,7 @@ package views.forms {
 			this.dispatchEvent(new FormEvent(FormEvent.FOCUS_IN,null));
 		}
 		private function onClick(event:MouseEvent):void {
-			//trace(event.localX,event.localY);
 			var clickPoint:Point = this.globalToLocal(new Point(event.stageX,event.stageY));
-			//trace(clickPoint);
-			//trace(this.bounds);
 			if(clickPoint.x > this.bounds.width || clickPoint.y > paneHeight || clickPoint.y < 0 || clickPoint.x < 0 ){
 				Starling.current.nativeStage.removeEventListener(MouseEvent.CLICK,onClick);
 				close();

@@ -30,6 +30,7 @@ package views {
 			Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_WHEEL,onMouseWheel);
 		}
 		protected function onMouseWheel(event:MouseEvent):void {
+			
 			var mousePoint:Point = this.globalToLocal(new Point(Starling.current.nativeStage.mouseX,Starling.current.nativeStage.mouseY));
 			if(this.visible && mousePoint.x > 0 && mousePoint.x < _w && mousePoint.y > 0 && mousePoint.y < _h && !(_fullHeight < _h) && scrollBarVertical && _spr){
 				var lastY:int;
@@ -47,6 +48,7 @@ package views {
 				Starling.juggler.tween(scrollBarVertical, (Math.abs(lastY - cY) * 0.2)/_moveBy, {transition: Transitions.LINEAR,y: Math.round(sby)});
 				Starling.juggler.tween(_spr, (Math.abs(lastY - cY) * 0.2)/_moveBy, {transition: Transitions.LINEAR,y: cY});
 			}
+			
 		}
 		public function set fullHeight(value:uint):void {
 			_fullHeight = value;
