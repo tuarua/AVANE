@@ -279,5 +279,6 @@
 
 <extensions>
         <extensionID>com.tuarua.AVANE</extensionID>
+    <extensionID>com.tuarua.SaveAsANE</extensionID>
     </extensions>
 </application>

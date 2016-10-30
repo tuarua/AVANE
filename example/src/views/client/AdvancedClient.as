@@ -40,8 +40,10 @@ package views.client {
 	import com.tuarua.ffprobe.events.ProbeEvent;
 	
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.filesystem.File;
 	import flash.text.TextFieldType;
+	import flash.utils.Timer;
 	
 	import events.FormEvent;
 	import events.InteractionEvent;
@@ -60,8 +62,9 @@ package views.client {
 	
 	import views.forms.DropDown;
 	import views.forms.Input;
-	
+	import com.tuarua.SaveAsANE;
 	public class AdvancedClient extends Sprite {
+		private var saveAsANE:SaveAsANE = new SaveAsANE();
 		private var bg:MeshBatch = new MeshBatch();
 		private var bgBottom:MeshBatch = new MeshBatch();
 		private var holder:Sprite = new Sprite();
@@ -318,9 +321,6 @@ package views.client {
 			
 		}
 		
-	
-	
-		
 		private function hasEncoder(value:String):Boolean {
 			for (var i:int=0, l:int=encoders.length; i<l; ++i){
 				if(encoders[i].name == value)
@@ -539,15 +539,19 @@ package views.client {
 			if(touch && touch.phase == TouchPhase.ENDED)
 				selectedFile.browseForOpen("Select video file...");
 		}
-		private function onOutputTouch(event:TouchEvent):void {
-			event.stopPropagation();
+		private function onOutputTouch(event:TouchEvent):void {	
 			var touch:Touch = event.getTouch(chooseFileOut, TouchPhase.ENDED);
 			if(touch && touch.phase == TouchPhase.ENDED){
-				var savePath:String = avANE.saveAs(containerDataList[containerDrop.selected].value);
-				filePathOutput.text = savePath;
-				
-				isEncodeEnabled = (filePathInput.text != "");
-				encodeButton.alpha = isEncodeEnabled ? 1.0 : 0.25;
+				var saveAsTimer:Timer;
+				saveAsTimer = new Timer(50,1);
+				saveAsTimer.addEventListener(TimerEvent.TIMER,function(te:TimerEvent):void {
+					var savePath:String = saveAsANE.saveAs(containerDataList[containerDrop.selected].value);
+					filePathOutput.text = savePath;
+					
+					isEncodeEnabled = (filePathInput.text != "");
+					encodeButton.alpha = isEncodeEnabled ? 1.0 : 0.25;
+				});
+				saveAsTimer.start();
 				
 			}
 		}
