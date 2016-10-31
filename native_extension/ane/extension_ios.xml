@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension xmlns="http://ns.adobe.com/air/extension/23.0">
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
 	<id>com.tuarua.AVANE</id>
 	<name>AV ANE</name>
 	<copyright>This work is licensed under Mozilla Public License Version 1.1, Copyright 2015</copyright>
