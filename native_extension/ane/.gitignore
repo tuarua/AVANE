@@ -3,6 +3,8 @@ build_osx.sh
 build_osx_debug.sh
 build_multi.sh
 build-release.bat
-# *.bat
+clean.bat
 extension_osx.xml
+extension_win.xml
 extension_multi.xml
+AVANE.dll
