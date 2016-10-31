@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<platform xmlns="http://ns.adobe.com/air/extension/23.0">
+    <sdkVersion>8.3</sdkVersion>
+    <linkerOptions>
+        <option>-ios_version_min 6.1</option>
+        <option>-lstdc++</option>
+        <option>-lc++</option>
+        <option>-liconv</option>
+        <option>-lbz2</option>
+        <option>-lz</option>
+        <option>-w</option>
+        <option>-framework VideoToolbox</option>
+    </linkerOptions>
+</platform>
