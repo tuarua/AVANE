@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE763B6E1DC7D8DC002C9762 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE763B6D1DC7D8DC002C9762 /* libx264.a */; };
+		CEBCB17A1DC685E100262C99 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1781DC685BB00262C99 /* json.hpp */; };
+		CEBCB17C1DC6868400262C99 /* ANEhelper.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB17B1DC6868400262C99 /* ANEhelper.h */; };
+		CEBCB17E1DC6869400262C99 /* ANEhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */; };
+		CEBCB18B1DC68D9100262C99 /* AVANE_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1891DC68D9100262C99 /* AVANE_ios.h */; };
+		CEBCB18D1DC68DB000262C99 /* AVANE_ios.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEBCB1891DC68D9100262C99 /* AVANE_ios.h */; };
+		CEBCB1911DC68F0300262C99 /* AVANE_ios.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1901DC68F0300262C99 /* AVANE_ios.m */; };
+		CEBCB1931DC6930700262C99 /* AVANE.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1921DC6930700262C99 /* AVANE.h */; };
+		CEBCB1AD1DC693F800262C99 /* Constants.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1AC1DC693F800262C99 /* Constants.hpp */; };
+		CEBCB1AF1DC6940B00262C99 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1AE1DC6940B00262C99 /* Utils.h */; };
+		CEBCB1B11DC6945600262C99 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1B01DC6945600262C99 /* Utils.cpp */; };
+		CEBCB1B31DC6958300262C99 /* AVANE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1B21DC6958300262C99 /* AVANE.cpp */; };
+		CEBCB1BE1DC697FB00262C99 /* cmdutils_common_opts.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */; };
+		CEBCB1BF1DC697FB00262C99 /* cmdutils.c in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1B51DC697FB00262C99 /* cmdutils.c */; };
+		CEBCB1C01DC697FB00262C99 /* cmdutils.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1B61DC697FB00262C99 /* cmdutils.h */; };
+		CEBCB1C21DC697FB00262C99 /* ffmpeg_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1B81DC697FB00262C99 /* ffmpeg_filter.c */; };
+		CEBCB1C31DC697FB00262C99 /* ffmpeg_opt.c in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1B91DC697FB00262C99 /* ffmpeg_opt.c */; };
+		CEBCB1C51DC697FB00262C99 /* ffmpeg_videotoolbox.c in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1BB1DC697FB00262C99 /* ffmpeg_videotoolbox.c */; };
+		CEBCB1C61DC697FB00262C99 /* ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1BC1DC697FB00262C99 /* ffmpeg.c */; };
+		CEBCB1C71DC697FB00262C99 /* ffmpeg.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1BD1DC697FB00262C99 /* ffmpeg.h */; };
+		CED38D5D1DC69E24009F2595 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D541DC69E24009F2595 /* libavcodec.a */; };
+		CED38D5E1DC69E24009F2595 /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D551DC69E24009F2595 /* libavdevice.a */; };
+		CED38D5F1DC69E24009F2595 /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D561DC69E24009F2595 /* libavfilter.a */; };
+		CED38D601DC69E24009F2595 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D571DC69E24009F2595 /* libavformat.a */; };
+		CED38D611DC69E24009F2595 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D581DC69E24009F2595 /* libavutil.a */; };
+		CED38D621DC69E24009F2595 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D591DC69E24009F2595 /* libboost.a */; };
+		CED38D631DC69E24009F2595 /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D5A1DC69E24009F2595 /* libpostproc.a */; };
+		CED38D641DC69E24009F2595 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D5B1DC69E24009F2595 /* libswresample.a */; };
+		CED38D651DC69E24009F2595 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED38D5C1DC69E24009F2595 /* libswscale.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CEBCB1591DC67FF400262C99 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				CEBCB18D1DC68DB000262C99 /* AVANE_ios.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		CE763B6D1DC7D8DC002C9762 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = dependancies/libx264.a; sourceTree = "<group>"; };
+		CEBCB15B1DC67FF400262C99 /* libAVANE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAVANE.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEBCB1781DC685BB00262C99 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = ../../../include/json.hpp; sourceTree = "<group>"; };
+		CEBCB17B1DC6868400262C99 /* ANEhelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ANEhelper.h; path = ../../../include/ANEhelper.h; sourceTree = "<group>"; };
+		CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ANEhelper.cpp; path = ../../../source/ANEhelper.cpp; sourceTree = "<group>"; };
+		CEBCB17F1DC6871C00262C99 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		CEBCB1891DC68D9100262C99 /* AVANE_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVANE_ios.h; sourceTree = "<group>"; };
+		CEBCB1901DC68F0300262C99 /* AVANE_ios.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVANE_ios.m; sourceTree = "<group>"; };
+		CEBCB1921DC6930700262C99 /* AVANE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVANE.h; path = ../../../include/AVANE.h; sourceTree = "<group>"; };
+		CEBCB1AC1DC693F800262C99 /* Constants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Constants.hpp; path = ../../../include/Constants.hpp; sourceTree = "<group>"; };
+		CEBCB1AE1DC6940B00262C99 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../../include/Utils.h; sourceTree = "<group>"; };
+		CEBCB1B01DC6945600262C99 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Utils.cpp; path = ../../../source/Utils.cpp; sourceTree = "<group>"; };
+		CEBCB1B21DC6958300262C99 /* AVANE.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AVANE.cpp; path = ../../../source/AVANE.cpp; sourceTree = "<group>"; };
+		CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cmdutils_common_opts.h; path = ../../../source/ffmpeg/cmdutils_common_opts.h; sourceTree = "<group>"; };
+		CEBCB1B51DC697FB00262C99 /* cmdutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cmdutils.c; path = ../../../source/ffmpeg/cmdutils.c; sourceTree = "<group>"; };
+		CEBCB1B61DC697FB00262C99 /* cmdutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cmdutils.h; path = ../../../source/ffmpeg/cmdutils.h; sourceTree = "<group>"; };
+		CEBCB1B81DC697FB00262C99 /* ffmpeg_filter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ffmpeg_filter.c; path = ../../../source/ffmpeg/ffmpeg_filter.c; sourceTree = "<group>"; };
+		CEBCB1B91DC697FB00262C99 /* ffmpeg_opt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ffmpeg_opt.c; path = ../../../source/ffmpeg/ffmpeg_opt.c; sourceTree = "<group>"; };
+		CEBCB1BB1DC697FB00262C99 /* ffmpeg_videotoolbox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ffmpeg_videotoolbox.c; path = ../../../source/ffmpeg/ffmpeg_videotoolbox.c; sourceTree = "<group>"; };
+		CEBCB1BC1DC697FB00262C99 /* ffmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ffmpeg.c; path = ../../../source/ffmpeg/ffmpeg.c; sourceTree = "<group>"; };
+		CEBCB1BD1DC697FB00262C99 /* ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ffmpeg.h; path = ../../../source/ffmpeg/ffmpeg.h; sourceTree = "<group>"; };
+		CED38D521DC69DF5009F2595 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = dependancies/libboost.a; sourceTree = "<group>"; };
+		CED38D541DC69E24009F2595 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = dependancies/libavcodec.a; sourceTree = "<group>"; };
+		CED38D551DC69E24009F2595 /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = dependancies/libavdevice.a; sourceTree = "<group>"; };
+		CED38D561DC69E24009F2595 /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = dependancies/libavfilter.a; sourceTree = "<group>"; };
+		CED38D571DC69E24009F2595 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = dependancies/libavformat.a; sourceTree = "<group>"; };
+		CED38D581DC69E24009F2595 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = dependancies/libavutil.a; sourceTree = "<group>"; };
+		CED38D591DC69E24009F2595 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = dependancies/libboost.a; sourceTree = "<group>"; };
+		CED38D5A1DC69E24009F2595 /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = dependancies/libpostproc.a; sourceTree = "<group>"; };
+		CED38D5B1DC69E24009F2595 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = dependancies/libswresample.a; sourceTree = "<group>"; };
+		CED38D5C1DC69E24009F2595 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = dependancies/libswscale.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CEBCB1581DC67FF400262C99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CED38D621DC69E24009F2595 /* libboost.a in Frameworks */,
+				CED38D641DC69E24009F2595 /* libswresample.a in Frameworks */,
+				CED38D611DC69E24009F2595 /* libavutil.a in Frameworks */,
+				CED38D5F1DC69E24009F2595 /* libavfilter.a in Frameworks */,
+				CED38D5E1DC69E24009F2595 /* libavdevice.a in Frameworks */,
+				CED38D651DC69E24009F2595 /* libswscale.a in Frameworks */,
+				CED38D631DC69E24009F2595 /* libpostproc.a in Frameworks */,
+				CE763B6E1DC7D8DC002C9762 /* libx264.a in Frameworks */,
+				CED38D601DC69E24009F2595 /* libavformat.a in Frameworks */,
+				CED38D5D1DC69E24009F2595 /* libavcodec.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CEBCB1521DC67FF400262C99 = {
+			isa = PBXGroup;
+			children = (
+				CE763B6D1DC7D8DC002C9762 /* libx264.a */,
+				CED38D541DC69E24009F2595 /* libavcodec.a */,
+				CED38D551DC69E24009F2595 /* libavdevice.a */,
+				CED38D561DC69E24009F2595 /* libavfilter.a */,
+				CED38D571DC69E24009F2595 /* libavformat.a */,
+				CED38D581DC69E24009F2595 /* libavutil.a */,
+				CED38D591DC69E24009F2595 /* libboost.a */,
+				CED38D5A1DC69E24009F2595 /* libpostproc.a */,
+				CED38D5B1DC69E24009F2595 /* libswresample.a */,
+				CED38D5C1DC69E24009F2595 /* libswscale.a */,
+				CED38D521DC69DF5009F2595 /* libboost.a */,
+				CEBCB15D1DC67FF400262C99 /* AVANE */,
+				CEBCB15C1DC67FF400262C99 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CEBCB15C1DC67FF400262C99 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEBCB15B1DC67FF400262C99 /* libAVANE.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CEBCB15D1DC67FF400262C99 /* AVANE */ = {
+			isa = PBXGroup;
+			children = (
+				CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */,
+				CEBCB1B51DC697FB00262C99 /* cmdutils.c */,
+				CEBCB1B61DC697FB00262C99 /* cmdutils.h */,
+				CEBCB1B81DC697FB00262C99 /* ffmpeg_filter.c */,
+				CEBCB1B91DC697FB00262C99 /* ffmpeg_opt.c */,
+				CEBCB1BB1DC697FB00262C99 /* ffmpeg_videotoolbox.c */,
+				CEBCB1BC1DC697FB00262C99 /* ffmpeg.c */,
+				CEBCB1BD1DC697FB00262C99 /* ffmpeg.h */,
+				CEBCB1B21DC6958300262C99 /* AVANE.cpp */,
+				CEBCB1B01DC6945600262C99 /* Utils.cpp */,
+				CEBCB1AE1DC6940B00262C99 /* Utils.h */,
+				CEBCB1AC1DC693F800262C99 /* Constants.hpp */,
+				CEBCB1921DC6930700262C99 /* AVANE.h */,
+				CEBCB1901DC68F0300262C99 /* AVANE_ios.m */,
+				CEBCB1891DC68D9100262C99 /* AVANE_ios.h */,
+				CEBCB17F1DC6871C00262C99 /* FlashRuntimeExtensions.h */,
+				CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */,
+				CEBCB17B1DC6868400262C99 /* ANEhelper.h */,
+				CEBCB1781DC685BB00262C99 /* json.hpp */,
+			);
+			path = AVANE;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CEBCB1791DC685C600262C99 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEBCB1C71DC697FB00262C99 /* ffmpeg.h in Headers */,
+				CEBCB1BE1DC697FB00262C99 /* cmdutils_common_opts.h in Headers */,
+				CEBCB1931DC6930700262C99 /* AVANE.h in Headers */,
+				CEBCB17A1DC685E100262C99 /* json.hpp in Headers */,
+				CEBCB1C01DC697FB00262C99 /* cmdutils.h in Headers */,
+				CEBCB18B1DC68D9100262C99 /* AVANE_ios.h in Headers */,
+				CEBCB17C1DC6868400262C99 /* ANEhelper.h in Headers */,
+				CEBCB1AD1DC693F800262C99 /* Constants.hpp in Headers */,
+				CEBCB1AF1DC6940B00262C99 /* Utils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CEBCB15A1DC67FF400262C99 /* AVANE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEBCB1641DC67FF400262C99 /* Build configuration list for PBXNativeTarget "AVANE" */;
+			buildPhases = (
+				CEBCB1571DC67FF400262C99 /* Sources */,
+				CEBCB1581DC67FF400262C99 /* Frameworks */,
+				CEBCB1591DC67FF400262C99 /* CopyFiles */,
+				CEBCB1791DC685C600262C99 /* Headers */,
+				CE763B6F1DC80B6B002C9762 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AVANE;
+			productName = AVANE;
+			productReference = CEBCB15B1DC67FF400262C99 /* libAVANE.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEBCB1531DC67FF400262C99 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Tua Rua Ltd";
+				TargetAttributes = {
+					CEBCB15A1DC67FF400262C99 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = CEBCB1561DC67FF400262C99 /* Build configuration list for PBXProject "AVANE" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CEBCB1521DC67FF400262C99;
+			productRefGroup = CEBCB15C1DC67FF400262C99 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CEBCB15A1DC67FF400262C99 /* AVANE */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CE763B6F1DC80B6B002C9762 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ../../../native_extension/ane/build_ios.sh;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CEBCB1571DC67FF400262C99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEBCB1C31DC697FB00262C99 /* ffmpeg_opt.c in Sources */,
+				CEBCB17E1DC6869400262C99 /* ANEhelper.cpp in Sources */,
+				CEBCB1BF1DC697FB00262C99 /* cmdutils.c in Sources */,
+				CEBCB1C51DC697FB00262C99 /* ffmpeg_videotoolbox.c in Sources */,
+				CEBCB1911DC68F0300262C99 /* AVANE_ios.m in Sources */,
+				CEBCB1B31DC6958300262C99 /* AVANE.cpp in Sources */,
+				CEBCB1C61DC697FB00262C99 /* ffmpeg.c in Sources */,
+				CEBCB1B11DC6945600262C99 /* Utils.cpp in Sources */,
+				CEBCB1C21DC697FB00262C99 /* ffmpeg_filter.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CEBCB1621DC67FF400262C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-w";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		CEBCB1631DC67FF400262C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-w";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEBCB1651DC67FF400262C99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../lib/ios",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/dependancies",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "../../include ../../include/ios/boost/include ../../include/ios/ffmpeg";
+			};
+			name = Debug;
+		};
+		CEBCB1661DC67FF400262C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../lib/ios",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/dependancies",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "../../include ../../include/ios/boost/include ../../include/ios/ffmpeg";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CEBCB1561DC67FF400262C99 /* Build configuration list for PBXProject "AVANE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEBCB1621DC67FF400262C99 /* Debug */,
+				CEBCB1631DC67FF400262C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEBCB1641DC67FF400262C99 /* Build configuration list for PBXNativeTarget "AVANE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEBCB1651DC67FF400262C99 /* Debug */,
+				CEBCB1661DC67FF400262C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CEBCB1531DC67FF400262C99 /* Project object */;
+}
