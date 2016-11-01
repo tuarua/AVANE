@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.tuarua.AVANE"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X264Preset"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X264Profile"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X264Tune"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X265Preset"/>
+    <classEntry path="com.tuarua.ffmpeg.events.FFmpegEvent"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.pad"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.scaleTo"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.to16x9"/>
+    <classEntry path="com.tuarua.ffmpeg.X264Options"/>
+    <classEntry path="com.tuarua.ffmpeg.X265Options"/>
+    <classEntry path="com.tuarua.ffmpeg.X264AdvancedOptions"/>
+    <classEntry path="com.tuarua.ffmpeg.X265AdvancedOptions"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X265Tune"/>
+    <classEntry path="com.tuarua.ffmpeg.Attachment"/>
+    <classEntry path="com.tuarua.ffmpeg.MetaData"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.MimeTypes"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.deinterlace"/>
+    <classEntry path="com.tuarua.ffmpeg.Overlay"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.X264Advanced"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.denoise"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.sharpen"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.boxBlur"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.smartBlur"/>
+    <classEntry path="com.tuarua.ffmpeg.InputStream"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.crop"/>
+    <classEntry path="com.tuarua.ffmpeg.filters.video.cropdetect"/>
+    <classEntry path="com.tuarua.ffmpeg.Logger"/>
+    <classEntry path="com.tuarua.ffmpeg.BitStreamFilter"/>
+    <classEntry path="com.tuarua.ffmpeg.HLSOptions"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.Nvenc265Preset"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.Nvenc264Profile"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.Nvenc265Profile"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.Qsv265Preset"/>
+    <classEntry path="com.tuarua.ffmpeg.constants.Qsv264Profile"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
