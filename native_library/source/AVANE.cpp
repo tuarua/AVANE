@@ -664,17 +664,19 @@ extern "C" {
 		av_register_all();
 		avformat_network_init();
 
-		ret = ffmpeg_parse_options(inputContext.commandLine.size(), charVec);
+		ret = ffmpeg_parse_options((int)inputContext.commandLine.size(), charVec);
 
 		avane_set_pause_transcode(0);
 		isEncoding = true;
+		std::string returnVal = "";
+		FREDispatchStatusEventAsync(dllContext, (uint8_t*)returnVal.c_str(), (const uint8_t*) "ON_ENCODE_START");
 		if (ret < 0) {
 		}else {
 			ret = avane_main_transcode();
 			trace("avane_main_transcode is finished");
 		}
 		isEncoding = false;
-		std::string returnVal = "";
+		
 		if (ret < 0)
 			FREDispatchStatusEventAsync(dllContext, (uint8_t*)returnVal.c_str(), (const uint8_t*) "ON_ENCODE_ERROR");
 		else
