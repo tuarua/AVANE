@@ -1,3 +1,6 @@
+### 0.0.5
+- WINS/OSX: fix ON_ENCODE_START event not firing
+
 ### 0.0.4
 - WINS/OSX: updated to FFmpeg 3.1.5
 
