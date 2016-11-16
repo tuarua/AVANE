@@ -19,7 +19,7 @@ package com.tuarua.ffmpeg {
 		private var _lyrics:String;
 		private var _network:String;
 		private var _rating:String;
-		private var _show:String
+		private var _show:String;
 		private var _title:String;
 		private var _track:String;
 		private var _year:String;
