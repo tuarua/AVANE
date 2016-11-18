@@ -137,7 +137,7 @@ extern "C" {
 		AVFormatContext *fmt_ctx = *ctx_ptr;
 		/* close decoder for each stream */
 		for (i = 0; i < fmt_ctx->nb_streams; i++)
-			if (fmt_ctx->streams[i]->codec->codec_id != AV_CODEC_ID_NONE)
+			if (fmt_ctx->streams[i]->codecpar->codec_id != AV_CODEC_ID_NONE)
 				avcodec_close(fmt_ctx->streams[i]->codec);
 		avformat_close_input(ctx_ptr);
 	}
@@ -351,7 +351,7 @@ extern "C" {
 						if (dec) {
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecName", getFREObjectFromString(dec->name), NULL);
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecLongName", getFREObjectFromString((dec->long_name) ? dec->long_name : "unknown"), NULL);
-						} else if ((cd = avcodec_descriptor_get(stream->codec->codec_id))) {
+						} else if ((cd = avcodec_descriptor_get(stream->codecpar->codec_id))) {
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecName", getFREObjectFromString(cd->name), NULL);
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecLongName", getFREObjectFromString(cd->long_name), NULL);
 						} else {
@@ -415,15 +415,17 @@ extern "C" {
 								FRESetObjectProperty(objStream, (const uint8_t*)"colorPrimaries", getFREObjectFromString(av_color_primaries_name(dec_ctx->color_primaries)), NULL);
 							if (dec_ctx->chroma_sample_location != AVCHROMA_LOC_UNSPECIFIED)
 								FRESetObjectProperty(objStream, (const uint8_t*)"chromaLocation", getFREObjectFromString(av_chroma_location_name(dec_ctx->chroma_sample_location)), NULL);
-
-							if (dec_ctx->timecode_frame_start >= 0) {
+#if FF_API_PRIVATE_OPT
+							if (dec_ctx && dec_ctx->timecode_frame_start >= 0) {
 								char tcbuf[AV_TIMECODE_STR_SIZE];
 								av_timecode_make_mpeg_tc_string(tcbuf, dec_ctx->timecode_frame_start);
 								FRESetObjectProperty(objStream, (const uint8_t*)"timecode", getFREObjectFromString(tcbuf), NULL);
 							}else {
 								FRESetObjectProperty(objStream, (const uint8_t*)"timecode", getFREObjectFromString("N/A"), NULL);
 							}
-							FRESetObjectProperty(objStream, (const uint8_t*)"refs", getFREObjectFromInt32(dec_ctx->refs), NULL);
+#endif
+							if (dec_ctx)
+								FRESetObjectProperty(objStream, (const uint8_t*)"refs", getFREObjectFromInt32(dec_ctx->refs), NULL);
 
 							break;
 
@@ -543,7 +545,6 @@ extern "C" {
 
 			//Tags
 			AVDictionaryEntry *tag = NULL;
-			int numTags = av_dict_count(probeContext.fmt_ctx->metadata);
 			FREObject formatTags = NULL;
 			FRENewObject((const uint8_t*)"Object", 0, NULL, &formatTags, NULL);
 			while ((tag = av_dict_get(probeContext.fmt_ctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))

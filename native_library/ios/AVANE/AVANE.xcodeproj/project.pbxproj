@@ -12,7 +12,6 @@
 		CEBCB17C1DC6868400262C99 /* ANEhelper.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB17B1DC6868400262C99 /* ANEhelper.h */; };
 		CEBCB17E1DC6869400262C99 /* ANEhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */; };
 		CEBCB18B1DC68D9100262C99 /* AVANE_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1891DC68D9100262C99 /* AVANE_ios.h */; };
-		CEBCB18D1DC68DB000262C99 /* AVANE_ios.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEBCB1891DC68D9100262C99 /* AVANE_ios.h */; };
 		CEBCB1911DC68F0300262C99 /* AVANE_ios.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBCB1901DC68F0300262C99 /* AVANE_ios.m */; };
 		CEBCB1931DC6930700262C99 /* AVANE.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1921DC6930700262C99 /* AVANE.h */; };
 		CEBCB1AD1DC693F800262C99 /* Constants.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1AC1DC693F800262C99 /* Constants.hpp */; };
@@ -45,7 +44,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				CEBCB18D1DC68DB000262C99 /* AVANE_ios.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +353,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				HEADER_SEARCH_PATHS = ../../include/ios/ffmpeg/x86;
+				"HEADER_SEARCH_PATHS[sdk=iphoneos*]" = ../../include/ios/ffmpeg/arm;
+				"HEADER_SEARCH_PATHS[sdk=iphonesimulator*]" = ../../include/ios/ffmpeg/x86;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../lib/ios",
 					"$(PROJECT_DIR)",
@@ -372,6 +373,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				HEADER_SEARCH_PATHS = ../../include/ios/ffmpeg/x86;
+				"HEADER_SEARCH_PATHS[arch=*]" = ../../include/ios/ffmpeg/arm;
+				"HEADER_SEARCH_PATHS[sdk=iphonesimulator*]" = ../../include/ios/ffmpeg/x86;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../lib/ios",
 					"$(PROJECT_DIR)",
