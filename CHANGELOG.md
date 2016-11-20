@@ -1,5 +1,5 @@
 ### 0.0.6
-- WINS/OSX: Base ASdocs added.
+- WINS/OSX/Android: Base ASdocs added.
 - WINS/OSX: Universal Player updated with controls to showcase play/pause/seek.
 - WINS/OSX: [BUG] framerate should be Number not int
 - WINS/OSX: Added ability to add extra options to both input and output

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<platform xmlns="http://ns.adobe.com/air/extension/22.0">
+<platform xmlns="http://ns.adobe.com/air/extension/19.0">
     <packagedDependencies>
 		<packagedDependency>LibAVANE.jar</packagedDependency>
     </packagedDependencies>
