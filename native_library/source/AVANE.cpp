@@ -259,9 +259,6 @@ extern "C" {
 		probeContext.fileName = getStringFromFREObject(argv[0]);
 		probeContext.playList = getStringFromFREObject(argv[1]);
         
-        trace(probeContext.fileName);
-        
-        
 		threads[0] = boost::move(createThread(&threadProbe, 1));
 		return getFREObjectFromBool(true);
 	}

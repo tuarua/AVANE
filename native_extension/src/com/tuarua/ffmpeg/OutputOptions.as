@@ -2,15 +2,29 @@ package com.tuarua.ffmpeg {
 	import flash.globalization.DateTimeFormatter;
 	[RemoteClass(alias="com.tuarua.ffmpeg.OutputOptions")]
 	public class OutputOptions extends Object {
+		/** 
+		 * FFmpeg equivalent: -f.
+		 * <p>Force output file format. The format is normally guessed from the file extension for output files, 
+		 * so this option is not needed in most cases. </p>
+		 * @default null which ommits it from the params used 
+		 */	
 		public static var format:String;
+		/** 
+		 * <p>output file name. </p>
+		 */
 		public static var uri:String;
 		public static var videoStreams:Vector.<OutputVideoStream> = new Vector.<OutputVideoStream>;
 		public static var audioStreams:Vector.<OutputAudioStream> = new Vector.<OutputAudioStream>;
 		public static var attachments:Vector.<Attachment> = new Vector.<Attachment>;
 		public static var metadata:MetaData; //http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
 		
-		public static var arbitraryOptions:*; //eg hls
-		
+		public static var extraOptions:Vector.<*>; //eg hls
+		/** 
+		 * FFmpeg equivalent: -movflags +faststart.
+		 * <p>Normally, a MOV/MP4 file has all the metadata about all packets stored in one location 
+		 * (written at the end of the file, it can be moved to the start for better playback.</p>
+		 * @default false which ommits it from the params used 
+		 */	
 		public static var fastStart:Boolean = false;
 		public static var videoFilters:Vector.<String> = new Vector.<String>;
 		public static var complexFilters:Vector.<String> = new Vector.<String>;
@@ -18,19 +32,72 @@ package com.tuarua.ffmpeg {
 		
 		public static var copyAllVideoStreams:Boolean = false;
 		public static var copyAllAudioStreams:Boolean = false;
-		
+		/** 
+		 * FFmpeg equivalent: -bufsize.
+		 * <p>Sets the buffer size</p>
+		 * @default -1 which ommits it from the params used 
+		 */	
 		public static var bufferSize:int = -1;
+		/** 
+		 * FFmpeg equivalent: -maxrate.
+		 * <p>Sets the max rate</p>
+		 * @default -1 which ommits it from the params used 
+		 */	
 		public static var maxRate:int = -1;
+		/** 
+		 * FFmpeg equivalent: -t.
+		 * <p>Stop writing the output after its duration reaches duration. </p>
+		 * @default -1 which ommits it from the params used 
+		 */	
 		public static var duration:Number = -1.0;
+		/** 
+		 * FFmpeg equivalent: -to.
+		 * <p>Stop writing the output at position.</p>
+		 * @default -1 which ommits it from the params used 
+		 */
 		public static var to:Number = -1.0;
+		
+		/** 
+		 * FFmpeg equivalent: -fs.
+		 * <p>Set the file size limit, expressed in bytes. No further chunk of bytes is written after 
+		 * the limit is exceeded. The size of the output file is slightly more than the requested file size. </p>
+		 * @default -1 which ommits it from the params used 
+		 */
 		public static var fileSizeLimit:int = -1;
 		//private static var _timestamp:String;
 		//public static var program:String;//need
-		public static var preset:String;
-		public static var target:String;
-		public static var frameRate:int = 0;
-		public static var realtime:Boolean = false;
 		
+		
+		/** 
+		 * FFmpeg equivalent: -pre.
+		 * <p>Specify the preset for matching stream(s).</p>
+		 * @default null which ommits it from the params used 
+		 */
+		public static var preset:String;
+		/** 
+		 * FFmpeg equivalent: -target.
+		 * <p>Specify target file type (vcd, svcd, dvd, dv, dv50). type may be prefixed with pal-, 
+		 * ntsc- or film- to use the corresponding standard. 
+		 * All the format options (bitrate, codecs, buffer sizes) are then set automatically.</p>
+		 * @default null which ommits it from the params used 
+		 */
+		public static var target:String;
+		/** 
+		 * FFmpeg equivalent: -r.
+		 * <p>Set the input frame rate in frames per second. </p>
+		 * @default 0.0 which ommits it from the params used 
+		 */	
+		public static var frameRate:Number = 0.0;
+		/** 
+		 * <p>Write output at native frame rate. This is an additional feature not available in FFmpeg 
+		 * and differs from realtime input. </p>
+		 * @default false
+		 */
+		public static var realtime:Boolean = false;
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function OutputOptions(){}
 		public static function addOverlay(overlay:Overlay):void {
 			var inputOptions:InputOptions = new InputOptions();
 			inputOptions.uri = overlay.fileName;
@@ -55,6 +122,13 @@ package com.tuarua.ffmpeg {
 				attachments = new Vector.<Attachment>;
 			attachments.push(_attachment);
 		}
+		
+		public static function addExtraOptions(_extra:*):void {
+			if(extraOptions == null)
+				extraOptions = new Vector.<*>;
+			extraOptions.push(_extra);
+		}
+		
 		public static function clear():void {
 			format = null;
 			uri = null;
@@ -95,6 +169,10 @@ package com.tuarua.ffmpeg {
 			
 			if(complexFilters)
 				complexFilters.splice(0, complexFilters.length);
+			
+			if(extraOptions)
+				extraOptions.splice(0, extraOptions.length);
+			
 		}
 		public static function burnSubtitles(path:String):void {
 			videoFilters.push("subtitles="+path);

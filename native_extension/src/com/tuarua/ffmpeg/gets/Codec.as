@@ -11,5 +11,9 @@ package com.tuarua.ffmpeg.gets {
 		public var isLossy:Boolean;
 		public var isLossless:Boolean;
 		public var isIntraFrameOnly:Boolean;
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function Codec(){}
 	}
 }

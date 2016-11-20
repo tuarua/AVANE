@@ -80,7 +80,7 @@ package {
 			
 			//trace("AVANE configuration:",avANE.getBuildConfiguration());
 			trace("AVANE library versions:",avANE.getVersion());
-			//trace("AVANE FFmpeg License:",avANE.getLicense());
+			trace("AVANE FFmpeg License:",avANE.getLicense());
 			
 			
 			menuButton.x = 10;

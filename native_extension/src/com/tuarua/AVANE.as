@@ -22,6 +22,7 @@ package com.tuarua {
 	import com.tuarua.ffmpeg.gets.PixelFormat;
 	import com.tuarua.ffmpeg.gets.Protocols;
 	import com.tuarua.ffmpeg.gets.SampleFormat;
+	import com.tuarua.ffmpeg.constants.LogLevel;
 	import com.tuarua.ffprobe.Probe;
 	import com.tuarua.ffprobe.events.ProbeEvent;
 	
@@ -34,9 +35,13 @@ package com.tuarua {
 		private var extensionContext:ExtensionContext;
 		private var _inited:Boolean = false;
 		private var timestamp:Date;
+		private var _logLevel:int = LogLevel.QUIET;
 		public function AVANE() {
 			initiate();
 		}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		protected function initiate():void {
 			trace("[AVANE] Initalizing ANE...");
 			try {
@@ -46,7 +51,9 @@ package com.tuarua {
 				trace("[AVANE] ANE Not loaded properly.  Future calls will fail.");
 			}
 		}
-		
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		protected function gotEvent(event:StatusEvent):void {
 			switch (event.level) {
 				case "TRACE":
@@ -127,9 +134,21 @@ package com.tuarua {
 		public function getAvailableFormats():Vector.<AvailableFormat> {
 			return extensionContext.call("getAvailableFormats") as Vector.<AvailableFormat>;
 		}
+		/** 
+		 * <p>Returns license information for the FFmpeg libraries used</p>
+		 * 
+		 * @example
+		 * <listing version="3.0">avANE.getLicense();</listing>
+		 */ 
 		public function getLicense():String {
 			return extensionContext.call("getLicense")as String;
 		}
+		/** 
+		 * <p>Returns version information for the FFmpeg libraries used</p>
+		 * 
+		 * @example
+		 * <listing version="3.0">avANE.getVersion();</listing>
+		 */ 
 		public function getVersion():String {
 			return extensionContext.call("getVersion")as String;
 		}
@@ -139,6 +158,9 @@ package com.tuarua {
 		public function getSampleFormats():Vector.<SampleFormat> {
 			return extensionContext.call("getSampleFormats") as Vector.<SampleFormat>;
 		}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		private function cliParse(str:String, lookForQuotes:Boolean=true):Vector.<String> {
 			var args:Vector.<String> = new Vector.<String>();
 			var readingPart:Boolean = false;
@@ -205,11 +227,32 @@ package com.tuarua {
 						args.push("-t",inputOptions.duration.toString());
 					if(inputOptions.frameRate > 0)
 						args.push("-r",inputOptions.frameRate.toString());
+					if(inputOptions.size)
+						args.push("-s",inputOptions.size);
+					if(inputOptions.videoCodec)
+						args.push("-vcodec",inputOptions.videoCodec);
+					if(inputOptions.audioCodec)
+						args.push("-acodec",inputOptions.audioCodec);
+					if(inputOptions.pixelFormat)
+						args.push("-pix_fmt",inputOptions.pixelFormat);
 					if(inputOptions.inputTimeOffset > 0)
 						args.push("-itsoffset",inputOptions.inputTimeOffset.toString());
 					if(inputOptions.hardwareAcceleration)
 						args.push("-hwaccel",inputOptions.hardwareAcceleration);
 					
+					
+					if(inputOptions.extraOptions){
+						try {
+							var obj:*;
+							for (var v:int=0, l6:int=OutputOptions.extraOptions.length; v<l6; ++v){
+								obj = OutputOptions.extraOptions[v];
+								var vecArb:Vector.<Object> = obj.getAsVector();
+								for each(var optArb:Object in vecArb){
+									args.push("-"+opt.key, opt.value);
+								}
+							}
+						}catch(e:Error){trace(e.message);}
+					}
 					
 					args.push("-i",inputOptions.uri);
 				}
@@ -311,27 +354,32 @@ package com.tuarua {
 					}
 				}
 				
-				if(OutputOptions.arbitraryOptions){
-					try{
-						var vecArb:Vector.<Object> = OutputOptions.arbitraryOptions.getAsVector();
-						for each(var optArb:Object in vecArb){
-							args.push("-"+opt.key, opt.value);
-						}	
-					}catch(e:Error){}
+				if(OutputOptions.extraOptions){
+					try {
+						var obji:*;
+						for (var u:int=0, l7:int=OutputOptions.extraOptions.length; u<l7; ++u){
+							obji = OutputOptions.extraOptions[u];
+							var vecXtra:Vector.<Object> = obji.getAsVector();
+							for each(var optXtra:Object in vecXtra){
+								args.push("-"+opt.key, opt.value);
+							}
+						}
+					}catch(e:Error){trace(e.message);}
 				}
+				
 				
 				args.push(OutputOptions.uri);
 			}
 			
-			
-			//trace(args);
-			
+			if(_logLevel >= LogLevel.INFO)
+				trace("constructed FFmpeg cli sent to encode:",args);
 			
 			extensionContext.call("encode",args);
 		}
 		
 		public function setLogLevel(level:int):void {
-			extensionContext.call("setLogLevel",level);
+			_logLevel = level;
+			extensionContext.call("setLogLevel",_logLevel);
 		}
 		public function cancelEncode():Boolean {
 			return extensionContext.call("cancelEncode");

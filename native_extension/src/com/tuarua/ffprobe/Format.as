@@ -12,5 +12,8 @@ package com.tuarua.ffprobe {
 		public var bitRate:int;
 		public var probeScore:int;
 		public var tags:Object;
+		public function Format(){
+			
+		}
 	}
 }

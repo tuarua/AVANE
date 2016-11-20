@@ -10,5 +10,6 @@ package com.tuarua.ffmpeg {
 		public var pixelFormat:String;
 		public var encoderOptions:* = null;
 		public var advancedEncOpts:* = null;
+		public function OutputVideoStream(){}
 	}
 }

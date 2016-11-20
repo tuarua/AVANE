@@ -9,5 +9,9 @@ package com.tuarua.ffmpeg.gets {
 		public var isBitStream:Boolean;
 		public var numComponents:int;
 		public var bitsPerPixel:int;
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function PixelFormat(){}
 	}
 }

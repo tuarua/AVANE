@@ -17,5 +17,6 @@ package com.tuarua.ffprobe {
 		public var chromaLocation:String;
 		public var timecode:String;
 		public var refs:int;
+		public function VideoStream(){}
 	}
 }

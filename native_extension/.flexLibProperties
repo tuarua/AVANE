@@ -36,6 +36,7 @@
     <classEntry path="com.tuarua.ffmpeg.constants.Nvenc265Profile"/>
     <classEntry path="com.tuarua.ffmpeg.constants.Qsv265Preset"/>
     <classEntry path="com.tuarua.ffmpeg.constants.Qsv264Profile"/>
+    <classEntry path="com.tuarua.ffmpeg.AVFoundationOptions"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

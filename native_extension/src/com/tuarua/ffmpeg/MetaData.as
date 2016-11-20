@@ -23,9 +23,11 @@ package com.tuarua.ffmpeg {
 		private var _title:String;
 		private var _track:String;
 		private var _year:String;
-		
 		private var customKeys:Dictionary = new Dictionary();
-
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function MetaData(){}
 		public function addCustom(key:String,value:String):void {
 			customKeys[key] = value;
 		}

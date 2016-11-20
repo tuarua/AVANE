@@ -5,6 +5,10 @@ package com.tuarua.ffmpeg {
 		public var profile:String;
 		public var level:String;
 		public var tune:String;
+		public function X264Options(){}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */
 		public function getAsVector():Vector.<Object> {
 			var ret:Vector.<Object> = new Vector.<Object>;
 			if(preset && preset.length > 0)

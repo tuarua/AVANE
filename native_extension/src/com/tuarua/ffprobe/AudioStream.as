@@ -6,5 +6,8 @@ package com.tuarua.ffprobe {
 		public var channels:int;
 		public var channelLayout:String;
 		public var bitsPerSample:int;
+		public function AudioStream(){
+			
+		}
 	}
 }

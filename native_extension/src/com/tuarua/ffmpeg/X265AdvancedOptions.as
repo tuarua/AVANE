@@ -4,7 +4,10 @@ package com.tuarua.ffmpeg {
 		public var type:String = "x265-params";
 		public var profile:String;
 		public var tune:String;
-		
+		public function X265AdvancedOptions(){}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		public function getAsString():String {
 			var arr:Array = new Array();
 			if(profile)

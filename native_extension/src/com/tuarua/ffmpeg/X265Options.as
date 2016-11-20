@@ -4,7 +4,10 @@ package com.tuarua.ffmpeg {
 		public var preset:String;
 		//public var profile:String;//these go into Advanced
 		//public var tune:String;//these go into Advanced
-		
+		public function X265Options(){}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		public function getAsVector():Vector.<Object> {
 			var ret:Vector.<Object> = new Vector.<Object>;
 			if(preset && preset.length > 0)

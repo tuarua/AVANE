@@ -25,12 +25,18 @@ package views {
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.TimerEvent;
 	import flash.media.SoundTransform;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.NetStreamAppendBytesAction;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.system.System;
+	import flash.ui.Mouse;
+	import flash.utils.Timer;
+	
+	import events.InteractionEvent;
 	
 	import starling.core.Starling;
 	import starling.display.BlendMode;
@@ -44,6 +50,7 @@ package views {
 	
 	import views.forms.DropDown;
 	import views.loader.CircularLoader;
+	import views.video.controls.ControlsContainer;
 
 	public class UniversalPlayer extends Sprite {
 		private var avANE:AVANE;
@@ -55,17 +62,35 @@ package views {
 		private var ns:NetStream;
 		private var vidClient:Object;
 		private var uri:String;
+		private var isLive:Boolean = false;
 		private var videoImage:Image;
 		private var videoTexture:Texture;
 		private var loading:LoadingIcon = new LoadingIcon();
 		private var soundTransform:SoundTransform = new SoundTransform();
 		private var circularLoader:CircularLoader;
-		private var isTwitch:Boolean = false;
-		private var twitchChannel:String;
 
 		private var hwAccels:Vector.<HardwareAcceleration>;
+		
+		public var controls:ControlsContainer = new ControlsContainer();
+		private var controlsTimer:Timer = new Timer(5000);
+		private var videoDuration:Number = 0;
+		private var isSeeking:Boolean = false;
+		private var nFauxOffset:Number = 0;
+		private var seekAfterEncodeFinish:Boolean = false;
+		private var playAfterEncodeFinish:Boolean = false;
+		
+		private var startTime:Number;
+		private var durTimer:Timer;
+		
 		public function UniversalPlayer(_avANE:AVANE) {
 			super();
+			
+			controls.addEventListener(InteractionEvent.ON_CONTROLS_PLAY,onPlayClick);
+			controls.addEventListener(InteractionEvent.ON_CONTROLS_PAUSE,onPauseClick);
+			controls.addEventListener(InteractionEvent.ON_CONTROLS_SEEK,onSeek);
+			controls.addEventListener(InteractionEvent.ON_CONTROLS_MUTE,onMute);
+			controls.addEventListener(InteractionEvent.ON_CONTROLS_SETVOLUME,onSetVolume);
+			
 			avANE = _avANE;
 			
 			hwAccels = avANE.getHardwareAccelerations();
@@ -74,16 +99,17 @@ package views {
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_ERROR,onEncodeError);
 			
-			streamer = new Streamer("127.0.0.1",1235);
+			streamer = new Streamer("127.0.0.1",1234);
 			streamer.addEventListener(StreamProviderEvent.ON_STREAM_DATA,onStreamData);
 			streamer.addEventListener(StreamProviderEvent.ON_STREAM_CLOSE,onStreamClose);
 			
-			urlList.push({value:"https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4",label:"MP4 H.264   -   https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4"});
-			urlList.push({value:"http://video.h265files.com/TearsOfSteel_720p_h265.mkv",label:"MKV HEVC   -   http://video.h265files.com/TearsOfSteel_720p_h265.mkv"});
-			urlList.push({value:"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
-			urlList.push({value:"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
-			urlList.push({value:"http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on",label:"NASA TV HLS   -   http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on"});
-			//urlList.push({value:"twitch",label:"HLS Twitch live  60fps -   random channel"});
+			
+			urlList.push({value:"{\"uri\":\"https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4\",\"live\":false}",label:"MP4 H.264   -   https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4"});
+			urlList.push({value:"{\"uri\":\"http://video.h265files.com/TearsOfSteel_720p_h265.mkv\",\"live\":false}",label:"MKV HEVC   -   http://video.h265files.com/TearsOfSteel_720p_h265.mkv"});
+			urlList.push({value:"{\"uri\":\"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm\",\"live\":false}",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
+			urlList.push({value:"{\"uri\":\"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv\",\"live\":false}",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
+			urlList.push({value:"{\"uri\":\"http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on\",\"live\":true}",label:"NASA TV HLS   -   http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on"});
+			
 			playButton.x = 1050;
 			playButton.y = 38;
 			playButton.addEventListener(TouchEvent.TOUCH,onPlayTouch);
@@ -98,19 +124,116 @@ package views {
 			addChild(urlDrop);
 			addChild(playButton);
 			
+			
 			addChild(loading);
 			
 		}
 		
+		private function onPlayClick(event:InteractionEvent):void {
+			ns.resume();
+			avANE.pauseEncode(false);
+		}
+		private function onPauseClick(event:InteractionEvent):void {
+			ns.pause();
+			avANE.pauseEncode(true);
+		}
+		
+		private function onSeek(event:InteractionEvent):void {
+			var newTime:Number = event.params.time;
+			isSeeking = true;
+			showLoading();
+			nFauxOffset = newTime;
+			streamer.suspend();
+			ns.seek(0);
+			ns.appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
+			ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
+			if(streamer.connected)
+				avANE.cancelEncode();
+			
+			InputStream.options[0].startTime = newTime;
+			seekAfterEncodeFinish = true;
+			
+		}
+		
+		private function onMute(event:InteractionEvent):void {
+			if(controls.isMuted){
+				soundTransform.volume = 0;
+				ns.soundTransform = soundTransform;
+			}else{
+				soundTransform.volume = controls.volume;
+				ns.soundTransform = soundTransform;
+			}
+		}
+		
+		private function onSetVolume(event:InteractionEvent):void {
+			soundTransform.volume = controls.volume;
+			ns.soundTransform = soundTransform;
+		}
+		
+		private function startControlsTimer():void {
+			controlsTimer.addEventListener(TimerEvent.TIMER,onControlsTimer);
+			controlsTimer.start();
+		}
+		private function stopControlsTimer():void {
+			controlsTimer.reset();
+			controlsTimer.stop();
+			controlsTimer.removeEventListener(TimerEvent.TIMER,onControlsTimer);
+			Mouse.show();
+		}
+		
+		private function stopDurationTimer():void {
+			if(durTimer){
+				durTimer.reset();
+				durTimer.stop();
+				durTimer.removeEventListener(TimerEvent.TIMER,onTimeChange);
+			}	
+		}
+		
+		private function onMouseMove(event:TouchEvent):void {
+			var touch:Touch = event.getTouch(this);
+			if(touch && touch.phase == TouchPhase.HOVER){
+				controlsTimer.reset();
+				controlsTimer.start();
+				controls.show();
+				this.dispatchEvent(new InteractionEvent(InteractionEvent.ON_PLAYER_SHOW_CONTROLS));
+			}	
+		}
+		
+		protected function onTimeChange(event:TimerEvent):void {
+			var timeToSet:int = Math.floor(nFauxOffset+ns.time);
+			if(timeToSet < 1) timeToSet = 0;
+			if(!isSeeking && !controls.isScrubbing) controls.setCurrentTime(timeToSet);
+		}
+		
+		protected function onControlsTimer(event:TimerEvent):void {
+			this.dispatchEvent(new InteractionEvent(InteractionEvent.ON_PLAYER_HIDE_CONTROLS));
+		}
+		
 		protected function onEncodeError(event:FFmpegEvent):void {
 			trace("AVANE ERROR: ",event.params.message);
+
 		}
 		protected function onStreamData(event:StreamProviderEvent):void {
 			if(ns)
 				ns.appendBytes(event.data);
 		}
 		protected function onStreamClose(event:StreamProviderEvent):void {
+			trace("--------------onStreamClose------------");
 			trace(event);
+			
+			if(seekAfterEncodeFinish){
+				streamer.init();
+				OutputOptions.uri = "tcp:127.0.0.1:1234";
+				avANE.encode();
+			}else if(playAfterEncodeFinish){
+				var obj:Object = JSON.parse(urlList[urlDrop.selected].value);
+				uri = obj.uri;
+				isLive = obj.live;
+				controls.isLive = isLive;
+				avANE.getProbeInfo(uri);
+			}
+			seekAfterEncodeFinish = false;
+			playAfterEncodeFinish = false;
 		}
 		private function setupVideo():void {
 			vidClient = new Object();
@@ -132,13 +255,22 @@ package views {
 			var probe:Probe = event.params.data as Probe;
 			//probe tells us about the video and audio codec. We can now determine how and if to transcode into a format Flash can play (h.264 & aac in flv container)
 			
+			if(isLive){
+				videoDuration = 0;
+			}else{
+				videoDuration = probe.format.duration;
+				startTime = probe.format.startTime;
+				controls.setDuration(videoDuration);
+				controls.updateProgress(1.0);
+			}
+			
 			setupVideo();
 			
 			var inputOptions:InputOptions = new InputOptions();
 			inputOptions.uri = uri;
-					
-			//inputOptions.startTime = 15;
-			//inputOptions.realtime = true;
+			if(videoDuration > 0) OutputOptions.to = videoDuration;
+			inputOptions.startTime = (nFauxOffset > 0) ? nFauxOffset : 0;
+			
 			InputStream.clear();
 			InputStream.addInput(inputOptions);
 			
@@ -161,6 +293,8 @@ package views {
 				}
 				OutputOptions.addAudioStream(outputAudioStream);
 			}	
+			
+		
 			
 			var videoStream:OutputVideoStream = new OutputVideoStream();
 			videoStream.sourceIndex = 0;
@@ -185,7 +319,7 @@ package views {
 			OutputOptions.format = "flv";
 			OutputOptions.realtime = true;
 			streamer.init();
-			OutputOptions.uri = "tcp:127.0.0.1:1235";
+			OutputOptions.uri = "tcp:127.0.0.1:1234";
 			avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET); 
 			avANE.encode();
 			
@@ -200,6 +334,20 @@ package views {
 		protected function onNetStatus(event:NetStatusEvent):void {
 			trace(event.info.code);
 			switch(event.info.code){
+				case "NetStream.Play.Stop":
+					controls.reset();
+					stopControlsTimer();
+					stopDurationTimer();
+					clearVideo();
+					break;
+				case "NetStream.SeekStart.Notify":
+					isSeeking = true;
+					showLoading();
+					break;
+				case "NetStream.Seek.Notify":
+					isSeeking = false;
+					showLoading();
+					break;
 				case "NetStream.Buffer.Empty":
 					showLoading(true);
 					break;
@@ -214,11 +362,28 @@ package views {
 			videoImage.blendMode = BlendMode.NONE;
 			videoImage.touchable = false;
 			setSize();
+			
+			if(!durTimer)
+				durTimer = new Timer(200);
+			durTimer.addEventListener(TimerEvent.TIMER,onTimeChange);
+			durTimer.start();
+			
+			controls.setDuration(videoDuration);
+			
+			//controls.doResize(_screenWidth);
+			controls.y = 800-51;
+			if(!this.contains(controls))
+				addChild(controls);
+			startControlsTimer();
+			
+			if(!this.hasEventListener(TouchEvent.TOUCH))
+				this.addEventListener(TouchEvent.TOUCH, onMouseMove);
+			
+			
 			if(!this.contains(videoImage))
 				this.addChildAt(videoImage,0);
 		}
 		public function setSize():void {
-			trace(videoTexture.nativeWidth);
 			var scaleFactor:Number = 1280/videoTexture.nativeWidth;
 			videoImage.scaleY = videoImage.scaleX = scaleFactor;
 			videoImage.y = 80;
@@ -238,133 +403,36 @@ package views {
 			var touch:Touch = event.getTouch(playButton, TouchPhase.ENDED);
 			if(touch && touch.phase == TouchPhase.ENDED){
 				
+				controls.reset();
 				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.INFO :  LogLevel.QUIET);
 				Logger.enableLogToTextField = false;
 				Logger.enableLogToTrace = true;
 				Logger.enableLogToFile = false;
 				
 				//stop any existing playback
-				
+				stopDurationTimer();
 				showLoading(true);
 				if(streamer.connected){
-					avANE.addEventListener(FFmpegEvent.ON_ENCODE_FINISH,onPlayAfterCancel);
+					playAfterEncodeFinish = true;
 					clearVideo();
 				}else{
 					clearVideo();
-					isTwitch = (urlList[urlDrop.selected].value == "twitch");
-					if(isTwitch){
-						var streamLdr:URLLoader = new URLLoader();
-						streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
-						streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
-					}else{
-						uri = urlList[urlDrop.selected].value;
-						avANE.getProbeInfo(uri);
-					}
+					
+					var obj:Object = JSON.parse(urlList[urlDrop.selected].value);
+					
+					uri = obj.uri;
+					isLive = obj.live;
+					controls.isLive = isLive;
+					avANE.getProbeInfo(uri);
 				}
 				
 			}	
 		}
-		private function onPlayAfterCancel(event:FFmpegEvent):void {
-			isTwitch = (urlList[urlDrop.selected].value == "twitch");
-			if(isTwitch){
-				var streamLdr:URLLoader = new URLLoader();
-				streamLdr.addEventListener(Event.COMPLETE, onTwitchStream);
-				streamLdr.load(new URLRequest("https://api.twitch.tv/kraken/streams"));	
-			}else{
-				uri = urlList[urlDrop.selected].value;
-				avANE.getProbeInfo(uri);
-			}
-		}
+		
 		private function randomRange(minNum:Number, maxNum:Number):Number {
 			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
 		}
 
-		protected function onTwitchStream(event:Event):void {
-			var result:String = event.target.data;
-			var parsedObj:Object = JSON.parse(result);
-			var niceOptions:Array = new Array();
-			for each(var obj:Object in parsedObj.streams){
-				if(obj.average_fps > 50 && obj.channel.language == "en")
-					niceOptions.push(obj);
-			}
-			
-			twitchChannel = niceOptions[randomRange(0,niceOptions.length-1)].channel.name;
-			
-			var url:String = "http://api.twitch.tv/api/channels/"+twitchChannel+"/access_token";
-			var twitchTokenLdr:URLLoader = new URLLoader();
-			twitchTokenLdr.addEventListener(Event.COMPLETE, onTwitchToken);
-			twitchTokenLdr.load(new URLRequest(url));
-			
-		}
-		
-		
-		protected function onTwitchm3u8Loaded(event:Event):void{
-			var m3u8:String = event.target.data;
-			var lines:Array = m3u8.split("\n");
-			var line:String;
-			var sourceArr:Array = new Array();
-			var sourceObj:Object ;
-			for (var i:int = 0; i < lines.length;i++){
-				line = lines[i];
-				if(line.indexOf("#EXT-X-MEDIA:TYPE=VIDEO") == 0){
-					var itms:Array = line.split(",");
-					sourceObj = new Object()
-					sourceObj.name = itms[2];
-					sourceObj.name = sourceObj.name.replace(new RegExp("NAME=", "g"),""); ;
-					sourceObj.name = sourceObj.name.replace(new RegExp('"', "g"),"");
-					sourceObj.name = sourceObj.name.toLowerCase();
-					sourceObj.uri = lines[i+2];
-					if(sourceObj.name == "source") uri = sourceObj.uri;
-					sourceArr.push(sourceObj);
-				}
-			}
-				
-			setupVideo();
-			ns.bufferTime = 1;
-			
-			//don't probe - already know we need to transcode
-			var inputOptions:InputOptions = new InputOptions();
-			
-			inputOptions.uri = uri;
-			InputStream.clear();
-			InputStream.addInput(inputOptions);
-			var outputAudioStream:OutputAudioStream = new OutputAudioStream();
-			outputAudioStream.sourceIndex = 0;
-			outputAudioStream.samplerate = 48000;
-			outputAudioStream.bitrate = 448000;
-			outputAudioStream.codec = "aac";
-			outputAudioStream.channels = 2;
-			
-			OutputOptions.addAudioStream(outputAudioStream);
-
-			var videoStream:OutputVideoStream = new OutputVideoStream();
-			videoStream.sourceIndex = 0;
-			videoStream.codec = "copy";
-			
-			OutputOptions.addVideoStream(videoStream);
-			OutputOptions.format = "flv";
-			streamer.init();
-			OutputOptions.uri = "tcp:127.0.0.1:1235";
-			avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.VERBOSE :  LogLevel.QUIET);
-			avANE.encode();
-			
-			
-		}
-		
-		protected function onTwitchToken(event:Event):void {
-			var result:String = event.target.data;
-			var parsedObj:Object = JSON.parse(result);
-			var sig:String = parsedObj.sig;
-			var token:String = parsedObj.token;
-			var m3u8Url:String = "http://usher.twitch.tv/api/channel/hls/"+twitchChannel+".m3u8?player=twitchweb&token="+token+"&sig="+sig+"&$allow_audio_only=true&allow_source=true&type=any&p=1243565"
-				
-			
-			var m3u8Ldr:URLLoader = new URLLoader();
-			m3u8Ldr.addEventListener(Event.COMPLETE, onTwitchm3u8Loaded);
-			//m3u8Ldr.addEventListener(IOErrorEvent.IO_ERROR, onm3u8Error);
-			m3u8Ldr.load(new URLRequest(m3u8Url));
-			
-		}
 		private function showLoading(b:Boolean=true):void {
 			if(b && !loading.isRunning)
 				loading.start();
@@ -372,6 +440,9 @@ package views {
 				loading.stop();
 		}
 		public function clearVideo():void {
+			
+			nFauxOffset = 0;
+			
 			if(streamer.connected)
 				avANE.cancelEncode();
 			OutputOptions.clear();

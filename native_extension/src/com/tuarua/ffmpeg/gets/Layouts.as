@@ -3,5 +3,9 @@ package com.tuarua.ffmpeg.gets {
 	public class Layouts {
 		public var individual:Vector.<Layout>;
 		public var standard:Vector.<Layout>;
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function Layouts(){}
 	}
 }

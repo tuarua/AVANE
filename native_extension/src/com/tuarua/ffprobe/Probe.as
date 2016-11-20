@@ -5,5 +5,8 @@ package com.tuarua.ffprobe {
 		public var videoStreams:Vector.<VideoStream>;
 		public var audioStreams:Vector.<AudioStream>;
 		public var subtitleStreams:Vector.<SubtitleStream>;
+		public function Probe(){
+			
+		}
 	}
 }

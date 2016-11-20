@@ -28,5 +28,8 @@ package com.tuarua.ffprobe {
 		public var numFrames:Number;
 		public var tags:Object;
 		public var disposition:Vector.<Object>; //TODO create Disposition Object
+		public function Stream(){
+			
+		}
 	}
 }

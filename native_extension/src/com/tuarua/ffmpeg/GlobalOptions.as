@@ -1,18 +1,69 @@
 package com.tuarua.ffmpeg {
 	[RemoteClass(alias="com.tuarua.ffmpeg.GlobalOptions")]
 	public class GlobalOptions extends Object {
+		/** 
+		 * FFmpeg equivalent: -y.
+		 * <p>overwrite output files.</p>
+		 * @default true
+		 */	
 		public static var overwriteOutputFiles:Boolean = true;
+		/** 
+		 * FFmpeg equivalent: -ignore_unknown.
+		 * <p>Ignore unknown stream types.</p>
+		 * @default false
+		 */	
 		public static var ignoreUnknown:Boolean = false;
 		//public static var maxAllocBytes:int = -1; //what is default ?
 		//public static var volume:int = 256;
-		public static var maxErrorRate:Number = 0.0;
+		/** 
+		 * FFmpeg equivalent: -max_error_rate.
+		 * <p>ratio of errors (0.0: no errors, 1.0: 100% error  maximum error rate.</p>
+		 * @default 0
+		 */	
+
+		public static var maxErrorRate:Number = 0.0;       
+		/** 
+		 * FFmpeg equivalent: -copy_unknown.
+		 * <p>Copy unknown stream types</p>
+		 * @default false
+		 */	
 		public static var copyUnknown:Boolean = false;
+		/** 
+		 * FFmpeg equivalent: -timelimit
+		 * <p>set max runtime in seconds.</p>
+		 * @default -1 which ommits it from the params used 
+		 */
 		public static var timeLimit:int = -1;
-		public static var vsync:String = "-1"; //-1 auto, 0 = passthrough,1 = cfr,2 = vfr, drop
-		public static var fDropThreshold:Number = -1.1; //doesn't like frameDropThreadhold
+		/** 
+		 * FFmpeg equivalent: -vsync
+		 * <p>-1 auto, 0 = passthrough,1 = cfr,2 = vfr, drop.</p>
+		 * @default -1 auto 
+		 */
+		public static var vsync:String = "-1";
+		/** 
+		 * FFmpeg equivalent: -frame_drop_threshold
+		 * <p>Frame drop threshold.</p>
+		 * @default -1.1
+		 */
+		public static var fDropThreshold:Number = -1.1;
+		/** 
+		 * FFmpeg equivalent: -copyts
+		 * <p>Copy timestamps.</p>
+		 * @default false
+		 */	
 		public static var copyTs:Boolean = false;
+		/** 
+		 * FFmpeg equivalent: -start_at_zero
+		 * <p>Shift input timestamps to start at 0 when using copyTs.</p>
+		 * @default false
+		 */	
 		public static var startAtZero:Boolean = false;
-		public static var copyTb:int = -1; // 0 is decoder, 1 is demuxer
+		/** 
+		 * FFmpeg equivalent: -copytb 
+		 * <p>Copy input stream time base when stream copying. 0 is decoder, 1 is demuxer.</p>
+		 * @default -1
+		 */	
+		public static var copyTb:int = -1; // 
 
 		/*
 		public static function getOvrwrtFles():Boolean {
@@ -92,9 +143,7 @@ NA -loglevel loglevel  set logging level
 NA -v loglevel         set logging level
 ?? -report             generate a report
 DONE -max_alloc bytes    set maximum size of a single allocated block
-DONE -y                  overwrite output files
-DONE -n                  never overwrite output files
-DONE -ignore_unknown     Ignore unknown stream types
+
 NA -stats              print progress report during encoding
 DONE -max_error_rate ratio of errors (0.0: no errors, 1.0: 100% error  maximum error rate
 ?? deprecated -bits_per_raw_sample number  set the number of bits per raw sample
@@ -103,21 +152,19 @@ DONE -vol volume         change audio volume (256=normal)
 Advanced global options:
 NA -cpuflags flags     force specific cpu flags
 NA -hide_banner hide_banner  do not show program banner
-DONE -copy_unknown       Copy unknown stream types
+
 ?? -benchmark          add timings for benchmarking
 ?? -benchmark_all      add timings for each task
 ?? -progress url       write program-readable progress information
 NA -stdin              enable or disable interaction on standard input
-DONE -timelimit limit    set max runtime in seconds
+
 NA -dump               dump each input packet
 NA -hex                when dumping packets, also dump the payload
-DONE -vsync              video sync method
-DONE -frame_drop_threshold   frame drop threshold
+
+
 ?? Deprecated -async              audio sync method
 ?? -adrift_threshold threshold  audio drift threshold
-DONE -copyts             copy timestamps
-DONE -start_at_zero      shift input timestamps to start at 0 when using copyts
-DONE -copytb mode        copy input stream time base when stream copying
+ 
 -dts_delta_threshold threshold  timestamp discontinuity delta threshold
 -dts_error_threshold threshold  timestamp error delta threshold
 NA -xerror error       exit on error

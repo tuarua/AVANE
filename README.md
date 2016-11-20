@@ -13,8 +13,6 @@ Desktop capture - demo using screen-capture-recorder to capture desktop (Windows
 
 ![alt tag](https://raw.githubusercontent.com/tuarua/AVANE/master/screenshots/screen-shot-1.png)
 
-### Version
-- 0.0.2 Win 32 and OSX 64 version
 
 ### Features
  - Harness the power of FFmpeg with this unoffical ANE version.

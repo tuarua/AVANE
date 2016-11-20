@@ -1,8 +1,10 @@
 debug/
+docs/
 build_osx.sh
 build_osx_debug.sh
 build_multi.sh
 build-release.bat
+build_asdocs.bat
 clean.bat
 extension_osx.xml
 extension_win.xml

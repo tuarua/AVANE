@@ -11,5 +11,9 @@ package com.tuarua.ffmpeg.gets {
 		public var isExperimental:Boolean;
 		public var supportsDrawHorizBand:Boolean;
 		public var supportsDirectRendering:Boolean;
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
+		public function Encoder(){}
 	}
 }

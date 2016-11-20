@@ -105,6 +105,11 @@ package com.tuarua.ffmpeg {
 		
 
 		*/
+		
+		public function X264AdvancedOptions(){}
+		/** 
+		 * This method is omitted from the output. * * @private 
+		 */ 
 		public function getAsString():String {
 			var arr:Array = new Array();
 			if(trellis != X264Advanced.TRELLIS_ENCODE)
