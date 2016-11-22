@@ -117,15 +117,15 @@ package com.tuarua.ffmpeg {
 		/** 
 		 * This method is omitted from the output. * * @private 
 		 */
-		public var extraOptions:Vector.<*>; //eg avfoundation
+		public var extraOptions:Array; //eg avfoundation
 		/** 
 		 * The InputOptions class is a container class for input parameters.
 		 * <p>An instance of this class should be passed to InputStream.addInput() when specifying input streams</p>
 		 * @example The following code shows how:
 		 * <listing version="3.0">
-var inputOptions = new InputOptions();
-inputOptions.uri = "https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4";
-InputStream.addInput(inputOptions);
+		 * var inputOptions = new InputOptions();
+		 * inputOptions.uri = "https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4";
+		 * InputStream.addInput(inputOptions);
 		 </listing>
 		 */ 
 		public function InputOptions(){}
@@ -135,7 +135,7 @@ InputStream.addInput(inputOptions);
 		 */	
 		public function addExtraOptions(extra:*):void {
 			if(extraOptions == null)
-				extraOptions = new Vector.<*>;
+				extraOptions = new Array();
 			extraOptions.push(extra);
 		}
 		

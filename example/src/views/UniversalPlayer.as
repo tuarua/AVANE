@@ -17,6 +17,7 @@ package views {
 	import com.tuarua.ffmpeg.constants.X264Profile;
 	import com.tuarua.ffmpeg.events.FFmpegEvent;
 	import com.tuarua.ffmpeg.events.StreamProviderEvent;
+	import com.tuarua.ffmpeg.gets.CaptureDevice;
 	import com.tuarua.ffmpeg.gets.HardwareAcceleration;
 	import com.tuarua.ffprobe.AudioStream;
 	import com.tuarua.ffprobe.Probe;
@@ -402,7 +403,6 @@ package views {
 			event.stopPropagation();
 			var touch:Touch = event.getTouch(playButton, TouchPhase.ENDED);
 			if(touch && touch.phase == TouchPhase.ENDED){
-				
 				controls.reset();
 				avANE.setLogLevel(BuildMode.isDebugBuild() ? LogLevel.INFO :  LogLevel.QUIET);
 				Logger.enableLogToTextField = false;
@@ -425,7 +425,7 @@ package views {
 					controls.isLive = isLive;
 					avANE.getProbeInfo(uri);
 				}
-				
+
 			}	
 		}
 		

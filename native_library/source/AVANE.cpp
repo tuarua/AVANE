@@ -11,9 +11,31 @@
 #ifdef _WIN32
 #include "FlashRuntimeExtensions.h"
 #include <windows.h>
+#include <dshow.h>
 #include <conio.h>
 bool isSupportedInOS = true;
 std::string pathSlash = "\\";
+
+HRESULT EnumerateDevices(REFGUID category, IEnumMoniker **ppEnum) {
+	// Create the System Device Enumerator.
+	ICreateDevEnum *pDevEnum;
+	HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
+		CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pDevEnum));
+
+	if (SUCCEEDED(hr)) {
+		// Create an enumerator for the category.
+		hr = pDevEnum->CreateClassEnumerator(category, ppEnum, 0);
+		if (hr == S_FALSE)
+			hr = VFW_E_NOT_FOUND;  // The category is empty. Treat as an error.
+		pDevEnum->Release();
+	}
+	return hr;
+}
+std::string getStringFromBstr(BSTR val) {
+	std::wstring ws(val, SysStringLen(val));
+	std::string s(ws.begin(), ws.end()); //and convert to string.
+	return s;
+}
 #elif __APPLE__
 
 #include "TargetConditionals.h"
@@ -43,6 +65,8 @@ std::string pathSlash = "/";
 #include <boost/thread.hpp>
 
 
+
+
 #include "ANEhelper.h"
 #include "Constants.hpp"
 
@@ -54,32 +78,34 @@ boost::thread createThread(void(*otherFunction)(int p), int p) {
 	return boost::move(t);
 }
 
+
+
 extern "C" {
 
-    #include "libavformat/avformat.h"
-    #include "libavcodec/avcodec.h"
-    #include "libavutil/avassert.h"
-    #include "libavutil/avstring.h"
-    #include "libavutil/bprint.h"
-    #include "libavutil/common.h"
-    #include "libavutil/display.h"
-    #include "libavutil/hash.h"
-    #include "libavutil/opt.h"
-    #include "libavutil/pixdesc.h"
-    #include "libavutil/dict.h"
-    #include "libavutil/intreadwrite.h"
-    #include "libavutil/parseutils.h"
-    #include "libavutil/timecode.h"
-    #include "libavutil/timestamp.h"
-    #include "libavutil/ffversion.h"
-    #include "libavdevice/avdevice.h"
-    #include "libswscale/swscale.h"
-    #include "libswresample/swresample.h"
-    #include "libpostproc/postprocess.h"
-    
-    #include "Utils.h"
-	#include "cmdutils.h"
-	#include "ffmpeg.h"
+#include "libavformat/avformat.h"
+#include "libavcodec/avcodec.h"
+#include "libavutil/avassert.h"
+#include "libavutil/avstring.h"
+#include "libavutil/bprint.h"
+#include "libavutil/common.h"
+#include "libavutil/display.h"
+#include "libavutil/hash.h"
+#include "libavutil/opt.h"
+#include "libavutil/pixdesc.h"
+#include "libavutil/dict.h"
+#include "libavutil/intreadwrite.h"
+#include "libavutil/parseutils.h"
+#include "libavutil/timecode.h"
+#include "libavutil/timestamp.h"
+#include "libavutil/ffversion.h"
+#include "libavdevice/avdevice.h"
+#include "libswscale/swscale.h"
+#include "libswresample/swresample.h"
+#include "libpostproc/postprocess.h"
+
+#include "Utils.h"
+#include "cmdutils.h"
+#include "ffmpeg.h"
 
 	FREContext dllContext;
 	typedef struct {
@@ -97,30 +123,30 @@ extern "C" {
 	static AVInputFormat *iformat = NULL;
 	static char *stream_specifier; //pass as arg
 
-    int logLevel = 32;
+	int logLevel = 32;
 	bool isEncoding = false;
 	//static int nb_streams; ??
 	static int *selected_streams;
 
-    extern void trace(std::string msg) {
-        if (logLevel > 0)
-            FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "TRACE");
-    }
-    extern void logError(std::string msg) {
-        FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*)"Encode.ERROR_MESSAGE");
-    }
-    extern void logInfo(std::string msg) {
-        if (logLevel > 0)
-            FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "INFO");
-    }
+	extern void trace(std::string msg) {
+		if (logLevel > 0)
+			FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "TRACE");
+	}
+	extern void logError(std::string msg) {
+		FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*)"Encode.ERROR_MESSAGE");
+	}
+	extern void logInfo(std::string msg) {
+		if (logLevel > 0)
+			FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "INFO");
+	}
 	extern void logInfoHtml(std::string msg) {
 		if (logLevel > 0)
 			FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "INFO_HTML");
 	}
-	
-    FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-        return getFREObjectFromBool(isSupportedInOS);
-    }
+
+	FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		return getFREObjectFromBool(isSupportedInOS);
+	}
 
 #define REALLOCZ_ARRAY_STREAM(ptr, cur_n, new_n)                        \
 	{                                                                       \
@@ -129,7 +155,7 @@ extern "C" {
 			goto end;                                                       \
 		memset( (ptr) + (cur_n), 0, ((new_n) - (cur_n)) * sizeof(*(ptr)) ); \
 	}
-	
+
 
 	//probe input
 	static void closeFileToProbe(AVFormatContext **ctx_ptr) {
@@ -141,7 +167,7 @@ extern "C" {
 				avcodec_close(fmt_ctx->streams[i]->codec);
 		avformat_close_input(ctx_ptr);
 	}
-	
+
 
 	static int probeFile(const char *filename) {
 		probeContext.fmt_ctx = NULL;
@@ -151,33 +177,33 @@ extern "C" {
 		AVDictionaryEntry *t;
 		AVDictionary **opts;
 		av_dict_set(&format_opts, "scan_all_pmts", "1", AV_DICT_DONT_OVERWRITE);
-		
+
 		if ((err = avformat_open_input(&probeContext.fmt_ctx, filename, iformat, &format_opts)) < 0) {
 			trace("Error opening file");
 			return err;
 		}
-		
+
 		av_dict_set(&format_opts, "scan_all_pmts", NULL, AV_DICT_MATCH_CASE);
-		
+
 		// fill the streams in the format context
 		opts = setup_find_stream_info_opts(probeContext.fmt_ctx, codec_opts);
 		orig_nb_streams = probeContext.fmt_ctx->nb_streams;
 		err = avformat_find_stream_info(probeContext.fmt_ctx, opts);
-		
+
 		for (i = 0; i < orig_nb_streams; i++)
 			av_dict_free(&opts[i]);
-		
+
 		av_freep(&opts);
-		
+
 		if (err < 0) {
 			trace("Error finding stream info");
 			return err;
 		}
-		
+
 		for (i = 0; i < probeContext.fmt_ctx->nb_streams; i++) {
 			AVStream *stream = probeContext.fmt_ctx->streams[i];
 			AVCodec *codec;
-			
+
 			if (stream->codecpar->codec_id == AV_CODEC_ID_PROBE) {
 				trace("Failed to probe codec for input stream");
 				////av_log(NULL, AV_LOG_WARNING,"Failed to probe codec for input stream %d\n",stream->index);
@@ -199,7 +225,7 @@ extern "C" {
 				}
 			}
 		}
-		
+
 #define CHECK_END if (ret < 0) goto end
 		CHECK_END;
 
@@ -219,7 +245,7 @@ extern "C" {
 		}
 
 	end:
-		if(ret < 0) {
+		if (ret < 0) {
 			closeFileToProbe(&probeContext.fmt_ctx);
 			av_freep(&selected_streams);
 		}
@@ -239,12 +265,12 @@ extern "C" {
 #if CONFIG_AVDEVICE
 		avdevice_register_all();
 #endif
-		
+
 		if (!probeContext.playList.empty())
 			opt_default(NULL, "playlist", probeContext.playList.c_str());
-		
+
 		int ret;
-        
+
 		ret = probeFile(probeContext.fileName.c_str());
 		uninit_opts();
 
@@ -258,7 +284,7 @@ extern "C" {
 	FREObject triggerProbeInfo(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		probeContext.fileName = getStringFromFREObject(argv[0]);
 		probeContext.playList = getStringFromFREObject(argv[1]);
-        
+
 		threads[0] = boost::move(createThread(&threadProbe, 1));
 		return getFREObjectFromBool(true);
 	}
@@ -297,8 +323,8 @@ extern "C" {
 						case AVMEDIA_TYPE_SUBTITLE:
 							numSubtitleStreams++;
 							break;
-                        default:
-                                break;
+						default:
+							break;
 						}
 					}
 				}
@@ -339,8 +365,8 @@ extern "C" {
 							currSubtitleStream++;
 							FRENewObject((const uint8_t*)"com.tuarua.ffprobe.SubtitleStream", 0, NULL, &objStream, NULL);
 							break;
-                        default:
-                                break;
+						default:
+							break;
 						}
 
 						FRESetObjectProperty(objStream, (const uint8_t*)"index", getFREObjectFromUint32(stream->index), NULL);
@@ -348,10 +374,12 @@ extern "C" {
 						if (dec) {
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecName", getFREObjectFromString(dec->name), NULL);
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecLongName", getFREObjectFromString((dec->long_name) ? dec->long_name : "unknown"), NULL);
-						} else if ((cd = avcodec_descriptor_get(stream->codecpar->codec_id))) {
+						}
+						else if ((cd = avcodec_descriptor_get(stream->codecpar->codec_id))) {
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecName", getFREObjectFromString(cd->name), NULL);
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecLongName", getFREObjectFromString(cd->long_name), NULL);
-						} else {
+						}
+						else {
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecName", getFREObjectFromString("unknown"), NULL);
 							FRESetObjectProperty(objStream, (const uint8_t*)"codecLongName", getFREObjectFromString("unknown"), NULL);
 						}
@@ -359,7 +387,8 @@ extern "C" {
 
 						if (dec && (profile = av_get_profile_name(dec, dec_ctx->profile))) {
 							FRESetObjectProperty(objStream, (const uint8_t*)"profile", getFREObjectFromString(profile), NULL);
-						}else {
+						}
+						else {
 							if (dec_ctx->profile != FF_PROFILE_UNKNOWN) {
 								char profile_num[12];
 								snprintf(profile_num, sizeof(profile_num), "%d", dec_ctx->profile);
@@ -417,7 +446,8 @@ extern "C" {
 								char tcbuf[AV_TIMECODE_STR_SIZE];
 								av_timecode_make_mpeg_tc_string(tcbuf, dec_ctx->timecode_frame_start);
 								FRESetObjectProperty(objStream, (const uint8_t*)"timecode", getFREObjectFromString(tcbuf), NULL);
-							}else {
+							}
+							else {
 								FRESetObjectProperty(objStream, (const uint8_t*)"timecode", getFREObjectFromString("N/A"), NULL);
 							}
 #endif
@@ -447,8 +477,8 @@ extern "C" {
 							if (dec_ctx->height)
 								FRESetObjectProperty(objStream, (const uint8_t*)"height", getFREObjectFromInt32(dec_ctx->height), NULL);
 							break;
-                        default:
-                                break;
+						default:
+							break;
 
 						}
 
@@ -463,7 +493,7 @@ extern "C" {
 						rnded = round(v * 1000);
 						FRESetObjectProperty(objStream, (const uint8_t*)"realFrameRate", getFREObjectFromDouble(double(rnded) / 1000), NULL);
 					}
-					
+
 					if (stream->avg_frame_rate.num > 0) {
 						v = double(stream->avg_frame_rate.num) / stream->avg_frame_rate.den;
 						rnded = round(v * 1000);
@@ -476,7 +506,7 @@ extern "C" {
 					if (stream->duration > 0) {
 						v = double(stream->duration) / stream->time_base.den;
 						rnded = round(v * 1000);
-						FRESetObjectProperty(objStream, (const uint8_t*)"duration", getFREObjectFromDouble(double(rnded)/1000), NULL);
+						FRESetObjectProperty(objStream, (const uint8_t*)"duration", getFREObjectFromDouble(double(rnded) / 1000), NULL);
 						FRESetObjectProperty(objStream, (const uint8_t*)"durationTimestamp", getFREObjectFromDouble(double(stream->duration)), NULL);
 					}
 					FRESetObjectProperty(objStream, (const uint8_t*)"startPTS", getFREObjectFromDouble(double(stream->start_time)), NULL);
@@ -502,17 +532,17 @@ extern "C" {
 					FRESetObjectProperty(objStream, (const uint8_t*)"tags", streamTags, NULL);
 
 					switch (dec_ctx->codec_type) {
-						case AVMEDIA_TYPE_VIDEO:
-							FRESetArrayElementAt(vecVideoStreams, currVideoStream, objStream);
-							break;
-						case AVMEDIA_TYPE_AUDIO:
-							FRESetArrayElementAt(vecAudioStreams, currAudioStream, objStream);
-							break;
-						case AVMEDIA_TYPE_SUBTITLE:
-							FRESetArrayElementAt(vecSubtitleStreams, currSubtitleStream, objStream);
-							break;
-						default:
-							break;
+					case AVMEDIA_TYPE_VIDEO:
+						FRESetArrayElementAt(vecVideoStreams, currVideoStream, objStream);
+						break;
+					case AVMEDIA_TYPE_AUDIO:
+						FRESetArrayElementAt(vecAudioStreams, currAudioStream, objStream);
+						break;
+					case AVMEDIA_TYPE_SUBTITLE:
+						FRESetArrayElementAt(vecSubtitleStreams, currSubtitleStream, objStream);
+						break;
+					default:
+						break;
 					}
 
 				}
@@ -555,24 +585,24 @@ extern "C" {
 	}
 	static const char *get_level_str(int level) {
 		switch (level) {
-			case AV_LOG_QUIET:
-				return "quiet";
-			case AV_LOG_DEBUG:
-				return "debug";
-			case AV_LOG_VERBOSE:
-				return "verbose";
-			case AV_LOG_INFO:
-				return "info";
-			case AV_LOG_WARNING:
-				return "warning";
-			case AV_LOG_ERROR:
-				return "error";
-			case AV_LOG_FATAL:
-				return "fatal";
-			case AV_LOG_PANIC:
-				return "panic";
-			default:
-				return "";
+		case AV_LOG_QUIET:
+			return "quiet";
+		case AV_LOG_DEBUG:
+			return "debug";
+		case AV_LOG_VERBOSE:
+			return "verbose";
+		case AV_LOG_INFO:
+			return "info";
+		case AV_LOG_WARNING:
+			return "warning";
+		case AV_LOG_ERROR:
+			return "error";
+		case AV_LOG_FATAL:
+			return "fatal";
+		case AV_LOG_PANIC:
+			return "panic";
+		default:
+			return "";
 		}
 	}
 
@@ -614,17 +644,17 @@ extern "C" {
 			string logStr;
 			string logHtml;
 
-	#ifdef _WIN32
+#ifdef _WIN32
 			vsnprintf_s(message, sizeof message, sizeof message, fmt, vl);
-	#else
-			vsprintf(message,fmt,vl);
-	#endif
+#else
+			vsprintf(message, fmt, vl);
+#endif
 
 			string messageTrimmed = string(message);
 			boost::algorithm::trim(messageTrimmed);
 
 			logStr = " [ffmpeg][" + (module ? string(module) : "") + "][" + lexical_cast<string>(get_level_str(level)) + "] : " + messageTrimmed;
-			logHtml = " <p class=\"" + lexical_cast<string>(get_level_str(level)) + "\">" + (module ? string(module) + ":": "") + lexical_cast<string>(get_level_str(level)) + ": " + messageTrimmed + "</p>";
+			logHtml = " <p class=\"" + lexical_cast<string>(get_level_str(level)) + "\">" + (module ? string(module) + ":" : "") + lexical_cast<string>(get_level_str(level)) + ": " + messageTrimmed + "</p>";
 
 			if (level <= logLevel && !messageTrimmed.empty()) {
 				logInfo(logStr);
@@ -669,12 +699,13 @@ extern "C" {
 		std::string returnVal = "";
 		FREDispatchStatusEventAsync(dllContext, (uint8_t*)returnVal.c_str(), (const uint8_t*) "ON_ENCODE_START");
 		if (ret < 0) {
-		}else {
+		}
+		else {
 			ret = avane_main_transcode();
 			trace("avane_main_transcode is finished");
 		}
 		isEncoding = false;
-		
+
 		if (ret < 0)
 			FREDispatchStatusEventAsync(dllContext, (uint8_t*)returnVal.c_str(), (const uint8_t*) "ON_ENCODE_ERROR");
 		else
@@ -703,7 +734,7 @@ extern "C" {
 	}
 
 	FREObject cancelEncode(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		if(isEncoding)
+		if (isEncoding)
 			avane_set_cancel_transcode(1);
 		isEncoding = false;
 		return getFREObjectFromBool(true);
@@ -716,6 +747,95 @@ extern "C" {
 		logLevel = getInt32FromFREObject(argv[0]);
 		return NULL;
 	}
+
+
+#ifdef _WIN32
+	void DisplayDeviceInformation(IEnumMoniker *pEnum, bool isVideo, FREObject obj) {
+		IMoniker *pMoniker = NULL;
+
+		while (pEnum->Next(1, &pMoniker, NULL) == S_OK) {
+			bool addObject = false;
+			IPropertyBag *pPropBag;
+			HRESULT hr = pMoniker->BindToStorage(0, 0, IID_PPV_ARGS(&pPropBag));
+			if (FAILED(hr)) {
+				pMoniker->Release();
+				continue;
+			}
+
+			FREObject objDevice;
+			FRENewObject((const uint8_t*)"com.tuarua.ffmpeg.gets.CaptureDevice", 0, NULL, &objDevice, NULL);
+			FRESetObjectProperty(objDevice, (const uint8_t*)"format", getFREObjectFromString("dshow"), NULL);
+
+			if(isVideo)
+				FRESetObjectProperty(objDevice, (const uint8_t*)"isVideo", getFREObjectFromBool(true), NULL);
+			else
+				FRESetObjectProperty(objDevice, (const uint8_t*)"isAudio", getFREObjectFromBool(true), NULL);
+
+
+			VARIANT var;
+			VariantInit(&var);
+
+			hr = pPropBag->Read(L"Description", &var, 0);
+			if (SUCCEEDED(hr)) {
+				std::string desc = getStringFromBstr(var.bstrVal);
+				FRESetObjectProperty(objDevice, (const uint8_t*)"description", getFREObjectFromString(desc), NULL);
+				VariantClear(&var);
+				addObject = true;
+			}
+
+			hr = pPropBag->Read(L"FriendlyName", &var, 0);
+
+			if (SUCCEEDED(hr)) {
+				std::string name = getStringFromBstr(var.bstrVal);
+				FRESetObjectProperty(objDevice, (const uint8_t*)"name", getFREObjectFromString(name), NULL);
+				VariantClear(&var);
+				addObject = true;
+			}
+
+			hr = pPropBag->Read(L"DevicePath", &var, 0);
+			if (SUCCEEDED(hr)) {
+				// The device path is not intended for display.
+				std::string path = getStringFromBstr(var.bstrVal);
+				FRESetObjectProperty(objDevice, (const uint8_t*)"path", getFREObjectFromString(path), NULL);
+				VariantClear(&var);
+			}
+			
+			pPropBag->Release();
+			pMoniker->Release();
+
+			if (addObject)
+				FRESetArrayElementAt(obj, getFREObjectArrayLength(obj), objDevice);
+
+		}
+	}
+
+	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject vecDevices = NULL;
+		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
+		HRESULT hr;
+		IEnumMoniker *pEnum;
+
+		hr = EnumerateDevices(CLSID_VideoInputDeviceCategory, &pEnum);
+		if (SUCCEEDED(hr)) {
+			DisplayDeviceInformation(pEnum, true, vecDevices);
+			pEnum->Release();
+		}
+		hr = EnumerateDevices(CLSID_AudioInputDeviceCategory, &pEnum);
+		if (SUCCEEDED(hr)) {
+			DisplayDeviceInformation(pEnum, false, vecDevices);
+			pEnum->Release();
+		}
+
+		return vecDevices;
+	}
+#elif
+	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject vecDevices = NULL;
+		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
+		return vecDevices;
+	}
+#endif
+	
     
     void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
         static FRENamedFunction extensionFunctions[] = {
@@ -742,6 +862,7 @@ extern "C" {
             ,{(const uint8_t*) "encode",NULL, &encode}
             ,{(const uint8_t*) "cancelEncode",NULL, &cancelEncode}
             ,{(const uint8_t*) "pauseEncode",NULL, &pauseEncode}
+			,{(const uint8_t*) "getCaptureDevices",NULL, &getCaptureDevices }
         };
         *numFunctionsToSet = sizeof(extensionFunctions) / sizeof(FRENamedFunction);
         *functionsToSet = extensionFunctions;

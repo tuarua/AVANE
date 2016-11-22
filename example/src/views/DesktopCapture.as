@@ -12,6 +12,7 @@ package views {
 	import com.tuarua.ffmpeg.constants.X264Preset;
 	import com.tuarua.ffmpeg.constants.X264Profile;
 	import com.tuarua.ffmpeg.events.FFmpegEvent;
+	import com.tuarua.ffmpeg.gets.CaptureDevice;
 	
 	import flash.filesystem.File;
 	import flash.system.Capabilities;
@@ -21,11 +22,15 @@ package views {
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	
+	import views.forms.DropDown;
 
 	public class DesktopCapture extends Sprite {
 		private var captureButton:SimpleButton = new SimpleButton("Start Capture",120);
 		private var cancelButton:SimpleButton = new SimpleButton("Stop Capture",120);
 		private var avANE:AVANE;
+		private var deviceDrop:DropDown;
+		private var deviceList:Vector.<Object> = new Vector.<Object>;
 		public function DesktopCapture(_avANE:AVANE) {
 			super();
 			avANE = _avANE;
@@ -36,9 +41,23 @@ package views {
 			cancelButton.addEventListener(TouchEvent.TOUCH,onCancel);
 			cancelButton.visible = false;
 			
+			var devices:Vector.<CaptureDevice> = avANE.getCaptureDevices();
+			
+			if(devices.length > 0){
+				for each(var d:CaptureDevice in devices){
+					if(d.isVideo)
+						deviceList.push({value:d.name,label:d.name});
+				}
+				deviceDrop = new DropDown(300,deviceList);
+				deviceDrop.x = 100;
+				deviceDrop.y = captureButton.y + 8;
+				addChild(deviceDrop);
+			}
+			
 			captureButton.addEventListener(TouchEvent.TOUCH,onCaptureTouch);
 			addChild(captureButton);
 			addChild(cancelButton);
+			
 			
 		}
 		private function onCancel(event:TouchEvent):void {
@@ -70,9 +89,11 @@ package views {
 				//https://github.com/rdp/screen-capture-recorder-to-video-windows-free
 				//ffmpeg -f dshow -i video="screen-capture-recorder" -r 60 -t 10 D:\\screen-capture.mp4
 				
+				
 				var inputOptions:InputOptions = new InputOptions();
 				inputOptions.format = "dshow";
-				inputOptions.uri = "video=screen-capture-recorder";
+				
+				inputOptions.uri = "video=" + deviceList[deviceDrop.selected].value;
 				
 				InputStream.clear();
 				InputStream.addInput(inputOptions);

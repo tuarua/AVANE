@@ -18,7 +18,7 @@ package com.tuarua.ffmpeg {
 		public static var attachments:Vector.<Attachment> = new Vector.<Attachment>;
 		public static var metadata:MetaData; //http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
 		
-		public static var extraOptions:Vector.<*>; //eg hls
+		public static var extraOptions:Array; //eg hls
 		/** 
 		 * FFmpeg equivalent: -movflags +faststart.
 		 * <p>Normally, a MOV/MP4 file has all the metadata about all packets stored in one location 
@@ -125,7 +125,7 @@ package com.tuarua.ffmpeg {
 		
 		public static function addExtraOptions(_extra:*):void {
 			if(extraOptions == null)
-				extraOptions = new Vector.<*>;
+				extraOptions = new Array();
 			extraOptions.push(_extra);
 		}
 		

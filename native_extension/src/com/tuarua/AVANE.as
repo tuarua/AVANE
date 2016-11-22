@@ -30,6 +30,7 @@ package com.tuarua {
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	import flash.globalization.DateTimeFormatter;
+	import com.tuarua.ffmpeg.gets.CaptureDevice;
 	
 	public class AVANE extends EventDispatcher {
 		private var extensionContext:ExtensionContext;
@@ -244,14 +245,16 @@ package com.tuarua {
 					if(inputOptions.extraOptions){
 						try {
 							var obj:*;
-							for (var v:int=0, l6:int=OutputOptions.extraOptions.length; v<l6; ++v){
-								obj = OutputOptions.extraOptions[v];
+							for (var v:int=0, l6:int=inputOptions.extraOptions.length; v<l6; ++v){
+								obj = inputOptions.extraOptions[v];
 								var vecArb:Vector.<Object> = obj.getAsVector();
-								for each(var optArb:Object in vecArb){
-									args.push("-"+opt.key, opt.value);
+								for each(var optArb:Object in vecArb) {
+									args.push("-"+optArb.key, optArb.value);
 								}
 							}
-						}catch(e:Error){trace(e.message);}
+						}catch(e:Error){
+							trace(e.message);
+						}
 					}
 					
 					args.push("-i",inputOptions.uri);
@@ -361,10 +364,12 @@ package com.tuarua {
 							obji = OutputOptions.extraOptions[u];
 							var vecXtra:Vector.<Object> = obji.getAsVector();
 							for each(var optXtra:Object in vecXtra){
-								args.push("-"+opt.key, opt.value);
+								args.push("-"+optXtra.key, optXtra.value);
 							}
 						}
-					}catch(e:Error){trace(e.message);}
+					}catch(e:Error){
+						trace(e.message);
+					}
 				}
 				
 				
@@ -386,6 +391,15 @@ package com.tuarua {
 		}
 		public function pauseEncode(value:Boolean):Boolean {
 			return extensionContext.call("pauseEncode",value);
+		}
+		/**
+		 * 
+		 * @return returns vector of Capture Devices
+		 * <p>Currently only available on Windows (DirectShow devices)</p>
+		 * 
+		 */		
+		public function getCaptureDevices():Vector.<CaptureDevice> {
+			return extensionContext.call("getCaptureDevices") as Vector.<CaptureDevice>;
 		}
 		
 		public function dispose():void {
