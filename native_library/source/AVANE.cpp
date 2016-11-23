@@ -828,7 +828,7 @@ extern "C" {
 
 		return vecDevices;
 	}
-#elif
+#else
 	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject vecDevices = NULL;
 		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
