@@ -24,6 +24,7 @@ package views {
 	import starling.events.TouchPhase;
 	
 	import views.forms.DropDown;
+	import com.tuarua.ffmpeg.AVFoundationOptions;
 
 	public class DesktopCapture extends Sprite {
 		private var captureButton:SimpleButton = new SimpleButton("Start Capture",120);
