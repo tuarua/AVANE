@@ -1,5 +1,7 @@
 # AVANE
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=tuarua&url=https%3A%2F%2Fgithub.com%2Ftuarua%2FAVANE&title=AVANE&language=en_GB&tags=github&category=software)
+
 Adobe Air Native Extension for OSX / WIN / Android / iOS (in beta) written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
 Samples included.
 
