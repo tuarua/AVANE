@@ -1,3 +1,10 @@
+### 0.0.8
+- OSX: added getCaptureDevices() method. Returns AVFoundation capture device list
+- OSX: added Desktop Capture example
+- WIN/OSX/Android: Improved error messaging
+- WIN/OSX/Android: Intelli J project files
+- Added https://tuarua.github.io/AVANE/ website
+
 ### 0.0.7
 - WIN/OSX: [BUG] InputOptions and OutputOptions addExtra params method breaking swc
 - WIN: added getCaptureDevices() method. Returns DirectShow capture device list

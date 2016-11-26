@@ -1,4 +1,6 @@
 mac/
 win/
+source/ffmpeg/ffmpeg_dxva2.c
+source/ffmpeg/ffmpeg_qsv.c
 
 

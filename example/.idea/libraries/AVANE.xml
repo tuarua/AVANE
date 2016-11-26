@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AVANE" type="flex">
+    <CLASSES />
+    <JAVADOC>
+      <root url="https://tuarua.github.io/AVANE/native_extension/docs/asdocs/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
