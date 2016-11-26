@@ -19,7 +19,7 @@ package views {
 			addChild(universalButton);
 			addChild(basicButton);
 			addChild(advancedButton);
-			if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1)
+			//if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1)
 				addChild(captureButton);
 			
 		}

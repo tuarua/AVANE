@@ -4,6 +4,7 @@ package com.tuarua.ffmpeg.events {
 	public class FFmpegEvent extends Event {
 		public static const ON_ENCODE_START:String = "onEncodeStart";
 		public static const ON_ENCODE_ERROR:String = "onEncodeError";
+        public static const ON_ENCODE_FATAL:String = "onEncodeFatal";
 		public static const ON_ENCODE_FINISH:String = "onEncodeFinish";
 		public static const ON_ENCODE_PROGRESS:String = "onEncodeProgress";
 		public var params:Object;

@@ -86,6 +86,9 @@ package com.tuarua {
 				case "Encode.ERROR_MESSAGE":
 					this.dispatchEvent(new FFmpegEvent(FFmpegEvent.ON_ENCODE_ERROR,{message:event.code}));
 					break;
+                case "Encode.FATAL_MESSAGE":
+                    this.dispatchEvent(new FFmpegEvent(FFmpegEvent.ON_ENCODE_FATAL,{message:event.code}));
+                    break;
 				case "ON_ENCODE_PROGRESS":
 					this.dispatchEvent(new FFmpegEvent(FFmpegEvent.ON_ENCODE_PROGRESS,JSON.parse(event.code)));
 					break;

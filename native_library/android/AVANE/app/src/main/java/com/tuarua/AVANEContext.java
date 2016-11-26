@@ -102,6 +102,13 @@ public class AVANEContext extends FREContext {
             }
         });
 
+        libAVANE.eventDispatcher.addEventListener(Event.ON_ENCODE_FATAL, new IEventHandler() {
+            @Override
+            public void callback(Event event) {
+                dispatchStatusEventAsync(String.valueOf(event.getParams()),Event.ON_ENCODE_FATAL);
+            }
+        });
+
         libAVANE.eventDispatcher.addEventListener(Event.ON_ENCODE_FINISH, new IEventHandler(){
             @Override
             public void callback(Event event) {

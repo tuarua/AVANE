@@ -60,6 +60,7 @@ package views {
 			
 			
 		}
+
 		private function onCancel(event:TouchEvent):void {
 			var touch:Touch = event.getTouch(cancelButton);
 			if(touch != null && touch.phase == TouchPhase.ENDED){
@@ -67,9 +68,7 @@ package views {
 				
 				cancelButton.visible = false;
 				captureButton.visible = true;
-				
-				//InputStream.clear();
-				//OutputOptions.clear();
+
 			}	
 		}
 		private function onCaptureTouch(event:TouchEvent):void {
@@ -86,39 +85,51 @@ package views {
 				Logger.enableLogToTrace = BuildMode.isDebugBuild();
 				Logger.enableLogToFile = false;
 				
-				//https://github.com/rdp/screen-capture-recorder-to-video-windows-free
-				//ffmpeg -f dshow -i video="screen-capture-recorder" -r 60 -t 10 D:\\screen-capture.mp4
-				
-				
 				var inputOptions:InputOptions = new InputOptions();
-				inputOptions.format = "dshow";
-				
-				inputOptions.uri = "video=" + deviceList[deviceDrop.selected].value;
-				
-				InputStream.clear();
-				InputStream.addInput(inputOptions);
-				
-				var videoStream:OutputVideoStream = new OutputVideoStream();
-				videoStream.crf = 0;
-				videoStream.codec = "libx264";
-				videoStream.pixelFormat = "yuv420p";
+
+                if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1) {
+                    inputOptions.format = "dshow";
+                    inputOptions.uri = "video=" + deviceList[deviceDrop.selected].value;
+                    InputStream.clear();
+                    InputStream.addInput(inputOptions);
+
+				} else {
+                    inputOptions.format = "avfoundation";
+                    inputOptions.uri = deviceList[deviceDrop.selected].value + ":none";
+
+					var avOptions:AVFoundationOptions = new AVFoundationOptions();
+					avOptions.frameRate = 60;
+					avOptions.captureCursor = true;
+					avOptions.pixelFormat = "uyvy422";
+					inputOptions.addExtraOptions(avOptions);
+                    InputStream.clear();
+                    InputStream.addInput(inputOptions);
+				}
+
+
+                var videoStream:OutputVideoStream = new OutputVideoStream();
+                videoStream.crf = 0;
+                videoStream.codec = "libx264";
+                if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1)
+					videoStream.pixelFormat = "yuv420p";
+
+                var x264Options:X264Options = new X264Options();
+                x264Options.preset = X264Preset.ULTRA_FAST;
+                videoStream.encoderOptions = x264Options;
+
 				OutputOptions.addVideoStream(videoStream);
-				
-				OutputOptions.preset = X264Preset.ULTRA_FAST;
-				OutputOptions.addVideoFilter("format=yuv420p");
-				OutputOptions.duration = 10;
+
+                if(Capabilities.os.toLowerCase().lastIndexOf("windows") > -1)
+					OutputOptions.addVideoFilter("format=yuv420p");
 				OutputOptions.frameRate = 60;
 				OutputOptions.bufferSize = 3000 * 1024;
 				OutputOptions.maxRate = 3000 * 1024;
-				
+
+
 				OutputOptions.uri = File.desktopDirectory.resolvePath("screen-capture.mp4").nativePath;
-				
-				
-				
+
 				avANE.encode();
-				
-				//
-				//avANE.encodeClassic("-f dshow -i video=\"screen-capture-recorder\" -r 60 -c:v libx264 -maxrate 3000k -bufsize 3000k -crf 0 -pix_fmt yuv420p -preset ultrafast -t 10 -y D:\screen-capture-classic.mp4");
+
 			}
 		}
 		protected function onEncodeFinish(event:FFmpegEvent):void {

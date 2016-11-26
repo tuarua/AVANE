@@ -29,9 +29,13 @@ package com.tuarua.ffmpeg.gets {
          * <p>The index of the device</p>
          */
         public var index:int = 0;
-		/** 
-		 * This method is omitted from the output. * * @private 
-		 */ 
+        /**
+         * <p>Returns the capabilities of the capture device if available</p>
+         */
+		public var capabilities:Vector.<CaptureDeviceCapabilities>;
+        /**
+         * This method is omitted from the output. * * @private
+         */
 		public function CaptureDevice() {}
 	}
 }

@@ -131,6 +131,9 @@ extern "C" {
 	extern void logError(std::string msg) {
 		FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*)"Encode.ERROR_MESSAGE");
 	}
+	extern void logFatal(std::string msg) {
+		FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*)"Encode.FATAL_MESSAGE");
+	}
 	extern void logInfo(std::string msg) {
 		if (logLevel > 0)
 			FREDispatchStatusEventAsync(dllContext, (uint8_t*)msg.c_str(), (const uint8_t*) "INFO");
@@ -657,8 +660,11 @@ extern "C" {
 				logInfoHtml(logHtml);
 			}
 
-			if (level == 16 || level == 8)
+			if (level == 16 )
 				logError(string(message));
+			
+			if (level == 8)
+				logFatal(string(message));
 		}
 	}
 

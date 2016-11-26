@@ -35,7 +35,6 @@ package com.tuarua.ffmpeg {
 			panicStyle.color = "#FA113C";
 			
 			ss.setStyle("p", {fontSize:"12",color:"#D8D8D8",fontFamily:"Consolas"});
-			//ss.setStyle("p", {fontSize:"13",color:"#D8D8D8",fontFamily:firaSansRegularFont.fontName});
 			
 			ss.setStyle(".debug", debugStyle);
 			ss.setStyle(".warning", warningStyle);

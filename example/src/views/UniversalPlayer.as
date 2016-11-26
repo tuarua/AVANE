@@ -1,7 +1,6 @@
 package views {
 	import com.tuarua.AVANE;
 	import com.tuarua.BuildMode;
-	import com.tuarua.ffmpeg.Attachment;
 	import com.tuarua.ffmpeg.GlobalOptions;
 	import com.tuarua.ffmpeg.InputOptions;
 	import com.tuarua.ffmpeg.InputStream;
@@ -99,6 +98,7 @@ package views {
 			avANE.addEventListener(ProbeEvent.ON_PROBE_INFO,onProbeInfo);
 			avANE.addEventListener(ProbeEvent.NO_PROBE_INFO,onNoProbeInfo);
 			avANE.addEventListener(FFmpegEvent.ON_ENCODE_ERROR,onEncodeError);
+			avANE.addEventListener(FFmpegEvent.ON_ENCODE_FATAL,onFatalError);
 			
 			streamer = new Streamer("127.0.0.1",1234);
 			streamer.addEventListener(StreamProviderEvent.ON_STREAM_DATA,onStreamData);
@@ -129,6 +129,8 @@ package views {
 			addChild(loading);
 			
 		}
+
+
 		
 		private function onPlayClick(event:InteractionEvent):void {
 			ns.resume();
@@ -207,26 +209,31 @@ package views {
 				this.dispatchEvent(new InteractionEvent(InteractionEvent.ON_PLAYER_SHOW_CONTROLS));
 			}	
 		}
-		
-		protected function onTimeChange(event:TimerEvent):void {
+
+        private function onTimeChange(event:TimerEvent):void {
 			var timeToSet:int = Math.floor(nFauxOffset+ns.time);
 			if(timeToSet < 1) timeToSet = 0;
-			if(!isSeeking && !controls.isScrubbing) controls.setCurrentTime(timeToSet);
+			if(!isSeeking && !controls.isScrubbing)
+				controls.setCurrentTime(timeToSet);
 		}
-		
-		protected function onControlsTimer(event:TimerEvent):void {
+
+        private function onControlsTimer(event:TimerEvent):void {
 			this.dispatchEvent(new InteractionEvent(InteractionEvent.ON_PLAYER_HIDE_CONTROLS));
 		}
-		
-		protected function onEncodeError(event:FFmpegEvent):void {
-			trace("AVANE ERROR: ",event.params.message);
 
+        private function onEncodeError(event:FFmpegEvent):void {
+			trace("AVANE ERROR: ",event.params.message);
 		}
-		protected function onStreamData(event:StreamProviderEvent):void {
+
+        private function onFatalError(event:FFmpegEvent):void {
+            trace("AVANE FATAL ERROR: ",event.params.message);
+        }
+
+        private function onStreamData(event:StreamProviderEvent):void {
 			if(ns)
 				ns.appendBytes(event.data);
 		}
-		protected function onStreamClose(event:StreamProviderEvent):void {
+        private function onStreamClose(event:StreamProviderEvent):void {
 			trace("--------------onStreamClose------------");
 			trace(event);
 			
@@ -260,7 +267,7 @@ package views {
 			ns.bufferTime = 2;
 			ns.play(null);
 		}
-		protected function onProbeInfo(event:ProbeEvent):void {
+        private function onProbeInfo(event:ProbeEvent):void {
 			var probe:Probe = event.params.data as Probe;
 			//probe tells us about the video and audio codec. We can now determine how and if to transcode into a format Flash can play (h.264 & aac in flv container)
 			
@@ -279,7 +286,7 @@ package views {
 			inputOptions.uri = uri;
 			if(videoDuration > 0) OutputOptions.to = videoDuration;
 			inputOptions.startTime = (nFauxOffset > 0) ? nFauxOffset : 0;
-			
+
 			InputStream.clear();
 			InputStream.addInput(inputOptions);
 			
@@ -339,8 +346,8 @@ package views {
 				
 			}
 		}
-		
-		protected function onNetStatus(event:NetStatusEvent):void {
+
+        private function onNetStatus(event:NetStatusEvent):void {
 			trace(event.info.code);
 			switch(event.info.code){
 				case "NetStream.Play.Stop":
@@ -365,8 +372,8 @@ package views {
 					break;
 			}
 		}
-		
-		protected function onTextureComplete():void {
+
+        private function onTextureComplete():void {
 			videoImage = new Image(videoTexture);
 			videoImage.blendMode = BlendMode.NONE;
 			videoImage.touchable = false;
@@ -403,7 +410,7 @@ package views {
 				videoImage.textureSmoothing = TextureSmoothing.BILINEAR;
 			
 		}
-		protected function onNoProbeInfo(event:ProbeEvent):void {
+        private function onNoProbeInfo(event:ProbeEvent):void {
 			trace(event);
 		}
 		
@@ -448,7 +455,8 @@ package views {
 				loading.stop();
 		}
 		public function clearVideo():void {
-			
+            stopDurationTimer();
+
 			nFauxOffset = 0;
 			
 			if(streamer.connected)
@@ -474,6 +482,10 @@ package views {
 				ns = null;
 				nc = null;
 			}
+
+            controls.reset();
+            if(this.contains(controls))
+                removeChild(controls);
 		}
 	
 		public function resume():void {
