@@ -1,7 +1,4 @@
 package com.tuarua;
-
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.adobe.fre.FREArray;
@@ -13,29 +10,28 @@ import com.adobe.fre.FRETypeMismatchException;
 import com.adobe.fre.FREWrongThreadException;
 import com.tuarua.avane.android.LibAVANE;
 import com.tuarua.avane.android.Progress;
-import com.tuarua.avane.android.constants.LogLevel;
 import com.tuarua.avane.android.events.Event;
 import com.tuarua.avane.android.events.IEventHandler;
-import com.tuarua.avane.android.gets.AvailableFormat;
-import com.tuarua.avane.android.gets.BitStreamFilter;
-import com.tuarua.avane.android.gets.Codec;
-import com.tuarua.avane.android.gets.Color;
-import com.tuarua.avane.android.gets.Decoder;
-import com.tuarua.avane.android.gets.Device;
-import com.tuarua.avane.android.gets.Encoder;
-import com.tuarua.avane.android.gets.Filter;
-import com.tuarua.avane.android.gets.HardwareAcceleration;
-import com.tuarua.avane.android.gets.Layout;
-import com.tuarua.avane.android.gets.Layouts;
-import com.tuarua.avane.android.gets.PixelFormat;
-import com.tuarua.avane.android.gets.Protocol;
-import com.tuarua.avane.android.gets.Protocols;
-import com.tuarua.avane.android.gets.SampleFormat;
-import com.tuarua.avane.android.probe.AudioStream;
-import com.tuarua.avane.android.probe.Format;
-import com.tuarua.avane.android.probe.Probe;
-import com.tuarua.avane.android.probe.SubtitleStream;
-import com.tuarua.avane.android.probe.VideoStream;
+import com.tuarua.avane.android.ffmpeg.constants.LogLevel;
+import com.tuarua.avane.android.ffmpeg.gets.AvailableFormat;
+import com.tuarua.avane.android.ffmpeg.gets.BitStreamFilter;
+import com.tuarua.avane.android.ffmpeg.gets.Codec;
+import com.tuarua.avane.android.ffmpeg.gets.Color;
+import com.tuarua.avane.android.ffmpeg.gets.Decoder;
+import com.tuarua.avane.android.ffmpeg.gets.Device;
+import com.tuarua.avane.android.ffmpeg.gets.Encoder;
+import com.tuarua.avane.android.ffmpeg.gets.Filter;
+import com.tuarua.avane.android.ffmpeg.gets.HardwareAcceleration;
+import com.tuarua.avane.android.ffmpeg.gets.Layout;
+import com.tuarua.avane.android.ffmpeg.gets.Layouts;
+import com.tuarua.avane.android.ffmpeg.gets.PixelFormat;
+import com.tuarua.avane.android.ffmpeg.gets.Protocol;
+import com.tuarua.avane.android.ffmpeg.gets.Protocols;
+import com.tuarua.avane.android.ffmpeg.gets.SampleFormat;
+import com.tuarua.avane.android.ffprobe.AudioStream;
+import com.tuarua.avane.android.ffprobe.Probe;
+import com.tuarua.avane.android.ffprobe.SubtitleStream;
+import com.tuarua.avane.android.ffprobe.VideoStream;
 import com.tuarua.utils.ANEhelper;
 
 import org.json.JSONException;
@@ -43,7 +39,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -162,6 +157,7 @@ public class AVANEContext extends FREContext {
         functionsToSet.put("encode",new encode());
         functionsToSet.put("cancelEncode",new cancelEncode());
         functionsToSet.put("pauseEncode",new pauseEncode());
+        functionsToSet.put("getCaptureDevices",new getCaptureDevices());
 
         return functionsToSet;
     }
@@ -884,5 +880,12 @@ public class AVANEContext extends FREContext {
 
     }
 
-
+    private class getCaptureDevices implements FREFunction {
+        @Override
+        public FREObject call(FREContext freContext, FREObject[] freObjects) {
+            FREArray vec = null;
+            vec = (FREArray) aneHelper.createFREObject("Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>",null);
+            return vec;
+        }
+    }
 }

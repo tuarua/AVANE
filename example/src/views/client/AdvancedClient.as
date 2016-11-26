@@ -124,7 +124,7 @@ package views.client {
 			
 			
 			*/
-			var devices:Vector.<Device> = avANE.getDevices();
+			//var devices:Vector.<Device> = avANE.getDevices();
 			
 			selectedFile.addEventListener(Event.SELECT, selectFile);
 			bg.touchable = false;
@@ -308,7 +308,7 @@ package views.client {
 			holder.addChild(txtHolder);
 			
 			encodingScreen.x = (encodeButton.x-encodingScreen.width)/2;
-			encodingScreen.y = 16
+			encodingScreen.y = 16;
 			holder.addChild(encodingScreen);
 			
 			infoButton.addEventListener(TouchEvent.TOUCH,onInfoClick);
@@ -519,7 +519,6 @@ package views.client {
 		}
 		
 		private function onFormChange(event:FormEvent):void {
-			var test:int;
 			switch(event.currentTarget){
 				case containerDrop:
 					

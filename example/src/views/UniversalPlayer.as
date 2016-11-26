@@ -141,6 +141,7 @@ package views {
 		
 		private function onSeek(event:InteractionEvent):void {
 			var newTime:Number = event.params.time;
+
 			isSeeking = true;
 			showLoading();
 			nFauxOffset = newTime;
@@ -148,11 +149,18 @@ package views {
 			ns.seek(0);
 			ns.appendBytesAction(NetStreamAppendBytesAction.RESET_SEEK);
 			ns.appendBytesAction(NetStreamAppendBytesAction.RESET_BEGIN);
-			if(streamer.connected)
-				avANE.cancelEncode();
-			
-			InputStream.options[0].startTime = newTime;
-			seekAfterEncodeFinish = true;
+			if(streamer.connected) {
+                avANE.cancelEncode();
+                InputStream.options[0].startTime = newTime;
+                seekAfterEncodeFinish = true;
+			} else {
+				streamer.init();
+                InputStream.options[0].startTime = newTime;
+				OutputOptions.uri = "tcp:127.0.0.1:1234";
+				avANE.encode();
+				seekAfterEncodeFinish = false;
+			}
+
 			
 		}
 		

@@ -25,6 +25,10 @@ package com.tuarua.ffmpeg.gets {
 		 * <p>Is Audio video device. A device can be both audio AND video so can appear twice in the list</p>
 		 */	
 		public var isVideo:Boolean = false;
+        /**
+         * <p>The index of the device</p>
+         */
+        public var index:int = 0;
 		/** 
 		 * This method is omitted from the output. * * @private 
 		 */ 

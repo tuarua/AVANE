@@ -37,11 +37,9 @@ std::string getStringFromBstr(BSTR val) {
 	return s;
 }
 #elif __APPLE__
-
 #include "TargetConditionals.h"
-
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-// iOS Simulator
+
 #include "FlashRuntimeExtensions.h"
 bool isSupportedInOS = true;
 std::string pathSlash = "/";
@@ -52,6 +50,8 @@ std::string pathSlash = "/";
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "ObjCInterface.h"
+
 bool isSupportedInOS = true;
 std::string pathSlash = "/";
 
@@ -63,10 +63,6 @@ std::string pathSlash = "/";
 
 
 #include <boost/thread.hpp>
-
-
-
-
 #include "ANEhelper.h"
 #include "Constants.hpp"
 
@@ -82,30 +78,30 @@ boost::thread createThread(void(*otherFunction)(int p), int p) {
 
 extern "C" {
 
-#include "libavformat/avformat.h"
-#include "libavcodec/avcodec.h"
-#include "libavutil/avassert.h"
-#include "libavutil/avstring.h"
-#include "libavutil/bprint.h"
-#include "libavutil/common.h"
-#include "libavutil/display.h"
-#include "libavutil/hash.h"
-#include "libavutil/opt.h"
-#include "libavutil/pixdesc.h"
-#include "libavutil/dict.h"
-#include "libavutil/intreadwrite.h"
-#include "libavutil/parseutils.h"
-#include "libavutil/timecode.h"
-#include "libavutil/timestamp.h"
-#include "libavutil/ffversion.h"
-#include "libavdevice/avdevice.h"
-#include "libswscale/swscale.h"
-#include "libswresample/swresample.h"
-#include "libpostproc/postprocess.h"
+	#include "libavformat/avformat.h"
+	#include "libavcodec/avcodec.h"
+	#include "libavutil/avassert.h"
+	#include "libavutil/avstring.h"
+	#include "libavutil/bprint.h"
+	#include "libavutil/common.h"
+	#include "libavutil/display.h"
+	#include "libavutil/hash.h"
+	#include "libavutil/opt.h"
+	#include "libavutil/pixdesc.h"
+	#include "libavutil/dict.h"
+	#include "libavutil/intreadwrite.h"
+	#include "libavutil/parseutils.h"
+	#include "libavutil/timecode.h"
+	#include "libavutil/timestamp.h"
+	#include "libavutil/ffversion.h"
+	#include "libavdevice/avdevice.h"
+	#include "libswscale/swscale.h"
+	#include "libswresample/swresample.h"
+	#include "libpostproc/postprocess.h"
 
-#include "Utils.h"
-#include "cmdutils.h"
-#include "ffmpeg.h"
+	#include "Utils.h"
+	#include "cmdutils.h"
+	#include "ffmpeg.h"
 
 	FREContext dllContext;
 	typedef struct {
@@ -810,32 +806,47 @@ extern "C" {
 	}
 
 	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject vecDevices = NULL;
-		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
+		FREObject vec = NULL;
+		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vec, NULL);
 		HRESULT hr;
 		IEnumMoniker *pEnum;
 
 		hr = EnumerateDevices(CLSID_VideoInputDeviceCategory, &pEnum);
 		if (SUCCEEDED(hr)) {
-			DisplayDeviceInformation(pEnum, true, vecDevices);
+			DisplayDeviceInformation(pEnum, true, vec);
 			pEnum->Release();
 		}
 		hr = EnumerateDevices(CLSID_AudioInputDeviceCategory, &pEnum);
 		if (SUCCEEDED(hr)) {
-			DisplayDeviceInformation(pEnum, false, vecDevices);
+			DisplayDeviceInformation(pEnum, false, vec);
 			pEnum->Release();
 		}
 
-		return vecDevices;
+		return vec;
 	}
-#else
-	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-		FREObject vecDevices = NULL;
-		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
-		return vecDevices;
-	}
-#endif
+
+#elif __APPLE__
 	
+	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject vec = NULL;
+		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vec, NULL);
+		return vec;
+	}
+	#elif TARGET_OS_MAC
+	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+		FREObject vec = NULL;
+		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vec, NULL);
+		
+		ObjCInterface oci;
+		vec = oci.getCaptureDevices();
+		return vec;
+	}
+	
+	#endif
+	
+	
+#endif
     
     void contextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToSet, const FRENamedFunction** functionsToSet) {
         static FRENamedFunction extensionFunctions[] = {
