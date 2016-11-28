@@ -15,6 +15,10 @@ Desktop capture - demo using screen-capture-recorder to capture desktop (Windows
 
 ![alt tag](https://raw.githubusercontent.com/tuarua/AVANE/master/screenshots/screen-shot-1.png)
 
+### AS Docs 
+[https://tuarua.github.io/AVANE/native_extension/docs/asdocs/] 
+
+
 
 ### Features
  - Harness the power of FFmpeg with this unoffical ANE version.
@@ -40,4 +44,3 @@ You will need
 
 ### Todos
  - Full source code of ANE
- - Add ASDocs
