@@ -2,30 +2,15 @@
 #include "FlashRuntimeExtensions.h"
 #include <windows.h>
 #include <conio.h>
-
-#elif __APPLE__
-
-#include "TargetConditionals.h"
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-// iOS Simulator
-#include "FlashRuntimeExtensions.h"
-
-#elif TARGET_OS_MAC
-// Other kinds of Mac OS
-#include <Adobe AIR/Adobe AIR.h>
-
 #else
-#   error "Unknown Apple platform"
-#endif
-
+#include <Adobe AIR/Adobe AIR.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #endif
 #include "../include/ANEhelper.h"
 #include <string>
 #include <vector>
-#include <boost/lexical_cast.hpp>
+
 FREObject getFREObjectProperty(FREObject objAS, const uint8_t * propertyName) {
 	FREObject result = NULL;
 	FREObject thrownException = NULL;
@@ -95,7 +80,8 @@ std::string getStringFromFREObject(FREObject arg) {
 	uint32_t string1Length;
 	const uint8_t *val;
 	FREGetObjectAsUTF8(arg, &string1Length, &val);
-	return boost::lexical_cast<std::string>(val);
+	std::string s(val, val + string1Length);
+	return s;
 }
 std::vector<std::string> getStringVectorFromFREObject(FREObject arg, const uint8_t * propertyName) {
 	uint32_t numItems = getFREObjectArrayLength(arg);
@@ -104,7 +90,7 @@ std::vector<std::string> getStringVectorFromFREObject(FREObject arg, const uint8
 		FREObject elemAS = NULL;
 		FREGetArrayElementAt(arg, k, &elemAS);
 		std::string elem;
-		if(propertyName == NULL)
+		if (propertyName == NULL)
 			elem = getStringFromFREObject(elemAS);
 		else
 			elem = getStringFromFREObject(getFREObjectProperty(elemAS, propertyName));

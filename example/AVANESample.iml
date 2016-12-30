@@ -8,10 +8,10 @@
             <entry library-id="2aea3fda-db3a-4052-a8ce-1b3923976694">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="AVANE" library-level="application">
+            <entry library-name="SaveAsANE" library-level="project">
               <dependency linkage="Merged" />
             </entry>
-            <entry library-name="SaveAsANE" library-level="application">
+            <entry library-name="AVANE" library-level="project">
               <dependency linkage="Merged" />
             </entry>
           </entries>
@@ -26,7 +26,7 @@
           <files-to-package>
             <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/logs" path-in-package="logs" />
           </files-to-package>
-          <AirSigningOptions keystore-path="D:/dev/flash/tuaruaWin.p12" />
+          <AirSigningOptions keystore-path="$DOCUMENTS$/tuaruaWin.p12" />
         </packaging-air-desktop>
         <packaging-android />
         <packaging-ios />
@@ -54,5 +54,7 @@
     </orderEntry>
     <orderEntry type="library" exported="" name="AVANE" level="application" />
     <orderEntry type="library" exported="" name="SaveAsANE" level="application" />
+    <orderEntry type="library" exported="" name="AVANE" level="project" />
+    <orderEntry type="library" exported="" name="SaveAsANE" level="project" />
   </component>
 </module>

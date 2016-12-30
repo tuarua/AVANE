@@ -3,7 +3,7 @@
 	<id>com.tuarua.AVANE</id>
 	<name>AV ANE</name>
 	<copyright>This work is licensed under Mozilla Public License Version 1.1, Copyright 2015</copyright>
-	<versionNumber>0.0.5</versionNumber>
+	<versionNumber>0.0.9</versionNumber>
 	<platforms>
 	<platform name="iPhone-x86">
 		<applicationDeployment>

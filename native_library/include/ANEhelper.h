@@ -25,7 +25,6 @@
 #endif
 #include <string>
 #include <vector>
-#include <boost/lexical_cast.hpp>
 FREObject getFREObjectProperty(FREObject objAS, const uint8_t * propertyName);
 FREObject getFREObjectFromString(std::string arg);
 FREObject getFREObjectFromString(const char* arg);

@@ -78,7 +78,7 @@ package {
 			holder.addChild(desktopCapture);
 			
 			
-			//trace("AVANE configuration:",avANE.getBuildConfiguration());
+			trace("AVANE configuration:",avANE.getBuildConfiguration());
 			trace("AVANE library versions:",avANE.getVersion());
 			trace("AVANE FFmpeg License:",avANE.getLicense());
 			

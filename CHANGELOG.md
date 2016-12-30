@@ -1,3 +1,6 @@
+### 0.0.9
+- WIN/OSX: Updated to FFmpeg 3.2.2
+
 ### 0.0.8
 - OSX: added getCaptureDevices() method. Returns AVFoundation capture device list
 - OSX: added Desktop Capture example
