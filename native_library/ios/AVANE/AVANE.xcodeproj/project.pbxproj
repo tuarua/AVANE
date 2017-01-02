@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE61D19B1E1A6FEA007CCE77 /* ObjCInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE61D1991E1A6FEA007CCE77 /* ObjCInterface.mm */; };
+		CE61D19C1E1A6FEA007CCE77 /* ObjCInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */; };
 		CE763B6E1DC7D8DC002C9762 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE763B6D1DC7D8DC002C9762 /* libx264.a */; };
 		CEBCB17A1DC685E100262C99 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB1781DC685BB00262C99 /* json.hpp */; };
 		CEBCB17C1DC6868400262C99 /* ANEhelper.h in Headers */ = {isa = PBXBuildFile; fileRef = CEBCB17B1DC6868400262C99 /* ANEhelper.h */; };
@@ -50,6 +52,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CE61D1991E1A6FEA007CCE77 /* ObjCInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjCInterface.mm; path = ../../../source/ObjCInterface.mm; sourceTree = "<group>"; };
+		CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjCInterface.h; path = ../../../source/ObjCInterface.h; sourceTree = "<group>"; };
 		CE763B6D1DC7D8DC002C9762 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = dependancies/libx264.a; sourceTree = "<group>"; };
 		CEBCB15B1DC67FF400262C99 /* libAVANE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAVANE.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEBCB1781DC685BB00262C99 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = ../../../include/json.hpp; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 		CEBCB15D1DC67FF400262C99 /* AVANE */ = {
 			isa = PBXGroup;
 			children = (
+				CE61D1991E1A6FEA007CCE77 /* ObjCInterface.mm */,
+				CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */,
 				CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */,
 				CEBCB1B51DC697FB00262C99 /* cmdutils.c */,
 				CEBCB1B61DC697FB00262C99 /* cmdutils.h */,
@@ -170,6 +176,7 @@
 				CEBCB17A1DC685E100262C99 /* json.hpp in Headers */,
 				CEBCB1C01DC697FB00262C99 /* cmdutils.h in Headers */,
 				CEBCB18B1DC68D9100262C99 /* AVANE_ios.h in Headers */,
+				CE61D19C1E1A6FEA007CCE77 /* ObjCInterface.h in Headers */,
 				CEBCB17C1DC6868400262C99 /* ANEhelper.h in Headers */,
 				CEBCB1AD1DC693F800262C99 /* Constants.hpp in Headers */,
 				CEBCB1AF1DC6940B00262C99 /* Utils.h in Headers */,
@@ -204,7 +211,7 @@
 		CEBCB1531DC67FF400262C99 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Tua Rua Ltd";
 				TargetAttributes = {
 					CEBCB15A1DC67FF400262C99 = {
@@ -232,7 +239,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		CE763B6F1DC80B6B002C9762 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -251,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEBCB1C31DC697FB00262C99 /* ffmpeg_opt.c in Sources */,
+				CE61D19B1E1A6FEA007CCE77 /* ObjCInterface.mm in Sources */,
 				CEBCB17E1DC6869400262C99 /* ANEhelper.cpp in Sources */,
 				CEBCB1BF1DC697FB00262C99 /* cmdutils.c in Sources */,
 				CEBCB1C51DC697FB00262C99 /* ffmpeg_videotoolbox.c in Sources */,
@@ -279,8 +287,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -304,7 +314,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-w";
 				SDKROOT = iphoneos;
 			};
@@ -324,8 +334,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";

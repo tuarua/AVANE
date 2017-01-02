@@ -2,7 +2,7 @@
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=tuarua&url=https%3A%2F%2Fgithub.com%2Ftuarua%2FAVANE&title=AVANE&language=en_GB&tags=github&category=software)
 
-Adobe Air Native Extension for OSX / WIN / Android / iOS (in beta) written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
+Adobe Air Native Extension for OSX / WIN / Android / iOS written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
 Samples included.
 
 Universal player - demo showing flash playing mp4, mkv, webm encoded in h264, hevc and vp9. Also showcases live HLS streams from NASA.  
@@ -11,6 +11,8 @@ N.B. Depending on your computer setup HEVC decoding may be very slow. So a 6 yea
 Advanced client - demo similar to Handbrake 
 
 Desktop capture - demo using screen-capture-recorder to capture desktop (Windows only)
+
+Camera recording - demo using camera to record video (iOS only)
 
 
 ![alt tag](https://raw.githubusercontent.com/tuarua/AVANE/master/screenshots/screen-shot-1.png)
@@ -39,8 +41,8 @@ AVANE uses the following libraries:
 
 You will need
  
- - Flash Builder 4.7
- - AIR 22 SDK
+ - Flash Builder 4.7 / IntelliJ
+ - AIR 24 SDK
 
 ### Todos
  - Full source code of ANE

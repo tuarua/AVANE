@@ -37,7 +37,7 @@ package {
 			mStarling.showStatsAt("right","bottom");
 			mStarling.enableErrorChecking = false;
 			mStarling.antiAliasing = 16;
-			mStarling.skipUnchangedFrames = false;
+			mStarling.skipUnchangedFrames = true;
 			
 			mStarling.addEventListener(starling.events.Event.ROOT_CREATED, 
 				function onRootCreated(event:Object, app:StarlingRoot):void {

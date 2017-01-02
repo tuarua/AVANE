@@ -5,9 +5,9 @@ extern "C" {
     __declspec(dllexport) void TRAVAExtFinizer(void* extData);
 }
 #elif __APPLE__
-
 #include "TargetConditionals.h"
 #if (TARGET_IPHONE_SIMULATOR) || (TARGET_OS_IPHONE)
+#include "FlashRuntimeExtensions.h"
 #elif TARGET_OS_MAC
 #include <Adobe AIR/Adobe AIR.h>
 

@@ -1,5 +1,8 @@
 ### 0.0.9
-- WIN/OSX: Updated to FFmpeg 3.2.2
+- WIN/OSX/iOS: Updated to FFmpeg 3.2.2
+- iOS: Added ARM. Deploying to devices now supported
+- iOS: Improved example using AVFoundation HW encoding and camera capture
+- iOS: added getCaptureDevices() method. Returns AVFoundation capture device list
 
 ### 0.0.8
 - OSX: added getCaptureDevices() method. Returns AVFoundation capture device list

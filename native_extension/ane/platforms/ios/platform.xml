@@ -2,7 +2,7 @@
 <platform xmlns="http://ns.adobe.com/air/extension/19.0">
     <sdkVersion>8.3</sdkVersion>
     <linkerOptions>
-        <option>-ios_version_min 6.1</option>
+        <option>-ios_version_min 8.3</option>
         <option>-lstdc++</option>
         <option>-lc++</option>
         <option>-liconv</option>

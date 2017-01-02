@@ -43,6 +43,7 @@ std::string getStringFromBstr(BSTR val) {
 #include "FlashRuntimeExtensions.h"
 bool isSupportedInOS = true;
 std::string pathSlash = "/";
+#include "ObjCInterface.h"
 
 #elif TARGET_OS_MAC
 // Other kinds of Mac OS
@@ -832,14 +833,14 @@ extern "C" {
 	}
 
 #elif __APPLE__
-	
+	/*
 	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject vec = NULL;
 		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vec, NULL);
 		return vec;
 	}
-	#elif TARGET_OS_MAC
+	#elif TARGET_OS_MAC*/
 	FREObject getCaptureDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
 		FREObject vec = NULL;
 		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vec, NULL);
@@ -849,7 +850,7 @@ extern "C" {
 		return vec;
 	}
 	
-	#endif
+	//#endif
 	
 	
 #endif

@@ -67,7 +67,6 @@ package views {
 		private var videoTexture:Texture;
 		private var loading:LoadingIcon = new LoadingIcon();
 		private var soundTransform:SoundTransform = new SoundTransform();
-		private var circularLoader:CircularLoader;
 
 		private var hwAccels:Vector.<HardwareAcceleration>;
 		

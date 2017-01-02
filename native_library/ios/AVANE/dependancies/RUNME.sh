@@ -17,7 +17,7 @@ mv "ofxiOSBoost/libs/boost/ios/libboost.a" "$CURR_DIR"
 
 rm -rf ofxiOSBoost
 
-wget https://github.com/tuarua/FFmpeg-for-iOS-Prebuilt/releases/download/v3.2/ffmpeg-x264-ios-fat.zip
+wget https://github.com/tuarua/FFmpeg-for-iOS-Prebuilt/releases/download/3.2.2/ffmpeg-x264-ios-fat.zip
 unzip ffmpeg-x264-ios-fat.zip
 rm ffmpeg-x264-ios-fat.zip
 

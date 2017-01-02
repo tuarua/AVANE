@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/23.0">
+<application xmlns="http://ns.adobe.com/air/application/24.0">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
@@ -28,7 +28,7 @@
 	Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
 	An updated version of application must have a versionNumber value higher than the previous version. Required for namespace >= 2.5 .
     For iOS Apps, this represents build number. -->
-	<versionNumber>0.0.0</versionNumber>
+	<versionNumber>0.0.1</versionNumber>
 		         
 	<!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. 
      For iOS Apps, this represents application version number and format should be (<0-999>.<0-999>.<0-999>).
@@ -308,6 +308,8 @@
 				<string>1</string>
 				<string>2</string>
 			</array>
+			<key>NSCameraUsageDescription</key>
+			<string>AVANE wants to record your camera</string>
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>

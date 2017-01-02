@@ -12,6 +12,13 @@
 			<finalizer>TRAVAExtFinizer</finalizer>
 		</applicationDeployment>
 	</platform>
+    <platform name="iPhone-ARM">
+        <applicationDeployment>
+            <nativeLibrary>libAVANE.a</nativeLibrary>
+            <initializer>TRAVAExtInizer</initializer>
+            <finalizer>TRAVAExtFinizer</finalizer>
+        </applicationDeployment>
+    </platform>
     <platform name="default">
         <applicationDeployment/>
     </platform>

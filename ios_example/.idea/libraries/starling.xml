@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="AVANE" type="flex">
+  <library name="starling" type="flex">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../native_extension/ane/AVANE.ane!/" />
+      <root url="jar://$PROJECT_DIR$/src/libs/starling.swc!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

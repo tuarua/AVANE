@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="SaveAsANE" type="flex">
     <CLASSES>
-      <root url="jar://$DOCUMENTS$/AVANE/native_extension/ane/SaveAsANE.ane!/" />
+      <root url="jar://$PROJECT_DIR$/../native_extension/ane/SaveAsANE.ane!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

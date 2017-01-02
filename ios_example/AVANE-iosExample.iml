@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="Flex" version="4">
+  <component name="FlexBuildConfigurationManager" active="Main">
+    <configurations>
+      <configuration name="Main" target-platform="Mobile" pure-as="true" main-class="Main" output-file="Main.swf" output-folder="$MODULE_DIR$/bin-debug">
+        <dependencies>
+          <entries>
+            <entry library-id="a3c9f633-161c-4566-bc73-20ea9aa32831">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-id="011e2b3c-bd70-4f34-87a9-406cde8cfd58">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="starling" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
+          <sdk name="AIRSDK" />
+        </dependencies>
+        <compiler-options>
+          <map>
+            <entry key="compiler.locale" value="en_US" />
+          </map>
+        </compiler-options>
+        <packaging-air-desktop />
+        <packaging-android use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/Main-app.xml" package-file-name="Main">
+          <files-to-package>
+            <FilePathAndPathInPackage file-path="$MODULE_DIR$/src/libs" path-in-package="libs" />
+          </files-to-package>
+        </packaging-android>
+        <packaging-ios enabled="true" use-generated-descriptor="false" custom-descriptor-path="$MODULE_DIR$/src/Main-app.xml" package-file-name="Main">
+          <AirSigningOptions sdk="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.2.sdk" keystore-path="$USER_HOME$/Documents/appleCertsProv/tuarua.p12" provisioning-profile-path="$USER_HOME$/Documents/appleCertsProv/Tua_Rua_Profile_Dev.mobileprovision" />
+        </packaging-ios>
+      </configuration>
+    </configurations>
+    <compiler-options />
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="AIRSDK" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="a3c9f633-161c-4566-bc73-20ea9aa32831" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/src/libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/src/libs" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="011e2b3c-bd70-4f34-87a9-406cde8cfd58" />
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../native_extension/ane/AVANE-ios.ane!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" exported="" name="starling" level="project" />
+  </component>
+</module>

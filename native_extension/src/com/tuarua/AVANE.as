@@ -295,6 +295,8 @@ package com.tuarua {
 							args.push("-c:v:"+k.toString(), vStream.codec);
 							if(vStream.bitrate > -1)
 								args.push("-b:v:"+k.toString(), vStream.bitrate.toString());
+                            if(vStream.quality > -1)
+                                args.push("-q:v:"+k.toString(), vStream.quality.toString());
 							if(vStream.frames > -1)
 								args.push("-frames:v:"+k.toString(), vStream.frames.toString());
 							if(vStream.pixelFormat)
