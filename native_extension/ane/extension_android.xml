@@ -2,7 +2,7 @@
 <extension xmlns="http://ns.adobe.com/air/extension/19.0">
     <id>com.tuarua.AVANE</id>
 	<name>AVANE Android</name>
-    <versionNumber>0.0.9</versionNumber>
+    <versionNumber>0.0.10</versionNumber>
     <platforms>
 		<platform name="Android-ARM"> 
            <applicationDeployment>
