@@ -1,4 +1,4 @@
-###############################################################################
+native_extension/docs/* linguist-documentation###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
@@ -62,3 +62,4 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 *.ane filter=lfs diff=lfs merge=lfs -text
+native_extension/docs/* linguist-documentation
