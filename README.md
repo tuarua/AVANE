@@ -1,6 +1,6 @@
 # AVANE
 
-##### I've hit my LFS limit for the January on Github. You may have trouble downloading the ANEs
+##### I've hit my LFS limit for January on Github. You may have trouble downloading the ANEs
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D9VQZQPGPLFKW)
 
