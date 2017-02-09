@@ -41,12 +41,10 @@ package {
 		
 		public function StarlingRoot() {
 			super();
-			TextField.registerBitmapFont(Fonts.getFont("fira-sans-semi-bold-13"));
+			TextField.registerCompositor(Fonts.getFont("fira-sans-semi-bold-13"), "Fira Sans Semi-Bold 13");
 		}
 		
 		public function start():void {
-			
-			
 			
 			exampleSelector = new ExampleSelector();
 			exampleSelector.x = -180;
