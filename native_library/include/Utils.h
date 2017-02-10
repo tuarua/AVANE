@@ -31,22 +31,23 @@
 
 #endif
 
-#include <boost/lexical_cast.hpp>
-
-FREObject getColors(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getLayouts(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getProtocols(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getFilters(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getPixelFormats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getBitStreamFilters(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getDecoders(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getEncoders(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getCodecs(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getHardwareAccelerations(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getDevices(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getAvailableFormats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getBuildConfiguration(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getLicense(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getVersion(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
-FREObject getSampleFormats(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]);
+extern "C" {
+#define FRE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
+FRE_FUNCTION(getColors);
+FRE_FUNCTION(getLayouts);
+FRE_FUNCTION(getProtocols);
+FRE_FUNCTION(getFilters);
+FRE_FUNCTION(getPixelFormats);
+FRE_FUNCTION(getBitStreamFilters);
+FRE_FUNCTION(getDecoders);
+FRE_FUNCTION(getEncoders);
+FRE_FUNCTION(getCodecs);
+FRE_FUNCTION(getHardwareAccelerations);
+FRE_FUNCTION(getDevices);
+FRE_FUNCTION(getAvailableFormats);
+FRE_FUNCTION(getBuildConfiguration);
+FRE_FUNCTION(getLicense);
+FRE_FUNCTION(getVersion);
+FRE_FUNCTION(getSampleFormats);
+}
 #endif /* Utils_hpp */

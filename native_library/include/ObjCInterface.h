@@ -17,7 +17,3 @@ class ObjCInterface
 public:
     FREObject getCaptureDevices();
 };
-
-
-
-

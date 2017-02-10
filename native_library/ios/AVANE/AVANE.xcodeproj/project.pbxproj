@@ -53,7 +53,7 @@
 
 /* Begin PBXFileReference section */
 		CE61D1991E1A6FEA007CCE77 /* ObjCInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjCInterface.mm; path = ../../../source/ObjCInterface.mm; sourceTree = "<group>"; };
-		CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjCInterface.h; path = ../../../source/ObjCInterface.h; sourceTree = "<group>"; };
+		CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjCInterface.h; path = ../../../include/ObjCInterface.h; sourceTree = "<group>"; };
 		CE763B6D1DC7D8DC002C9762 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = dependancies/libx264.a; sourceTree = "<group>"; };
 		CEBCB15B1DC67FF400262C99 /* libAVANE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAVANE.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEBCB1781DC685BB00262C99 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = ../../../include/json.hpp; sourceTree = "<group>"; };
@@ -108,6 +108,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE42B59B1E4E6F2100C24F8F /* ffmpeg */ = {
+			isa = PBXGroup;
+			children = (
+				CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */,
+				CEBCB1B51DC697FB00262C99 /* cmdutils.c */,
+				CEBCB1B61DC697FB00262C99 /* cmdutils.h */,
+				CEBCB1B81DC697FB00262C99 /* ffmpeg_filter.c */,
+				CEBCB1B91DC697FB00262C99 /* ffmpeg_opt.c */,
+				CEBCB1BB1DC697FB00262C99 /* ffmpeg_videotoolbox.c */,
+				CEBCB1BC1DC697FB00262C99 /* ffmpeg.c */,
+				CEBCB1BD1DC697FB00262C99 /* ffmpeg.h */,
+			);
+			name = ffmpeg;
+			sourceTree = "<group>";
+		};
+		CE42B59C1E4E6F4500C24F8F /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				CEBCB17F1DC6871C00262C99 /* FlashRuntimeExtensions.h */,
+				CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */,
+				CEBCB17B1DC6868400262C99 /* ANEhelper.h */,
+				CEBCB1781DC685BB00262C99 /* json.hpp */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
 		CEBCB1521DC67FF400262C99 = {
 			isa = PBXGroup;
 			children = (
@@ -138,16 +164,10 @@
 		CEBCB15D1DC67FF400262C99 /* AVANE */ = {
 			isa = PBXGroup;
 			children = (
+				CE42B59C1E4E6F4500C24F8F /* libs */,
+				CE42B59B1E4E6F2100C24F8F /* ffmpeg */,
 				CE61D1991E1A6FEA007CCE77 /* ObjCInterface.mm */,
 				CE61D19A1E1A6FEA007CCE77 /* ObjCInterface.h */,
-				CEBCB1B41DC697FB00262C99 /* cmdutils_common_opts.h */,
-				CEBCB1B51DC697FB00262C99 /* cmdutils.c */,
-				CEBCB1B61DC697FB00262C99 /* cmdutils.h */,
-				CEBCB1B81DC697FB00262C99 /* ffmpeg_filter.c */,
-				CEBCB1B91DC697FB00262C99 /* ffmpeg_opt.c */,
-				CEBCB1BB1DC697FB00262C99 /* ffmpeg_videotoolbox.c */,
-				CEBCB1BC1DC697FB00262C99 /* ffmpeg.c */,
-				CEBCB1BD1DC697FB00262C99 /* ffmpeg.h */,
 				CEBCB1B21DC6958300262C99 /* AVANE.cpp */,
 				CEBCB1B01DC6945600262C99 /* Utils.cpp */,
 				CEBCB1AE1DC6940B00262C99 /* Utils.h */,
@@ -155,10 +175,6 @@
 				CEBCB1921DC6930700262C99 /* AVANE.h */,
 				CEBCB1901DC68F0300262C99 /* AVANE_ios.m */,
 				CEBCB1891DC68D9100262C99 /* AVANE_ios.h */,
-				CEBCB17F1DC6871C00262C99 /* FlashRuntimeExtensions.h */,
-				CEBCB17D1DC6869400262C99 /* ANEhelper.cpp */,
-				CEBCB17B1DC6868400262C99 /* ANEhelper.h */,
-				CEBCB1781DC685BB00262C99 /* json.hpp */,
 			);
 			path = AVANE;
 			sourceTree = "<group>";

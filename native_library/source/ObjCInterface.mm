@@ -3,38 +3,50 @@
 #import <AVFoundation/AVFoundation.h>
 #include <string>
 #include <boost/lexical_cast.hpp>
-//#include <Adobe AIR/Adobe AIR.h>
-#include "ANEhelper.h"
+#ifdef _WIN32
+#elif __APPLE__
+#include "TargetConditionals.h"
+#if (TARGET_IPHONE_SIMULATOR) || (TARGET_OS_IPHONE)
+#include "FlashRuntimeExtensions.h"
+#elif TARGET_OS_MAC
+#include <Adobe AIR/Adobe AIR.h>
+
+#else
+#   error "Unknown Apple platform"
+#endif
+
+#endif
+
+#include <ANEhelper.h>
+
+ANEHelper aneHelper3 = ANEHelper();
 
 FREObject ObjCInterface::getCaptureDevices() {
-    FREObject vecDevices = NULL;
-    FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>", 0, NULL, &vecDevices, NULL);
+    FREObject vecDevices = aneHelper3.createFREObject("Vector.<com.tuarua.ffmpeg.gets.CaptureDevice>");
     
     NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     NSArray *audioDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     
     int index = 0;
-    //uint32_t num_screens = 0;
+    uint32_t num_screens = 0;
     for (AVCaptureDevice *device in videoDevices) {
         
-        FREObject objDevice;
-        FRENewObject((const uint8_t*)"com.tuarua.ffmpeg.gets.CaptureDevice", 0, NULL, &objDevice, NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"format", getFREObjectFromString("avfoundation"), NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"isVideo", getFREObjectFromBool(true), NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"index", getFREObjectFromInt32(index), NULL);
+        FREObject objDevice = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDevice");
+
+        aneHelper3.setProperty(objDevice, "format", "avfoundation");
+        aneHelper3.setProperty(objDevice, "isVideo", true);
+        aneHelper3.setProperty(objDevice, "index", index);
         
         const char *name = [[device localizedName] UTF8String];
         index = (int)[audioDevices indexOfObject:device];
-        
-        FRESetObjectProperty(objDevice, (const uint8_t*)"name", getFREObjectFromString(name), NULL);
-		
-		
-		FREObject vecCapabilities = NULL;
-		FRENewObject((const uint8_t*)"Vector.<com.tuarua.ffmpeg.gets.CaptureDeviceCapabilities>", 0, NULL, &vecCapabilities, NULL);
+
+        aneHelper3.setProperty(objDevice, "name", name);
+
+		FREObject vecCapabilities = aneHelper3.createFREObject("Vector.<com.tuarua.ffmpeg.gets.CaptureDeviceCapabilities>");
 		
 		NSObject *range = nil;
 		NSObject *format = nil;
-		int cindex = 0;
+		uint32_t cindex = 0;
 		for (format in [device valueForKey:@"formats"]) {
 			CMFormatDescriptionRef formatDescription;
 			CMVideoDimensions dimensions;
@@ -43,28 +55,28 @@ FREObject ObjCInterface::getCaptureDevices() {
 			
 			for (range in [format valueForKey:@"videoSupportedFrameRateRanges"]) {
 				
-				FREObject objCapability;
-				FRENewObject((const uint8_t*)"com.tuarua.ffmpeg.gets.CaptureDeviceCapabilities", 0, NULL, &objCapability, NULL);
+				FREObject objCapability = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDeviceCapabilities");
 				
 				double min_framerate;
 				double max_framerate;
 				
 				[[range valueForKey:@"minFrameRate"] getValue:&min_framerate];
 				[[range valueForKey:@"maxFrameRate"] getValue:&max_framerate];
-				
-				FRESetObjectProperty(objCapability, (const uint8_t*)"width", getFREObjectFromInt32(dimensions.width), NULL);
-				FRESetObjectProperty(objCapability, (const uint8_t*)"height", getFREObjectFromInt32(dimensions.height), NULL);
-				FRESetObjectProperty(objCapability, (const uint8_t*)"minFrameRate", getFREObjectFromDouble(min_framerate), NULL);
-				FRESetObjectProperty(objCapability, (const uint8_t*)"maxFrameRate", getFREObjectFromDouble(max_framerate), NULL);
+
+                aneHelper3.setProperty(objCapability, "width", dimensions.width);
+                aneHelper3.setProperty(objCapability, "height", dimensions.height);
+                aneHelper3.setProperty(objCapability, "minFrameRate", min_framerate);
+                aneHelper3.setProperty(objCapability, "maxFrameRate", max_framerate);
+
 				FRESetArrayElementAt(vecCapabilities, cindex, objCapability);
 				cindex++;
 				
 			}
 		}
+
+        aneHelper3.setProperty(objDevice, "capabilities", vecCapabilities);
 		
-		FRESetObjectProperty(objDevice, (const uint8_t*)"capabilities", vecCapabilities, NULL);
-		
-        FRESetArrayElementAt(vecDevices, getFREObjectArrayLength(vecDevices), objDevice);
+        FRESetArrayElementAt(vecDevices, aneHelper3.getArrayLength(vecDevices), objDevice);
         index++;
     }
 	
@@ -75,35 +87,34 @@ FREObject ObjCInterface::getCaptureDevices() {
         CGGetActiveDisplayList(num_screens, screens, &num_screens);
         for (int i = 0; i < num_screens; i++) {
             
-            FREObject objDevice;
-            FRENewObject((const uint8_t*)"com.tuarua.ffmpeg.gets.CaptureDevice", 0, NULL, &objDevice, NULL);
-            FRESetObjectProperty(objDevice, (const uint8_t*)"format", getFREObjectFromString("avfoundation"), NULL);
-            FRESetObjectProperty(objDevice, (const uint8_t*)"isVideo", getFREObjectFromBool(true), NULL);
-            FRESetObjectProperty(objDevice, (const uint8_t*)"index", getFREObjectFromInt32(index + i), NULL);
-            FRESetObjectProperty(objDevice, (const uint8_t*)"name", getFREObjectFromString("Capture screen " + boost::lexical_cast<std::string>(i)), NULL);
-            FRESetArrayElementAt(vecDevices, getFREObjectArrayLength(vecDevices), objDevice);
+            FREObject objDevice = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDevice");
+            aneHelper3.setProperty(objDevice, "format", "avfoundation");
+            aneHelper3.setProperty(objDevice, "isVideo", true);
+            aneHelper3.setProperty(objDevice, "index", index + i);
+            aneHelper3.setProperty(objDevice, "name", "Capture screen " + boost::lexical_cast<std::string>(i));
+
+            FRESetArrayElementAt(vecDevices, aneHelper3.getArrayLength(vecDevices), objDevice);
             
         }
     }
     
 #endif
-	
-    index = 0;
+
     for (AVCaptureDevice *device in audioDevices) {
-        
-        FREObject objDevice;
-        FRENewObject((const uint8_t*)"com.tuarua.ffmpeg.gets.CaptureDevice", 0, NULL, &objDevice, NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"format", getFREObjectFromString("avfoundation"), NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"isAudio", getFREObjectFromBool(true), NULL);
+
+        FREObject objDevice = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDevice");
+
+        aneHelper3.setProperty(objDevice, "format", "avfoundation");
+        aneHelper3.setProperty(objDevice, "isAudio", true);
         
         const char *name = [[device localizedName] UTF8String];
         index = (int)[audioDevices indexOfObject:device];
-        
-        FRESetObjectProperty(objDevice, (const uint8_t*)"index", getFREObjectFromInt32(index), NULL);
-        FRESetObjectProperty(objDevice, (const uint8_t*)"name", getFREObjectFromString(name), NULL);
-        FRESetArrayElementAt(vecDevices, getFREObjectArrayLength(vecDevices), objDevice);
 
-        index++;
+        aneHelper3.setProperty(objDevice, "index", index);
+        aneHelper3.setProperty(objDevice, "name", name);
+
+        FRESetArrayElementAt(vecDevices, aneHelper3.getArrayLength(vecDevices), objDevice);
+
     }
     return vecDevices;
     
