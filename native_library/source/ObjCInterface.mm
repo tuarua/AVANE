@@ -56,17 +56,17 @@ FREObject ObjCInterface::getCaptureDevices() {
 			for (range in [format valueForKey:@"videoSupportedFrameRateRanges"]) {
 				
 				FREObject objCapability = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDeviceCapabilities");
-				
+
 				double min_framerate;
 				double max_framerate;
-				
+
 				[[range valueForKey:@"minFrameRate"] getValue:&min_framerate];
 				[[range valueForKey:@"maxFrameRate"] getValue:&max_framerate];
 
-                aneHelper3.setProperty(objCapability, "width", dimensions.width);
-                aneHelper3.setProperty(objCapability, "height", dimensions.height);
-                aneHelper3.setProperty(objCapability, "minFrameRate", min_framerate);
-                aneHelper3.setProperty(objCapability, "maxFrameRate", max_framerate);
+				aneHelper3.setProperty(objCapability, "width", dimensions.width);
+				aneHelper3.setProperty(objCapability, "height", dimensions.height);
+				aneHelper3.setProperty(objCapability, "minFrameRate", min_framerate);
+				aneHelper3.setProperty(objCapability, "maxFrameRate", max_framerate);
 
 				FRESetArrayElementAt(vecCapabilities, cindex, objCapability);
 				cindex++;
@@ -101,9 +101,7 @@ FREObject ObjCInterface::getCaptureDevices() {
 #endif
 
     for (AVCaptureDevice *device in audioDevices) {
-
         FREObject objDevice = aneHelper3.createFREObject("com.tuarua.ffmpeg.gets.CaptureDevice");
-
         aneHelper3.setProperty(objDevice, "format", "avfoundation");
         aneHelper3.setProperty(objDevice, "isAudio", true);
         
@@ -114,7 +112,6 @@ FREObject ObjCInterface::getCaptureDevices() {
         aneHelper3.setProperty(objDevice, "name", name);
 
         FRESetArrayElementAt(vecDevices, aneHelper3.getArrayLength(vecDevices), objDevice);
-
     }
     return vecDevices;
     
