@@ -1,3 +1,6 @@
+### 0.0.11
+- OSX: Modified FFmpeg 3.3 to replace _clock_gettime calls Issue #17
+
 ### 0.0.10
 - OSX: Updated to FFmpeg 3.3
 - OSX: Updated to Boost 1.64 Issue #17
