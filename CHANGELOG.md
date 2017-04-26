@@ -1,3 +1,7 @@
+### 0.0.10
+- OSX: Updated to FFmpeg 3.3
+- OSX: Updated to Boost 1.64 Issue #17
+
 ### 0.0.9
 - WIN/OSX/iOS: Updated to FFmpeg 3.2.2
 - iOS: Added ARM. Deploying to devices now supported

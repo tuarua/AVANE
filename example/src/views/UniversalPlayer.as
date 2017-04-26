@@ -105,10 +105,10 @@ package views {
 			
 			
 			urlList.push({value:"{\"uri\":\"https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4\",\"live\":false}",label:"MP4 H.264   -   https://download.blender.org/durian/trailer/sintel_trailer-1080p.mp4"});
-			urlList.push({value:"{\"uri\":\"http://video.h265files.com/TearsOfSteel_720p_h265.mkv\",\"live\":false}",label:"MKV HEVC   -   http://video.h265files.com/TearsOfSteel_720p_h265.mkv"});
+			urlList.push({value:"{\"uri\":\"http://h265.webmfiles.org/TearsOfSteel_720p_h265.mkv\",\"live\":false}",label:"MKV HEVC   -   http://h265.webmfiles.org/TearsOfSteel_720p_h265.mkv"});
 			urlList.push({value:"{\"uri\":\"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm\",\"live\":false}",label:"WEBM VP9   -   http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-247.webm"});
 			urlList.push({value:"{\"uri\":\"http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv\",\"live\":false}",label:"MKV H.264   -   http://s1.demo-world.eu/hd_trailers.php?file=samsung_canadian_scenery-DWEU.mkv"});
-			urlList.push({value:"{\"uri\":\"http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on\",\"live\":true}",label:"NASA TV HLS   -   http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on"});
+			urlList.push({value:"{\"uri\":\"https://nasa-i.akamaihd.net/hls/live/253566/NTV-Media/master_2000.m3u8\",\"live\":true}",label:"NASA TV HLS   -   https://nasa-i.akamaihd.net/hls/live/253566/NTV-Media/master_2000.m3u8"});
 			
 			playButton.x = 1050;
 			playButton.y = 38;
