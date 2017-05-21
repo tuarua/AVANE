@@ -2,7 +2,8 @@
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D9VQZQPGPLFKW)
 
-Adobe Air Native Extension for OSX / WIN / Android / iOS written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
+Adobe Air Native Extension for OSX / WIN written in ActionScript 3 and C/C++ for encoding + decoding video and audio based on FFMpeg libraries.
+iOS and Android versions are provided as experimental only. I won't support them.
 Samples included.
 
 Universal player - demo showing flash playing mp4, mkv, webm encoded in h264, hevc and vp9. Also showcases live HLS streams from NASA.  
