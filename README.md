@@ -6,7 +6,6 @@ Adobe Air Native Extension for OSX / WIN written in ActionScript 3 and C/C++ for
 
 #### iOS and Android versions are provided as experimental only. I won't support them.
 
-
 Universal player - demo showing flash playing mp4, mkv, webm encoded in h264, hevc and vp9. Also showcases live HLS streams from NASA.  
 N.B. Depending on your computer setup HEVC decoding may be very slow. So a 6 year old mac mini is not going to cut it :)
 
@@ -19,9 +18,12 @@ Camera recording - demo using camera to record video (iOS only)
 
 ![alt tag](https://raw.githubusercontent.com/tuarua/AVANE/master/screenshots/screen-shot-1.png)
 
+### The ANE
+
+Download the latest from the [Releases](https://github.com/tuarua/AVANE/releases) page.
+
 ### AS Docs 
 [https://tuarua.github.io/AVANE/native_extension/docs/asdocs/] 
-
 
 
 ### Features
@@ -46,5 +48,3 @@ You will need
  - Flash Builder 4.7 / IntelliJ
  - AIR 24 SDK
 
-### Todos
- - Full source code of ANE

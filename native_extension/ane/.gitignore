@@ -11,3 +11,6 @@ extension_osx.xml
 extension_win.xml
 extension_multi.xml
 AVANE.dll
+*.ane
+*.framework
+*.dll

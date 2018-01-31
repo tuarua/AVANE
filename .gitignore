@@ -27,3 +27,4 @@ xcuserdata/
 *.tps
 *.DS_Store
 issue9/
+/release/
